@@ -1,0 +1,18 @@
+.vscode/
+.DS_Store
+
+*.sw*
+*.log
+*.tmp
+*.tmp.*
+log.txt
+
+# ionic
+node_modules/
+platforms/
+plugins/
+
+# iOS Platform
+*.mode1v3
+*.perspectivev3
+*.pbxuser
