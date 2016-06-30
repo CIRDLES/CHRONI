@@ -8,6 +8,7 @@ cache:
 
 install:
   - npm install -g bower
+  - npm install -g cordova
   - npm install -g ionic
   - bower install
 
