@@ -1,0 +1,30 @@
+.vscode/
+.DS_Store
+
+*.sw*
+*.log
+*.tmp
+*.tmp.*
+log.txt
+
+# ionic
+node_modules/
+platforms/
+plugins/
+
+# editor files
+/.idea/
+/.brackets.json
+
+# using SASS instead of CSS
+/www/css/
+/www/lib/
+
+# iOS Platform
+*.mode1v3
+*.perspectivev3
+*.pbxuser
+
+# no generated images
+/resources/android/
+/resources/ios/
