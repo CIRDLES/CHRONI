@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('chroni.controllers', ['ionic', 'chroni.services'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -42,15 +42,17 @@ angular.module('starter.controllers', [])
 })
 
 .controller('homeCtrl', function($scope) {
-  $scope.home = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+  
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('viewFilesCtrl', function($scope, Settings) {
+  $scope.settings = Settings.getSettings();
+
+  // TEST, TAKE OUT LATER
+  $scope.settings.set('currentAliquot','current aliquot path');
+
+  $scope.$watch('settings', function(v) {
+    settings.save();
+  }, true);
+
 });

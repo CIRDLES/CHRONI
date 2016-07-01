@@ -1,5 +1,5 @@
 {
-  "name": "CHRONI",
+  "name": "Chroni",
   "app_id": "",
   "gulpStartupTasks": [
     "sass",
