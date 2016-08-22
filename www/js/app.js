@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // the 2nd parameter is an array of 'requires'
 // 'chroni.controllers' is found in controllers.js
-angular.module('chroni', ['ionic', 'chroni.controllers'])
+angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -54,7 +54,18 @@ angular.module('chroni', ['ionic', 'chroni.controllers'])
     url: '/viewFiles',
     views: {
       'menuContent': {
-        templateUrl: 'templates/viewFiles.html'
+        templateUrl: 'templates/viewFiles.html',
+        controller: 'viewFilesCtrl'
+      }
+    }
+  })
+
+  .state('app.importFiles', {
+    url: '/importFiles',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/importFiles.html',
+        controller: 'importFilesCtrl'
       }
     }
   });
