@@ -21,7 +21,15 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
-h1 {
+.alignRight {
+  float: right;
+}
+.alignLeft {
+  float: left;
+}
+.alignCenter {
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 

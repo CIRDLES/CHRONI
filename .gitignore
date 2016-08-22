@@ -18,7 +18,6 @@ plugins/
 
 # using SASS instead of CSS
 /www/css/
-/www/lib/
 
 # iOS Platform
 *.mode1v3

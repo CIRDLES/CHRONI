@@ -1,6 +1,6 @@
-angular.module('chroni.controllers', ['ionic', 'chroni.services'])
+angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicPlatform, $cordovaFile, Settings) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -9,8 +9,12 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services'])
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
-  // Form data for the login modal
-  $scope.loginData = {};
+
+  // Obtain data for the login modal
+  $scope.loginData = {
+    'username': Settings.get('username'),
+    'password': Settings.get('password')
+  };
 
   // Create the login modal that we will use later
   $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -31,7 +35,7 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services'])
 
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+    console.log('Logging in...', $scope.loginData);
 
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
@@ -39,20 +43,90 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services'])
       $scope.closeLogin();
     }, 1000);
   };
+
+  $ionicPlatform.ready(function() {
+    $cordovaFile.checkDir(cordova.file.dataDirectory, "chroni")
+      .then(function(success) {},
+        function(error) {
+          $cordovaFile.createDir(cordova.file.dataDirectory, "chroni", false);
+        })
+
+    $cordovaFile.checkDir(cordova.file.dataDirectory, "chroni/Aliquots")
+      .then(function(success) {},
+        function(error) {
+          $cordovaFile.createDir(cordova.file.dataDirectory, "chroni/Aliquots", false);
+        })
+
+    $cordovaFile.checkDir(cordova.file.dataDirectory, "chroni/Report Settings")
+      .then(function(success) {},
+        function(error) {
+          $cordovaFile.createDir(cordova.file.dataDirectory, "chroni/Report Settings", false);
+        })
+  })
+
 })
 
 .controller('homeCtrl', function($scope) {
-  
+
 })
 
-.controller('viewFilesCtrl', function($scope, Settings) {
-  $scope.settings = Settings.getSettings();
+.controller('viewFilesCtrl', function($scope, $ionicModal, $ionicPlatform, $cordovaFile, Settings, Files) {
 
-  // TEST, TAKE OUT LATER
-  $scope.settings.set('currentAliquot','current aliquot path');
+  $scope.currentAliquot = Settings.get('currentAliquot');
+  $scope.currentReportSettings = Settings.get('currentReportSettings');
 
   $scope.$watch('settings', function(v) {
-    settings.save();
+    Settings.save();
   }, true);
+
+
+  var fs = new Files;
+
+  $ionicPlatform.ready(function() {
+    $cordovaFile.createDir(cordova.file.dataDirectory, "newDir", false);
+    $cordovaFile.createFile(cordova.file.dataDirectory, "newFile.txt", false);
+
+    fs.getEntriesAtRoot().then(function(result) {
+      $scope.files = result;
+    }, function(error) {
+      console.error(error);
+    });
+
+    $scope.getContents = function(path) {
+      fs.getEntries(path)
+        .then(function(result) {
+          $scope.files = result;
+          $scope.files.unshift({ name: "[parent]" });
+          fs.getParentDirectory(path)
+            .then(function(result) {
+              result.name = "[parent]";
+              $scope.files[0] = result;
+            });
+        });
+    }
+  });
+
+  $ionicModal.fromTemplateUrl('templates/fileBrowser.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  })
+
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+
+})
+
+.controller('importFilesCtrl', function($scope) {
 
 });
