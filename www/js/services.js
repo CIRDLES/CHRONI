@@ -54,46 +54,80 @@ angular.module('chroni.services', ['ionic'])
 
     getParentDirectory: function(path) {
       var deferred = $q.defer();
-      window.resolveLocalFileSystemURI(path, function(fileSystem) {
-        fileSystem.getParent(function(result) {
-          deferred.resolve(result);
-        }, function(error) {
+      window.resolveLocalFileSystemURL(path,
+        function(fileSystem) {
+          fileSystem.getParent(function(result) {
+            deferred.resolve(result);
+          }, function(error) {
+            deferred.reject(error);
+          });
+        },
+        function(error) {
           deferred.reject(error);
         });
-      }, function(error) {
-        deferred.reject(error);
-      });
       return deferred.promise;
     },
 
     getEntriesAtRoot: function() {
       var deferred = $q.defer();
-      window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) {
-        var directoryReader = fileSystem.root.createReader();
-        directoryReader.readEntries(function(entries) {
-          deferred.resolve(entries);
-        }, function(error) {
+      window.resolveLocalFileSystemURL(cordova.file.dataDirectory,
+        function(fileSystem) {
+          var directoryReader = fileSystem.createReader();
+          directoryReader.readEntries(function(entries) {
+            deferred.resolve(entries);
+          }, function(error) {
+            deferred.reject(error);
+          });
+        },
+        function(error) {
           deferred.reject(error);
         });
-      }, function(error) {
-        deferred.reject(error);
-      });
       return deferred.promise;
     },
 
     getEntries: function(path) {
       var deferred = $q.defer();
-      window.resolveLocalFileSystemURI(path, function(fileSystem) {
-        var directoryReader = fileSystem.createReader();
-        directoryReader.readEntries(function(entries) {
-          deferred.resolve(entries);
-        }, function(error) {
+      window.resolveLocalFileSystemURL(path,
+        function(fileSystem) {
+          var directoryReader = fileSystem.createReader();
+          directoryReader.readEntries(function(entries) {
+            deferred.resolve(entries);
+          }, function(error) {
+            deferred.reject(error);
+          });
+        },
+        function(error) {
           deferred.reject(error);
         });
-      }, function(error) {
-        deferred.reject(error);
-      });
       return deferred.promise;
+    },
+
+    getEntryAtPath: function(path) {
+      var deferred = $q.defer();
+      window.resolveLocalFileSystemURL(path,
+        function(fileSystem) {
+          deferred.resolve(fileSystem);
+        },
+        function(error) {
+          deferred.reject(error)
+        });
+      return deferred.promise;
+    },
+
+    checkFileValidity: function(file) {
+      // if valid, returns the type of XML file
+      var type = "";
+      var x2js = new X2JS();
+      var jsonObj = x2js.xml_str2json(file);
+      if (jsonObj) {
+        if (jsonObj["Aliquot"]) {
+          type = "Aliquot";
+
+        } else if (jsonObj["ReportSettings"]) {
+          type = "Report Settings";
+        }
+      }
+      return type;
     }
 
   };

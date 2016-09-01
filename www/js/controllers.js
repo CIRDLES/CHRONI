@@ -1,6 +1,6 @@
 angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicPlatform, $cordovaFile, Settings) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $ionicPlatform, $cordovaFile, $cordovaFileTransfer, Settings) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -49,19 +49,36 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova'])
       .then(function(success) {},
         function(error) {
           $cordovaFile.createDir(cordova.file.dataDirectory, "chroni", false);
-        })
+        });
 
     $cordovaFile.checkDir(cordova.file.dataDirectory, "chroni/Aliquots")
       .then(function(success) {},
         function(error) {
           $cordovaFile.createDir(cordova.file.dataDirectory, "chroni/Aliquots", false);
-        })
+        });
 
     $cordovaFile.checkDir(cordova.file.dataDirectory, "chroni/Report Settings")
       .then(function(success) {},
         function(error) {
           $cordovaFile.createDir(cordova.file.dataDirectory, "chroni/Report Settings", false);
-        })
+        });
+
+    $cordovaFile.checkFile(cordova.file.dataDirectory, "chroni/Report Settings/Default Report Settings.xml")
+      .then(function(success) {},
+        function(error) {
+          $cordovaFileTransfer.download(
+              "https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default%20Report%20Settings%20XML/Default%20Report%20Settings.xml",
+              cordova.file.dataDirectory + "chroni/Report Settings", {}, true)
+            .then(function(result) {
+              console.log("DOWNLOADED!");
+            }, function(err) {
+              console.log(JSON.stringify(err));
+            }, function(progress) {
+              $timeout(function() {
+                $scope.downloadProgress = (progress.loaded / progress.total) * 100;
+              });
+            });
+        });
   })
 
 })
@@ -72,8 +89,8 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova'])
 
 .controller('viewFilesCtrl', function($scope, $ionicModal, $ionicPlatform, $cordovaFile, Settings, Files) {
 
-  $scope.currentAliquot = Settings.get('currentAliquot');
-  $scope.currentReportSettings = Settings.get('currentReportSettings');
+  $scope.aliquot = Settings.get('currentAliquot');
+  $scope.reportSettings = Settings.get('currentReportSettings');
 
   $scope.$watch('settings', function(v) {
     Settings.save();
@@ -83,27 +100,49 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova'])
   var fs = new Files;
 
   $ionicPlatform.ready(function() {
-    $cordovaFile.createDir(cordova.file.dataDirectory, "newDir", false);
-    $cordovaFile.createFile(cordova.file.dataDirectory, "newFile.txt", false);
-
     fs.getEntriesAtRoot().then(function(result) {
       $scope.files = result;
     }, function(error) {
       console.error(error);
     });
 
-    $scope.getContents = function(path) {
+    $scope.select = function(path) {
+      fs.getEntryAtPath(path)
+        .then(function(result) {
+          if (result.isDirectory) {
+            getContents(path);
+
+          } else if (result.isFile) {
+            var fileType = fs.checkFileValidity(result);
+            if (fileType === "Aliquot" && $scope.modal.fileType === "Aliquot") {
+              $scope.aliquot = result;
+
+            } else if (fileType === "Report Settings" && $scope.modal.fileType === "Report Settings") {
+              $scope.reportSettings = result;
+            }
+          }
+        });
+    };
+
+    getContents = function(path) {
       fs.getEntries(path)
         .then(function(result) {
           $scope.files = result;
-          $scope.files.unshift({ name: "[parent]" });
-          fs.getParentDirectory(path)
-            .then(function(result) {
-              result.name = "[parent]";
-              $scope.files[0] = result;
-            });
+          // only adds the parent option if not in top directory
+          if (path != cordova.file.dataDirectory) {
+            $scope.files.unshift({ name: "[parent]" });
+            fs.getParentDirectory(path)
+              .then(function(result) {
+                result.name = "[parent]";
+                $scope.files[0] = result;
+              });
+          }
         });
-    }
+    };
+
+    $scope.$on('modal.hidden', function() {
+      getContents(cordova.file.dataDirectory);
+    });
   });
 
   $ionicModal.fromTemplateUrl('templates/fileBrowser.html', {
@@ -111,9 +150,10 @@ angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova'])
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.modal = modal;
-  })
+  });
 
-  $scope.openModal = function() {
+  $scope.openModal = function(fileType) {
+    $scope.modal.fileType = fileType;
     $scope.modal.show();
   };
 
