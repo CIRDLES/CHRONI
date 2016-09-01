@@ -1,0 +1,27 @@
+<ion-view view-title="View Files">
+  <ion-content>
+    <div class="row">
+      <h2 class="alignCenter">Reports</h2>
+    </div>
+    <div class="card col-offset-10 col-80">
+      <p class="item item-divider text-center">Aliquot</p>
+      <div class="item item-button-right item-text-wrap responsive-sm">
+        <button class="button ion-plus-round button-clear button-positive button-small" ng-click="openModal()"></button> Current: {{ currentAliquot }}
+      </div>
+    </div>
+    <div class="card col-offset-10 col-80">
+      <p class="item item-divider text-center">Report Settings</p>
+      <div class="item item-button-right item-text-wrap responsive-sm">
+        <button class="button ion-plus-round button-clear button-positive button-small"></button> Current: {{ currentReportSettings }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <button class="button button-assertive">Download</button>
+      </div>
+      <div class="col text-center">
+        <button class="button button-positive">Open</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
