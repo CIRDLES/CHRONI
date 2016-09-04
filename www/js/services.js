@@ -46,7 +46,7 @@ angular.module('chroni.services', ['ionic'])
  * files.
  *
  */
-.factory('Files', function($q) {
+.factory('Files', function($q, $cordovaFile) {
 
   var File = function() {};
 
@@ -116,20 +116,90 @@ angular.module('chroni.services', ['ionic'])
 
     checkFileValidity: function(file) {
       // if valid, returns the type of XML file
-      var type = "";
+      var deferred = $q.defer();
       var x2js = new X2JS();
-      var jsonObj = x2js.xml_str2json(file);
-      if (jsonObj) {
-        if (jsonObj["Aliquot"]) {
-          type = "Aliquot";
 
-        } else if (jsonObj["ReportSettings"]) {
-          type = "Report Settings";
-        }
+      path = file.fullPath;
+      if (path[0] === "/") {
+        path = path.substring(1, path.length);
       }
-      return type;
-    }
 
+      $cordovaFile.readAsText(cordova.file.dataDirectory, path)
+        .then(function(result) {
+            var jsonObj = x2js.xml_str2json(result);
+            if (jsonObj) {
+              if (jsonObj["Aliquot"]) {
+                deferred.resolve("Aliquot");
+
+              } else if (jsonObj["ReportSettings"]) {
+                deferred.resolve("Report Settings");
+              }
+            }
+          },
+          function(error) {
+            deferred.reject(error);
+          });
+
+      return deferred.promise;
+    },
+
+    createAndWriteFile: function(path, data) {
+      var deferred = $q.defer();
+      var success = false;
+      $cordovaFile.createFile(cordova.file.dataDirectory, path, false)
+        .then(function(result) {
+          $cordovaFile.writeFile(cordova.file.dataDirectory, path, data, false)
+            .then(function() {
+
+            });
+        });
+      return deferred.promise;
+    },
+
+    isEmptyDirectory: function(path) {
+      var deferred = $q.defer();
+      window.resolveLocalFileSystemURL(path,
+        function(fileSystem) {
+          var directoryReader = fileSystem.createReader();
+          directoryReader.readEntries(function(entries) {
+            deferred.resolve(entries.length === 0);
+          }, function(error) {
+            deferred.reject(error);
+          });
+        },
+        function(error) {
+          deferred.reject(error);
+        });
+      return deferred.promise;
+    },
+
+    directoryContainsFileByPath: function(file, files) {
+      var deferred = $q.defer();
+      var found = false;
+      var i = 0;
+      while (!found && i < files.length) {
+        if (file.fullPath === files[i].fullPath) {
+          found = true;
+        }
+        i++;
+      }
+      deferred.resolve(found);
+      return deferred.promise;
+    },
+
+    directoryContainsFileByName: function(file, files) {
+      var deferred = $q.defer();
+      var found = false;
+      var i = 0;
+      while (!found && i < files.length) {
+        if (file.name === files[i].name) {
+          found = true;
+        }
+        i++;
+      }
+      deferred.resolve(found);
+      return deferred.promise;
+    }
   };
 
   return File;

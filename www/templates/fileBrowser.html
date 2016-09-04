@@ -1,18 +1,24 @@
 <ion-modal-view>
   <ion-header-bar>
+    <div class="buttons">
+      <button class="button button-clear button-positive" ng-click="toggleEdit()">{{ editText }}</button>
+    </div>
     <h1 class="title">Files</h1>
     <div class="buttons">
       <button class="button button-clear button-assertive" ng-click="closeModal()">Cancel</button>
     </div>
   </ion-header-bar>
   <ion-content>
-    <div class="list">
-      <div ng-repeat="file in files">
-        <a class="item item-icon-left" ng-click="select(file.nativeURL)">
-          <i ng-show="file.isDirectory" class="icon ion-folder"></i>
-          <i ng-show="file.isFile" class="icon ion-document"></i> {{ file.name }}
-        </a>
-      </div>
-    </div>
+    <ion-list show-delete="showDelete" can-swipe="true">
+      <ion-item class="item item-icon-left" ng-repeat="file in files" ng-click="select(file.nativeURL)" on-hold="onFileHold(files, file, $index)">
+        <i ng-show="file.isDirectory" class="icon ion-folder"></i>
+        <i ng-show="file.isFile" class="icon ion-document"></i> {{ file.name }}
+        <ion-option-button class="button-assertive" ng-click="deleteFile(files, file, $index)">Delete</ion-option-button>
+        <ion-delete-button class="ion-minus-circled" ng-click="deleteFile(files, file, $index)"></ion-delete-button>
+      </ion-item>
+    </ion-list>
   </ion-content>
+  <ion-footer-bar ng-show="inEdit">
+    <button class="button pull-right button-clear button-positive" ng-click="pasteFile(files, currentDirectory)">Paste</button>
+  </ion-footer-bar>
 </ion-modal-view>
