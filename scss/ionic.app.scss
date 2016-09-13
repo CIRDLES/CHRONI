@@ -18,6 +18,7 @@ $dark:                            #444 !default;
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 
+
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
@@ -36,3 +37,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   text-align: center;
 }
 
+h1 {
+  color: #BAD9EB
+}
+
+.chroni-button {
+  background-color: #1B7AB0
+  color: white;
+}
