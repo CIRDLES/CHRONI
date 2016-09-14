@@ -20,7 +20,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
     .state('app', {
     url: '/app',
     abstract: true,
-    templateUrl: 'templates/menu.html',
+    templateUrl: 'pages/menu/menu.html',
     controller: 'AppCtrl'
   })
 
@@ -28,7 +28,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
     url: '/home',
     views: {
       'menuContent': {
-        templateUrl: 'templates/home.html',
+        templateUrl: 'pages/home/home.html',
         controller: 'homeCtrl'
       }
     }
@@ -38,7 +38,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
     url: '/history',
     views: {
       'menuContent': {
-        templateUrl: 'templates/history.html'
+        templateUrl: 'pages/history/history.html'
       }
     }
   })
@@ -47,7 +47,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
     url: '/viewFiles',
     views: {
       'menuContent': {
-        templateUrl: 'templates/viewFiles.html',
+        templateUrl: 'pages/viewFiles/viewFiles.html',
         controller: 'viewFilesCtrl'
       }
     }
@@ -57,7 +57,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
     url: '/importFiles',
     views: {
       'menuContent': {
-        templateUrl: 'templates/importFiles.html',
+        templateUrl: 'pages/importFiles/importFiles.html',
         controller: 'importFilesCtrl'
       }
     }
