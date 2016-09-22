@@ -14,34 +14,34 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
-
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default;
-
-
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
 .alignRight {
-  float: right;
+    float: right;
 }
+
 .alignLeft {
-  float: left;
+    float: left;
 }
+
 .alignCenter {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
+
 .textCenter {
-  text-align: center;
+    text-align: center;
 }
 
 h1 {
-  color: #BAD9EB
+    color: #BAD9EB;
 }
 
 .chroni-button {
-  background-color: #1B7AB0
-  color: white;
+    background-color: #1B7AB0;
+    color: white;
 }

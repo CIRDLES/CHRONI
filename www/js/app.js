@@ -6,62 +6,72 @@
 angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
 
 .run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
+    $ionicPlatform.ready(function() {
+        if (window.StatusBar) {
+            // org.apache.cordova.statusbar required
+            StatusBar.styleDefault();
+        }
+    });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider
+    $stateProvider
 
-    .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'pages/menu/menu.html',
-    controller: 'AppCtrl'
-  })
+        .state('app', {
+        url: '/app',
+        abstract: true,
+        templateUrl: 'pages/menu/menu.html',
+        controller: 'AppCtrl'
+    })
 
-  .state('app.home', {
-    url: '/home',
-    views: {
-      'menuContent': {
-        templateUrl: 'pages/home/home.html',
-        controller: 'homeCtrl'
-      }
-    }
-  })
+    .state('app.home', {
+        url: '/home',
+        views: {
+            'menuContent': {
+                templateUrl: 'pages/home/home.html',
+                controller: 'homeCtrl'
+            }
+        }
+    })
 
-  .state('app.history', {
-    url: '/history',
-    views: {
-      'menuContent': {
-        templateUrl: 'pages/history/history.html'
-      }
-    }
-  })
+    .state('app.history', {
+        url: '/history',
+        views: {
+            'menuContent': {
+                templateUrl: 'pages/history/history.html'
+            }
+        }
+    })
 
-  .state('app.viewFiles', {
-    url: '/viewFiles',
-    views: {
-      'menuContent': {
-        templateUrl: 'pages/viewFiles/viewFiles.html',
-        controller: 'viewFilesCtrl'
-      }
-    }
-  })
+    .state('app.viewFiles', {
+        url: '/viewFiles',
+        views: {
+            'menuContent': {
+                templateUrl: 'pages/viewFiles/viewFiles.html',
+                controller: 'viewFilesCtrl'
+            }
+        }
+    })
 
-  .state('app.importFiles', {
-    url: '/importFiles',
-    views: {
-      'menuContent': {
-        templateUrl: 'pages/importFiles/importFiles.html',
-        controller: 'importFilesCtrl'
-      }
-    }
-  });
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/home');
+    .state('app.about', {
+        url: '/about',
+        views: {
+            'menuContent': {
+                templateUrl: 'pages/about/about.html',
+                controller: 'aboutCtrl'
+            }
+        }
+    })
+
+    .state('app.importFiles', {
+        url: '/importFiles',
+        views: {
+            'menuContent': {
+                templateUrl: 'pages/importFiles/importFiles.html',
+                controller: 'importFilesCtrl'
+            }
+        }
+    });
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/home');
 });
