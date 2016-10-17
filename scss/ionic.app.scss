@@ -41,6 +41,82 @@ h1 {
   color: #BAD9EB;
 }
 
+#loginContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+}
+
+#loginImage {
+  order: 1;
+  flex: 1 1 auto;
+  align-self: auto;
+  min-height: 25%;
+  max-height: 35%;
+}
+
+.loginForm {
+  order: 2;
+  flex: 1 1 auto;
+  align-self: auto;
+  min-height: auto;
+  width: 100%;
+}
+
+.loginItem {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin-bottom: 2px;
+}
+
+#loginButton {
+  border-radius: 100px;
+  margin-top: 15px;
+  line-height: 5px;
+  min-height: 35px;
+}
+
+#loginContainer {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-end;
+  align-content: center;
+  align-items: center;
+}
+
+#loginImage {
+  order: 1;
+  flex: 1 1 auto;
+  align-self: auto;
+  min-height: 25%;
+  max-height: 35%;
+}
+
+.loginForm {
+  order: 2;
+  flex: 1 1 auto;
+  align-self: auto;
+  min-height: auto;
+  width: 100%;
+}
+
+.loginItem {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin-bottom: 2px;
+}
+
+#loginButton {
+  border-radius: 100px;
+  margin-top: 15px;
+  line-height: 5px;
+  min-height: 35px;
+}
+
 .chroni-button {
   background-color: #1B7AB0;
   color: white;

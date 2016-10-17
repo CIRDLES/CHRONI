@@ -1,27 +1,27 @@
 <ion-view view-title="View Files">
-  <ion-content>
-    <div class="row">
-      <h2 class="alignCenter">Reports</h2>
-    </div>
-    <div class="card col-offset-10 col-80">
-      <p class="item item-divider text-center">Aliquot</p>
-      <div class="item item-button-right item-text-wrap responsive-sm">
-        <button class="button ion-plus-round button-clear button-positive button-small" ng-click="openModal('Aliquot')"></button> Current: {{ aliquot.name }}
-      </div>
-    </div>
-    <div class="card col-offset-10 col-80">
-      <p class="item item-divider text-center">Report Settings</p>
-      <div class="item item-button-right item-text-wrap responsive-sm">
-        <button class="button ion-plus-round button-clear button-positive button-small" ng-click="openModal('Report Settings')"></button> Current: {{ reportSettings.name }}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col text-center">
-        <button class="button button-balanced">Download</button>
-      </div>
-      <div class="col text-center">
-        <button class="button button-positive">Open</button>
-      </div>
-    </div>
-  </ion-content>
+    <ion-content scroll="false">
+        <div class="row">
+            <h2 class="alignCenter">Reports</h2>
+        </div>
+        <div class="card col-offset-10 col-80">
+            <p class="item item-divider text-center">Aliquot</p>
+            <div class="item item-button-right item-text-wrap responsive-sm">
+                <button class="button ion-plus-round button-clear button-positive button-small" ng-click="openModal('Aliquot')"></button> Current: {{ aliquot.name }}
+            </div>
+        </div>
+        <div class="card col-offset-10 col-80">
+            <p class="item item-divider text-center">Report Settings</p>
+            <div class="item item-button-right item-text-wrap responsive-sm">
+                <button class="button ion-plus-round button-clear button-positive button-small" ng-click="openModal('Report Settings')"></button> Current: {{ reportSettings.name }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <button class="button button-balanced">Download</button>
+            </div>
+            <div class="col text-center">
+                <button class="button button-positive">Open</button>
+            </div>
+        </div>
+    </ion-content>
 </ion-view>
