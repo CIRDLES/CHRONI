@@ -115,7 +115,7 @@ angular.module('chroni.controllers')
         } catch (error) {}
 
         if (!aliquot || aliquot === "") {
-            fs.getEntryAtPath(encodeURI(cordova.file.dataDirectory + "chroni/Aliquot/Default Aliquot.xml"))
+            fs.getEntryAtPath(encodeURI(cordova.file.dataDirectory + "chroni/Aliquots/Default Aliquot.xml"))
                 .then(function(result) {
                     Settings.set("lastAliquot", result);
                 });
@@ -127,6 +127,6 @@ angular.module('chroni.controllers')
                     Settings.set("lastReportSettings", result);
                 });
         }
-    })
 
+    });
 });
