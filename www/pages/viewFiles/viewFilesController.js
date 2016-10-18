@@ -1,6 +1,6 @@
 angular.module('chroni.controllers')
 
-.controller('viewFilesCtrl', function($scope, $ionicModal, $ionicPlatform, $cordovaFile, $cordovaToast, $ionicPopup, $ionicActionSheet, Settings, Files) {
+.controller('viewFilesCtrl', function($scope, $ionicModal, $ionicPlatform, $cordovaFile, $cordovaToast, $ionicPopup, $ionicActionSheet, Settings, Files, History) {
 
     $scope.aliquot = Settings.get('lastAliquot');
     $scope.reportSettings = Settings.get('lastReportSettings');
@@ -9,6 +9,10 @@ angular.module('chroni.controllers')
         Settings.save();
     }, true);
 
+    $scope.openTable = function() {
+        var date = new Date();
+        History.addItem($scope.aliquot, $scope.reportSettings, date);
+    };
 
     var fs = new Files;
 
@@ -54,9 +58,8 @@ angular.module('chroni.controllers')
                     $scope.files = result;
                     // only adds the parent option if not in top directory
                     if (path != cordova.file.dataDirectory) {
-                        $scope.files.unshift({
-                            name: "[parent]"
-                        });
+                        $scope.files.unshift({ name: "[parent]" });
+
                         fs.getParentDirectory(path)
                             .then(function(result) {
                                 result.name = "[parent]";
@@ -287,11 +290,10 @@ angular.module('chroni.controllers')
     $scope.onFileHold = function(files, file, index) {
         if (file.isFile) {
             var actionSheet = $ionicActionSheet.show({
-                buttons: [{
-                    text: 'Cut'
-                }, {
-                    text: 'Copy'
-                }],
+                buttons: [
+                    { text: 'Cut' },
+                    { text: 'Copy' }
+                ],
                 destructiveText: 'Delete',
                 titleText: 'Modify File',
                 cancelText: 'Cancel',

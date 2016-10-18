@@ -42,9 +42,74 @@ angular.module('chroni.services', ['ionic'])
 })
 
 /**
+ * The History factory stores the users' previously opened tables. Each item
+ * contains the Report Settings file that was used, the Aliquot file that was
+ * opened, and the Date and Time at which it was opened.
+ *
+ * The Date and Time is obtained from using Javascript's date functionality
+ * via the code "<variable> = new Date()".
+ */
+.factory('History', function() {
+    var _history = {
+        "historyList": []
+    };
+
+    try {
+        _history = JSON.parse(window.localStorage['history']);
+
+    } catch (e) {}
+
+    if (!_history) {
+        window.localStorage['history'] = JSON.stringify(_history);
+    }
+
+    console.log(JSON.stringify(_history));
+
+    var historyList = _history["historyList"];
+
+    var obj = {
+
+        addItem: function(aliquot, reportSettings, date) {
+            item = {
+                "aliquot": aliquot,
+                "reportSettings": reportSettings,
+                "date": date
+            }
+
+            historyList.unshift(item);
+            this.save();
+        },
+
+        getItem: function(index) {
+            if (index < historyList.length)
+                return historyList[index];
+        },
+
+        getHistoryList: function() {
+            console.log(historyList);
+            return historyList;
+        },
+
+        removeItem: function(index) {
+            if (index < historyList.length) {
+                historyList.splice(index, 1);
+                this.save();
+            }
+        },
+
+        save: function() {
+            _history["historyList"] = historyList;
+            window.localStorage['history'] = JSON.stringify(_history);
+        }
+
+    }
+
+    return obj;
+})
+
+/**
  * The Files factory stores the users' files, such as aliquot and report settings
  * files.
- *
  */
 .factory('Files', function($q, $cordovaFile) {
 
