@@ -63,8 +63,6 @@ angular.module('chroni.services', ['ionic'])
         window.localStorage['history'] = JSON.stringify(_history);
     }
 
-    console.log(JSON.stringify(_history));
-
     var historyList = _history["historyList"];
 
     var obj = {
@@ -86,7 +84,6 @@ angular.module('chroni.services', ['ionic'])
         },
 
         getHistoryList: function() {
-            console.log(historyList);
             return historyList;
         },
 
@@ -176,35 +173,6 @@ angular.module('chroni.services', ['ionic'])
                 function(error) {
                     deferred.reject(error)
                 });
-            return deferred.promise;
-        },
-
-        checkFileValidity: function(file) {
-            // if valid, returns the type of XML file
-            var deferred = $q.defer();
-            var x2js = new X2JS();
-
-            path = file.fullPath;
-            if (path[0] === "/") {
-                path = path.substring(1, path.length);
-            }
-
-            $cordovaFile.readAsText(cordova.file.dataDirectory, path)
-                .then(function(result) {
-                        var jsonObj = x2js.xml_str2json(result);
-                        if (jsonObj) {
-                            if (jsonObj["Aliquot"]) {
-                                deferred.resolve("Aliquot");
-
-                            } else if (jsonObj["ReportSettings"]) {
-                                deferred.resolve("Report Settings");
-                            }
-                        }
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    });
-
             return deferred.promise;
         },
 

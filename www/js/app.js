@@ -59,6 +59,16 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
         }
     })
 
+    .state('app.tableView', {
+        url:'/tableView',
+        views: {
+            'menuContent': {
+                templateUrl: 'pages/table/tableView.html',
+                controller: 'tableViewCtrl'
+            }
+        }
+    })
+
     .state('app.about', {
         url: '/about',
         views: {
