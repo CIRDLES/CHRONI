@@ -13,6 +13,11 @@ angular.module('chroni.controllers')
     var xml = new XML;
 
     $ionicPlatform.ready(function() {
+        // this view's orientation is locked in portrait
+        $scope.$on('$ionicView.beforeEnter', function() {
+            window.screen.lockOrientation('portrait');
+        });
+
         fs.getEntriesAtRoot()
             .then(function(result) {
                 $scope.files = result;
@@ -81,8 +86,10 @@ angular.module('chroni.controllers')
                             .then(function(reportSettings) {
                                 //var date = new Date();
                                 //History.addItem($scope.aliquot, $scope.reportSettings, date);
-                                var table = xml.createTableData(aliquot, reportSettings);
-                                //$state.go('app.tableView');
+                                var tableDataArray = xml.createTableData(aliquot, reportSettings);
+                                $state.go('app.tableView', {
+                                    tableArray: JSON.stringify(tableDataArray)
+                                });
                             });
                     }
                 });

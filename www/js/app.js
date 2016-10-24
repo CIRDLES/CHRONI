@@ -17,6 +17,8 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+        // initially locks the orientation in portrait
+        window.screen.lockOrientation('portrait');
     });
 })
 
@@ -60,7 +62,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
     })
 
     .state('app.tableView', {
-        url:'/tableView',
+        url: '/tableView/:tableArray',
         views: {
             'menuContent': {
                 templateUrl: 'pages/table/tableView.html',

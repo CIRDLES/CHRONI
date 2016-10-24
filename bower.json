@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "ngCordova": "^0.1.27-alpha",
-    "abdmob/x2js": "^1.2.0"
+    "abdmob/x2js": "^1.2.0",
+    "bignumber.js": "^2.4.0"
   }
 }

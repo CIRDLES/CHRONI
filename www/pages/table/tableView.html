@@ -1,14 +1,27 @@
 <ion-view view-title="Aliquot Table">
     <ion-content scroll="false">
+        <div class="alignCenter">
+            <button class="button button-small">Aliquot</button>
+            <button class="button button-small">Report Settings</button>
+        </div>
         <ion-scroll zooming="true" direction="xy">
             <table>
                 <thead>
-                    <th>Header 1</th>
-                    <th>Header 2</th>
+                    <tr ng-repeat="row in headerArray">
+                        <th style="padding: 10px;" ng-if="$parent.$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
+                            {{ column }}
+                        </th>
+                        <th style="padding: 10px;" ng-if="!$parent.$first" ng-repeat="column in row track by $index">
+                            {{ column }}
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                    <td>Body 1</td>
-                    <td>Body 2</td>
+                    <tr ng-repeat="row in fractionArray">
+                        <td style="padding: 10px;" ng-repeat="column in row track by $index">
+                            {{ column }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </ion-scroll>

@@ -42,6 +42,50 @@ angular.module('chroni.services', ['ionic'])
 })
 
 /**
+ * The Numbers factory holds all relevant information for data conversions
+ * when building the data table.
+ */
+.factory('Numbers', function() {
+    var _unitConversions = {
+
+        "": 0,
+
+        // mass is stored in grams
+        "g": 0,
+        "mg": -3,
+        "\u03bcg": -6,
+        "ng": -9,
+        "pg": -12,
+        "fg": -15,
+
+        // concentrations
+        "\u0025": -2,
+        "\u2030": -3,
+        "ppm": -6,
+        "ppb": -9,
+        "g/g": 0,
+
+        // dates are stored in years
+        "a": 0,
+        "ka": 3,
+        "Ma": 6,
+        "Ga": 9,
+
+        // misc in % per amu
+        "%/amu": -2
+
+    }
+
+    var numbers = {
+        getUnitConversions: function() {
+            return _unitConversions;
+        }
+    };
+
+    return numbers;
+})
+
+/**
  * The History factory stores the users' previously opened tables. Each item
  * contains the Report Settings file that was used, the Aliquot file that was
  * opened, and the Date and Time at which it was opened.
