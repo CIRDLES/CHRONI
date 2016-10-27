@@ -36,82 +36,92 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
     text-align: center;
 }
 
-h1 {
-    color: #BAD9EB;
+.chroni_image {
+    width: 90px;
+    height: 150px;
+    margin-left: 150px;
+    text-align: center;
+}
+
+.about_p {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
 }
 
 #loginContainer {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-end;
-  align-content: center;
-  align-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
 }
 
 #loginImage {
-  order: 1;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: 25%;
-  max-height: 35%;
+    order: 1;
+    flex: 1 1 auto;
+    align-self: auto;
+    min-height: 25%;
+    max-height: 35%;
 }
 
 .loginForm {
-  order: 2;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: auto;
-  width: 100%;
+    order: 2;
+    flex: 1 1 auto;
+    align-self: auto;
+    min-height: auto;
+    width: 100%;
 }
 
 .loginItem {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  margin-bottom: 2px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 2px;
 }
 
 #loginButton {
-  border-radius: 100px;
-  margin-top: 15px;
-  line-height: 5px;
-  min-height: 35px;
+    border-radius: 100px;
+    margin-top: 15px;
+    line-height: 5px;
+    min-height: 35px;
 }
 
 #loginContainer {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-end;
-  align-content: center;
-  align-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
 }
 
 #loginImage {
-  order: 1;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: 25%;
-  max-height: 35%;
+    order: 1;
+    flex: 1 1 auto;
+    align-self: auto;
+    min-height: 25%;
+    max-height: 35%;
 }
 
 .loginForm {
-  order: 2;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: auto;
-  width: 100%;
+    order: 2;
+    flex: 1 1 auto;
+    align-self: auto;
+    min-height: auto;
+    width: 100%;
 }
 
 .loginItem {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  margin-bottom: 2px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 2px;
 }
 
 #loginButton {
-  border-radius: 100px;
-  margin-top: 15px;
-  line-height: 5px;
-  min-height: 35px;
+    border-radius: 100px;
+    margin-top: 15px;
+    line-height: 5px;
+    min-height: 35px;
 }
