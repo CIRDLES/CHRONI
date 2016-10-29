@@ -74,7 +74,7 @@ angular.module('chroni.services', ['ionic'])
         // misc in % per amu
         "%/amu": -2
 
-    }
+    };
 
     var numbers = {
         getUnitConversions: function() {

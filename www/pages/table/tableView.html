@@ -8,17 +8,17 @@
             <table>
                 <thead>
                     <tr ng-repeat="row in headerArray">
-                        <th style="padding: 10px;" ng-if="$parent.$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
+                        <th style="padding: 10px; white-space: nowrap;" ng-if="$parent.$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
                             {{ column }}
                         </th>
-                        <th style="padding: 10px;" ng-if="!$parent.$first" ng-repeat="column in row track by $index">
+                        <th style="padding: 10px; white-space: nowrap;" ng-if="!$parent.$first" ng-repeat="column in row track by $index">
                             {{ column }}
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="row in fractionArray">
-                        <td style="padding: 10px;" ng-repeat="column in row track by $index">
+                        <td style="padding: 10px; white-space: nowrap;" ng-repeat="column in row track by $index">
                             {{ column }}
                         </td>
                     </tr>
