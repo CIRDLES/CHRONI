@@ -4,21 +4,21 @@
             <button class="button button-small">Aliquot</button>
             <button class="button button-small">Report Settings</button>
         </div>
-        <ion-scroll zooming="true" direction="xy">
+        <ion-scroll id="tableScroll" zooming="true" direction="xy">
             <table>
-                <thead>
+                <thead id="tableHead">
                     <tr ng-repeat="row in headerArray">
-                        <th style="padding: 10px; white-space: nowrap;" ng-if="$parent.$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
+                        <th class="tableCell" ng-if="$parent.$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
                             {{ column }}
                         </th>
-                        <th style="padding: 10px; white-space: nowrap;" ng-if="!$parent.$first" ng-repeat="column in row track by $index">
+                        <th class="tableCell" ng-if="!$parent.$first" ng-repeat="column in row track by $index">
                             {{ column }}
                         </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
                     <tr ng-repeat="row in fractionArray">
-                        <td style="padding: 10px; white-space: nowrap;" ng-repeat="column in row track by $index">
+                        <td class="tableCell" ng-repeat="column in row track by $index">
                             {{ column }}
                         </td>
                     </tr>
