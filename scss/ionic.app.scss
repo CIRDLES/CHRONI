@@ -40,8 +40,22 @@ h1 {
     color: #BAD9EB;
 }
 
+#tableContent {
+    background-color: #92C4DE;
+}
+
 #tableScroll {
     height: 83vh;
+}
+
+#tableHead {
+    text-align: center;
+    background-color: #B9D9EA;
+    & tr:first-child,
+    & tr:last-child th:first-child,
+    & tr:last-child th:last-child {
+        text-align: left;
+    }
 }
 
 #tableBody {
@@ -50,18 +64,20 @@ h1 {
     & tr td:last-child {
         text-align: left;
     }
-}
-
-#tableHead {
-    text-align: center;
-    & tr:first-child,
-    & tr:last-child th:first-child,
-    & tr:last-child th:last-child {
-        text-align: left;
+    & tr:nth-child(odd) {
+        background-color: #E1E1E1;
+    }
+    & tr:nth-child(even) {
+        background-color: #FFFFFF;
+    }
+    & tr:first-child {
+        color: #FFFFFF;
+        background-color: #107AB3;
     }
 }
 
 .tableCell {
+    border: 2px solid #000000;
     padding: 10px;
     white-space: nowrap;
     font-family: monospace;
