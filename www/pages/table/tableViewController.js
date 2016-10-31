@@ -1,11 +1,121 @@
 angular.module('chroni.controllers')
 
-.controller('tableViewCtrl', function($scope, $ionicPlatform, $state, XML) {
+.controller('tableViewCtrl', function($scope, $ionicPlatform, $ionicScrollDelegate, $ionicGesture, $state, XML) {
     // this view's orientation is not locked
     $ionicPlatform.ready(function() {
         $scope.$on('$ionicView.beforeEnter', function() {
             window.screen.unlockOrientation();
         });
+        $scope.$on('$ionicView.beforeLeave', function() {
+            window.screen.lockOrientation('portrait');
+        });
+
+        // sets the height of the table body scroll view to fit the page properly
+        var contentHeight = document.getElementById("tableContent").offsetHeight;
+        var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
+        var headerScrollHeight = document.getElementById("headScroll").offsetHeight;
+        var bodyScrollHeight = (contentHeight - buttonDivHeight - headerScrollHeight - 6);
+
+        $scope.bodyScrollHeight = bodyScrollHeight / contentHeight * 100;
+        $scope.headerScrollHeight = (contentHeight - buttonDivHeight - bodyScrollHeight) / contentHeight * 100;
+
+        $scope.zoomLevel = 1;
+
+        // sets scrolling gestures
+        var headerScrollEl = angular.element(document.getElementById("headScroll"));
+        var bodyScrollEl = angular.element(document.getElementById("bodyScroll"));
+
+        $scope.headerScroll = function(event) {
+            $scope.$apply(function() {
+                // turns off the scrolling gesture for the body
+                $ionicGesture.off($scope.bodyGesture, 'scroll', $scope.bodyScroll);
+
+                var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
+                var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
+
+                var position = headerScrollDel.getScrollPosition();
+
+                // scrolls the body with the header in the x direction
+                bodyScrollDel.scrollTo(
+                    position.left,
+                    bodyScrollDel.getScrollPosition().top,
+                    false
+                );
+                bodyScrollDel.zoomTo(
+                    position.zoom,
+                    false
+                );
+                if (position.zoom !== $scope.zoomLevel) {
+                    headerScrollDel.zoomTo(
+                        position.zoom,
+                        false
+                    );
+                    $scope.zoomLevel = position.zoom;
+                    
+                }
+            });
+        }
+
+        $scope.bodyScroll = function(event) {
+            $scope.$apply(function() {
+                // turns off the scrolling gesture for the header
+                $ionicGesture.off($scope.headerGesture, 'scroll', $scope.headerScroll);
+
+                var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
+                var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
+
+                var position = bodyScrollDel.getScrollPosition();
+
+                // scrolls the header with the body in the x direction
+                headerScrollDel.scrollTo(
+                    position.left,
+                    headerScrollDel.getScrollPosition().top,
+                    false
+                );
+                if (position.zoom !== $scope.zoomLevel) {
+                    headerScrollDel.zoomTo(
+                        position.zoom,
+                        false
+                    );
+                    $scope.zoomLevel = position.zoom;
+                }
+            });
+        }
+
+        $scope.headerGesture = $ionicGesture.on("scroll", $scope.headerScroll, headerScrollEl);
+        $scope.bodyGesture = $ionicGesture.on("scroll", $scope.bodyScroll, bodyScrollEl);
+
+        $scope.headerScrollReset = function() {
+            // called when performing a header scroll to turn on the header scroll gesture
+            $scope.headerGesture = $ionicGesture.on("scroll", $scope.headerScroll, headerScrollEl);
+        }
+
+        $scope.bodyScrollReset = function() {
+            // called when performing a body scroll to turn on the body scroll gesture
+            $scope.bodyGesture = $ionicGesture.on("scroll", $scope.bodyScroll, bodyScrollEl);
+        }
+
+        // sets zooming gestures
+        $scope.headerZoom = function() {
+            var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
+            var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
+            // zooms to body to the same level as head
+            bodyScrollDel.zoomTo(
+                headerScrollDel.getScrollPosition().zoom,
+                false
+            );
+        }
+
+        $scope.bodyZoom = function() {
+            var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
+            var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
+            // zooms to body to the same level as head
+            headerScrollDel.zoomTo(
+                bodyScrollDel.getScrollPosition().zoom,
+                false
+            );
+        }
+
     });
 
     var tableArray = JSON.parse($state.params.tableArray);
@@ -24,9 +134,25 @@ angular.module('chroni.controllers')
         category.forEach(function(column) {
             column.forEach(function(item) {
                 newCategory.push(item);
-            })
+            });
         });
         displayArray[i] = newCategory;
+    }
+
+    $scope.columnLengths = [];
+    // first initializes all column lengths to 0 (uses the last row in header for this)
+    for (i = 0; i < displayArray[3].length; i++) {
+        $scope.columnLengths.push(0);
+    }
+    // steps through each row except top one (displayArray contains row arrays which contain columns)
+    for (i = 1; i < displayArray.length; i++) {
+        // steps through each column in the row
+        for (j = 0; j < displayArray[i].length; j++) {
+            if (displayArray[i][j].length > $scope.columnLengths[j]) {
+                // the column contains a longer item than already found, updates lengths array
+                $scope.columnLengths[j] = displayArray[i][j].length;
+            }
+        }
     }
 
     $scope.headerArray = displayArray.slice(0, 4);

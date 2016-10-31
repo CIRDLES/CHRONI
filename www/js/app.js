@@ -18,7 +18,7 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
             StatusBar.styleDefault();
         }
         // initially locks the orientation in portrait
-        window.screen.lockOrientation('portrait');
+        //window.screen.lockOrientation('portrait');
     });
 })
 

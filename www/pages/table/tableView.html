@@ -1,24 +1,28 @@
 <ion-view view-title="Aliquot Table">
     <ion-content id="tableContent" scroll="false">
-        <div class="alignCenter">
+        <div id="tableButtonDiv" class="alignCenter">
             <button class="button button-small">Aliquot</button>
             <button class="button button-small">Report Settings</button>
         </div>
-        <ion-scroll id="tableScroll" zooming="true" direction="xy">
+        <ion-scroll on-scroll="headerScrollReset()" delegate-handle="headScroll" id="headScroll" has-bouncing="false" zooming="true" scrollbar-x="false" scrollbar-y="false" direction="xy">
             <table>
                 <thead id="tableHead">
                     <tr ng-repeat="row in headerArray">
                         <th class="tableCell" ng-if="$parent.$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
                             {{ column }}
                         </th>
-                        <th class="tableCell" ng-if="!$parent.$first" ng-repeat="column in row track by $index">
+                        <th class="tableCell" ng-if="!$parent.$first" ng-repeat="column in row track by $index" style="min-width: {{ columnLengths[$index] }}em; max-width: {{ columnLengths[$index] }}em;">
                             {{ column }}
                         </th>
                     </tr>
                 </thead>
+            </table>
+        </ion-scroll>
+        <ion-scroll on-scroll="bodyScrollReset()" delegate-handle="bodyScroll" id="bodyScroll" has-bouncing="false" zooming="true" direction="xy" style="height: {{ bodyScrollHeight * zoomLevel }}%;">
+            <table>
                 <tbody id="tableBody">
                     <tr ng-repeat="row in fractionArray">
-                        <td class="tableCell" ng-repeat="column in row track by $index">
+                        <td class="tableCell" ng-repeat="column in row track by $index" style="min-width: {{ columnLengths[$index] }}em; max-width: {{ columnLengths[$index] }}em;">
                             {{ column }}
                         </td>
                     </tr>
