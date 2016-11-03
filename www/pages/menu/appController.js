@@ -45,6 +45,7 @@ angular.module('chroni.controllers')
     };
 
     $ionicPlatform.ready(function() {
+
         $cordovaFile.checkDir(cordova.file.dataDirectory, "chroni")
             .then(function(success) {},
                 function(error) {

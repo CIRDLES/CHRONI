@@ -14,10 +14,10 @@ $assertive:                       #ef473a !default;
 $royal:                           #886aea !default;
 $dark:                            #444 !default;
 */
+
 // The path for our ionicons font files, relative to the built CSS in www/css
 $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
 .alignRight {
     float: right;
 }
@@ -40,83 +40,79 @@ h1 {
     color: #BAD9EB;
 }
 
+#tableContent {
+    background-color: #92C4DE;
+}
+
+#tableHead {
+    text-align: center;
+    background-color: #B9D9EA;
+    & tr:first-child,
+    & tr:last-child th:first-child,
+    & tr:last-child th:last-child {
+        text-align: left;
+    }
+}
+
+#tableBody {
+    text-align: right;
+    & tr td:first-child,
+    & tr td:last-child {
+        text-align: left;
+    }
+    & tr:nth-child(odd) {
+        background-color: #E1E1E1;
+    }
+    & tr:nth-child(even) {
+        background-color: #FFFFFF;
+    }
+    & tr:first-child {
+        color: #FFFFFF;
+        background-color: #107AB3;
+    }
+}
+
+.tableCell {
+    border: 2px solid #000000;
+    padding: 10px;
+    white-space: nowrap;
+    font-family: monospace;
+}
+
 #loginContainer {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-end;
-  align-content: center;
-  align-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-end;
+    align-content: center;
+    align-items: center;
 }
 
 #loginImage {
-  order: 1;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: 25%;
-  max-height: 35%;
+    order: 1;
+    flex: 1 1 auto;
+    align-self: auto;
+    min-height: 25%;
+    max-height: 35%;
 }
 
 .loginForm {
-  order: 2;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: auto;
-  width: 100%;
+    order: 2;
+    flex: 1 1 auto;
+    align-self: auto;
+    min-height: auto;
+    width: 100%;
 }
 
 .loginItem {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  margin-bottom: 2px;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 2px;
 }
 
 #loginButton {
-  border-radius: 100px;
-  margin-top: 15px;
-  line-height: 5px;
-  min-height: 35px;
-}
-
-#loginContainer {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-end;
-  align-content: center;
-  align-items: center;
-}
-
-#loginImage {
-  order: 1;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: 25%;
-  max-height: 35%;
-}
-
-.loginForm {
-  order: 2;
-  flex: 1 1 auto;
-  align-self: auto;
-  min-height: auto;
-  width: 100%;
-}
-
-.loginItem {
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  margin-bottom: 2px;
-}
-
-#loginButton {
-  border-radius: 100px;
-  margin-top: 15px;
-  line-height: 5px;
-  min-height: 35px;
-}
-
-.chroni-button {
-    background-color: #1B7AB0;
-    color: white;
+    border-radius: 100px;
+    margin-top: 15px;
+    line-height: 5px;
+    min-height: 35px;
 }
