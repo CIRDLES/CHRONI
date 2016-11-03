@@ -4,7 +4,7 @@
             <button class="button button-small">Aliquot</button>
             <button class="button button-small">Report Settings</button>
         </div>
-        <ion-scroll on-scroll="headerScrollReset()" delegate-handle="headScroll" id="headScroll" has-bouncing="false" zooming="true" scrollbar-x="false" scrollbar-y="false" direction="xy">
+        <ion-scroll on-scroll="headerScrollReset()" delegate-handle="headScroll" id="headScroll" has-bouncing="false" zooming="true" scrollbar-x="false" scrollbar-y="false" direction="xy" style="height: {{ headerHeight ? (headerHeight * zoomLevel) + .5 + 'px' : 'auto'; }}">
             <table>
                 <thead id="tableHead">
                     <tr ng-repeat="row in headerArray">
@@ -18,7 +18,7 @@
                 </thead>
             </table>
         </ion-scroll>
-        <ion-scroll on-scroll="bodyScrollReset()" delegate-handle="bodyScroll" id="bodyScroll" has-bouncing="false" zooming="true" direction="xy" style="height: {{ bodyScrollHeight * zoomLevel }}%;">
+        <ion-scroll on-scroll="bodyScrollReset()" delegate-handle="bodyScroll" id="bodyScroll" has-bouncing="false" zooming="true" direction="xy" style="height: {{ bodyScrollHeight / zoomLevel }}px;">
             <table>
                 <tbody id="tableBody">
                     <tr ng-repeat="row in fractionArray">

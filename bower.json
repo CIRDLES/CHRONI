@@ -7,6 +7,16 @@
   "dependencies": {
     "ngCordova": "^0.1.27-alpha",
     "abdmob/x2js": "^1.2.0",
-    "bignumber.js": "^2.4.0"
+    "bignumber.js": "^2.4.0",
+    "angular-sanitize": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "angular-animate": "^1.5.8",
+    "angular": "^1.5.8"
+  },
+  "resolutions": {
+    "angular-sanitize": "^1.5.8",
+    "angular-ui-router": "^0.3.1",
+    "angular-animate": "^1.5.8",
+    "angular": "^1.5.8"
   }
 }

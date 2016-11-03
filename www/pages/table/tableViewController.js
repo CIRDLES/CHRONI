@@ -1,6 +1,6 @@
 angular.module('chroni.controllers')
 
-.controller('tableViewCtrl', function($scope, $ionicPlatform, $ionicScrollDelegate, $ionicGesture, $state, XML) {
+.controller('tableViewCtrl', function($scope, $ionicPlatform, $ionicScrollDelegate, $ionicGesture, $state) {
     // this view's orientation is not locked
     $ionicPlatform.ready(function() {
         $scope.$on('$ionicView.beforeEnter', function() {
@@ -10,14 +10,17 @@ angular.module('chroni.controllers')
             window.screen.lockOrientation('portrait');
         });
 
-        // sets the height of the table body scroll view to fit the page properly
-        var contentHeight = document.getElementById("tableContent").offsetHeight;
-        var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
-        var headerScrollHeight = document.getElementById("headScroll").offsetHeight;
-        var bodyScrollHeight = (contentHeight - buttonDivHeight - headerScrollHeight - 6);
+        $scope.headerHeight = 0;
+        $scope.bodyScrollHeight = window.screen.height;
 
-        $scope.bodyScrollHeight = bodyScrollHeight / contentHeight * 100;
-        $scope.headerScrollHeight = (contentHeight - buttonDivHeight - bodyScrollHeight) / contentHeight * 100;
+        $scope.$on('$ionicView.enter', function() {
+            // sets the height of the table body scroll view to fit the page properly
+            var contentHeight = document.getElementById("tableContent").offsetHeight;
+            var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
+
+            $scope.headerHeight = document.getElementById("headScroll").offsetHeight;
+            $scope.bodyScrollHeight = (contentHeight - buttonDivHeight - $scope.headerHeight);
+        });
 
         $scope.zoomLevel = 1;
 
@@ -51,7 +54,13 @@ angular.module('chroni.controllers')
                         false
                     );
                     $scope.zoomLevel = position.zoom;
-                    
+
+                    var contentHeight = document.getElementById("tableContent").offsetHeight;
+                    var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
+                    var headerHeight = ($scope.headerHeight * $scope.zoomLevel) + .5;
+                    $scope.bodyScrollHeight = (contentHeight - buttonDivHeight - headerHeight);
+                    console.log($scope.bodyScrollHeight);
+
                 }
             });
         }
