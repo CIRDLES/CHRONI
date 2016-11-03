@@ -36,8 +36,18 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
     text-align: center;
 }
 
-h1 {
-    color: #BAD9EB;
+.chroni_image {
+    width: 90px;
+    height: 150px;
+    margin-left: 150px;
+    text-align: center;
+}
+
+.about_p {
+    float: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
 }
 
 #tableContent {
