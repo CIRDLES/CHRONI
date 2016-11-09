@@ -1,6 +1,6 @@
 angular.module('chroni.controllers')
 
-.controller('viewFilesCtrl', function($scope, $ionicModal, $ionicPlatform, $cordovaFile, $cordovaToast, $ionicPopup, $ionicActionSheet, Settings, Files, History) {
+.controller('viewFilesCtrl', function($scope, $state, $ionicModal, $ionicPlatform, $cordovaFile, $cordovaToast, $ionicPopup, $ionicActionSheet, Settings, Files, XML, History) {
 
     $scope.aliquot = Settings.get('lastAliquot');
     $scope.reportSettings = Settings.get('lastReportSettings');
@@ -9,14 +9,15 @@ angular.module('chroni.controllers')
         Settings.save();
     }, true);
 
-    $scope.openTable = function() {
-        var date = new Date();
-        History.addItem($scope.aliquot, $scope.reportSettings, date);
-    };
-
     var fs = new Files;
+    var xml = new XML;
 
     $ionicPlatform.ready(function() {
+        // this view's orientation is locked in portrait
+        $scope.$on('$ionicView.beforeEnter', function() {
+            window.screen.lockOrientation('portrait');
+        });
+
         fs.getEntriesAtRoot()
             .then(function(result) {
                 $scope.files = result;
@@ -37,7 +38,7 @@ angular.module('chroni.controllers')
                         getContents(path);
 
                     } else if (result.isFile) {
-                        fs.checkFileValidity(result)
+                        xml.checkFileValidity(result)
                             .then(function(fileType) {
                                 if (fileType === "Aliquot" && $scope.modal.fileType === "Aliquot") {
                                     $scope.aliquot = result;
@@ -72,6 +73,28 @@ angular.module('chroni.controllers')
                     $scope.currentDirectory = result;
                 });
         };
+
+        $scope.openTable = function() {
+            var validAliquot = false;
+            var validReportSettings = false;
+
+            xml.createAliquot($scope.aliquot)
+                .then(function(aliquot) {
+                    // continues only if aliquot is valid
+                    if (aliquot) {
+                        xml.createReportSettings($scope.reportSettings)
+                            .then(function(reportSettings) {
+                                //var date = new Date();
+                                //History.addItem($scope.aliquot, $scope.reportSettings, date);
+                                var tableDataArray = xml.createTableData(aliquot, reportSettings);
+                                $state.go('app.tableView', {
+                                    tableArray: JSON.stringify(tableDataArray)
+                                });
+                            });
+                    }
+                });
+        };
+
 
         $scope.$on('modal.hidden', function() {
             getContents(cordova.file.dataDirectory);

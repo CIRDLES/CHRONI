@@ -23,7 +23,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "cordova-plugin-keyboard",
-    "ionic-plugin-keyboard"
+    "ionic-plugin-keyboard",
+    "cordova-plugin-screen-orientation"
   ],
   "cordovaPlatforms": []
 }

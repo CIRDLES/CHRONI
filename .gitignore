@@ -11,6 +11,7 @@ log.txt
 node_modules/
 platforms/
 plugins/
+.io-config.json
 
 # editor files
 /.idea/
