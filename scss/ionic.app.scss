@@ -126,3 +126,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
     line-height: 5px;
     min-height: 35px;
 }
+
+table, th, td {
+    border: 1px solid black;
+}
