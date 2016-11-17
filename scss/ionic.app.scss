@@ -84,7 +84,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
 
 .tableCell {
     border: 2px solid #000000;
-    padding: 10px;
+    padding: 5px;
     white-space: nowrap;
     font-family: monospace;
 }
@@ -125,8 +125,4 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
     margin-top: 15px;
     line-height: 5px;
     min-height: 35px;
-}
-
-table, th, td {
-    border: 1px solid black;
 }
