@@ -54,7 +54,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
     background-color: #92C4DE;
 }
 
-#tableHead {
+.tableHead {
     text-align: center;
     background-color: #B9D9EA;
     & tr:first-child,
@@ -84,7 +84,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
 
 .tableCell {
     border: 2px solid #000000;
-    padding: 10px;
+    padding: 5px;
     white-space: nowrap;
     font-family: monospace;
 }

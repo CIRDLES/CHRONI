@@ -142,7 +142,11 @@ angular.module('chroni.controllers')
         var newCategory = [];
         category.forEach(function(column) {
             column.forEach(function(item) {
-                newCategory.push(item);
+                if (item && item != "")
+                    newCategory.push(item);
+                else
+                    // puts just a space in if the field is empty
+                    newCategory.push("\u00A0");
             });
         });
         displayArray[i] = newCategory;
