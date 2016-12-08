@@ -32,16 +32,6 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
         controller: 'AppCtrl'
     })
 
-    .state('app.home', {
-        url: '/home',
-        views: {
-            'menuContent': {
-                templateUrl: 'pages/home/home.html',
-                controller: 'homeCtrl'
-            }
-        }
-    })
-
     .state('app.history', {
         url: '/history',
         views: {
@@ -91,5 +81,5 @@ angular.module('chroni', ['ionic', 'chroni.controllers', 'ngCordova'])
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/home');
+    $urlRouterProvider.otherwise('/app/viewFiles');
 });
