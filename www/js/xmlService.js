@@ -117,6 +117,9 @@ angular.module('chroni.services')
 
     var createFractionArray = function(aliquot, reportSettings, reportSettingsArray, visibleCategories) {
 
+        var sizes = [];
+        var hasDecimals = [];
+
         var fractionArray = [];
         var unitConversions = Numbers.getUnitConversions();
 
@@ -138,9 +141,10 @@ angular.module('chroni.services')
         // steps through each fraction in the aliquot
         aliquot.fractions.forEach(function(fraction) {
             var currentRowArray = [];
+            var colIndex = 0;
 
             // steps through each visible Category
-            visibleCategories.forEach(function(categoryName) {
+            visibleCategories.forEach(function(categoryName, catIndex) {
                 var category = reportSettings.categories[categoryName];
                 var currentCategoryArray = [];
 
@@ -202,10 +206,40 @@ angular.module('chroni.services')
                                     );
                                 }
                                 // only adds uncertainty if visible
-                                if (columnVisible && uncertaintyIsVisible)
-                                    currentCategoryArray.push(uncertaintyValue.toString());
+                                if (columnVisible && uncertaintyIsVisible) {
+                                    var val = uncertaintyValue.toString();
+                                    currentCategoryArray.push(val);
+
+                                    // adds or changes necessary length stats for the column
+                                    if (val.includes(".")) {
+
+                                        if (colIndex >= hasDecimals.length)
+                                            hasDecimals.push(true);
+                                        else
+                                            hasDecimals[colIndex + 1] = true;
+
+                                        var len = val.split(".")[1].length;
+                                        if (colIndex >= sizes.length)
+                                            sizes.push(len);
+                                        else {
+                                            if (len > sizes[colIndex + 1])
+                                                sizes[colIndex + 1] = len;
+                                        }
+
+                                    } else {
+
+                                        if (colIndex >= hasDecimals.length)
+                                            hasDecimals.push(false);
+
+                                        // no need for padding a column with no decimals
+                                        if (colIndex >= sizes.length)
+                                            sizes.push(0);
+
+                                    }
+                                }
 
                             }
+
 
                         } else {
                             if (columnVisible && uncertaintyIsVisible)
@@ -348,18 +382,80 @@ angular.module('chroni.services')
                                     }
                                 }
 
+                                val = fractionValue.toString();
+
                                 if (columnVisible) {
 
                                     if (uncertaintyIsVisible) {
                                         // if uncertainty is visible, must splice it so that it goes before the uncertainty column
                                         currentCategoryArray.splice(
-                                            currentCategoryArray.length - 1, 0, fractionValue
+                                            currentCategoryArray.length - 1, 0, val
                                         );
+
+                                        // adds or changes necessary length stats for the column
+                                        if (val.includes(".")) {
+
+                                            if (colIndex >= hasDecimals.length - 1)
+                                                hasDecimals.splice(colIndex, 0, true);
+                                            else
+                                                hasDecimals[colIndex] = true;
+
+                                            var len = val.split(".")[1].length;
+                                            if (colIndex >= sizes.length - 1)
+                                                sizes.splice(colIndex, 0, len);
+                                            else {
+                                                if (len > sizes[colIndex])
+                                                    sizes[colIndex] = len;
+                                            }
+
+                                        } else {
+
+                                            if (colIndex >= hasDecimals.length - 1)
+                                                hasDecimals.splice(colIndex, 0, false);
+
+                                            // no need for padding a column with no decimals
+                                            if (colIndex >= sizes.length - 1)
+                                                sizes.splice(colIndex, 0, 0);
+
+                                        }
 
                                     } else {
                                         // otherwise just adds it to the end
-                                        currentCategoryArray.push(fractionValue);
+                                        currentCategoryArray.push(val);
+
+                                        // adds or changes necessary length stats for the column
+                                        if (val.includes(".")) {
+
+                                            if (colIndex >= hasDecimals.length)
+                                                hasDecimals.push(true);
+                                            else
+                                                hasDecimals[colIndex] = true;
+
+                                            var len = val.split(".")[1].length;
+                                            if (colIndex >= sizes.length)
+                                                sizes.push(len);
+                                            else {
+                                                if (len > sizes[colIndex])
+                                                    sizes[colIndex] = len;
+                                            }
+
+
+                                        } else {
+
+                                            if (colIndex >= hasDecimals.length)
+                                                hasDecimals.push(false);
+
+                                            // no need for padding a column with no decimals
+                                            if (colIndex >= sizes.length)
+                                                sizes.push(0);
+
+                                        }
                                     }
+                                    
+                                    if (uncertaintyIsVisible)
+                                        colIndex += 2;
+                                    else
+                                        colIndex++;
                                 }
 
                             }
@@ -368,16 +464,53 @@ angular.module('chroni.services')
                             if (columnVisible)
                                 currentCategoryArray.push("-");
                         }
-
                     }
-
                 });
                 // pushes the entire row of values to the current Category
                 currentRowArray.push(currentCategoryArray);
             });
             // pushes the entire Category to the fraction array
             fractionArray.push(currentRowArray);
+            colIndex = 0;
         });
+
+        // must now add padding to the numbers
+        var currentColumn = 0;
+        for (i = 1; i < fractionArray.length; i++) {
+            var row = fractionArray[i];
+
+            // loops through categories, not including first and last (names of fraction)
+            for (j = 1; j < row.length - 1; j++) {
+                var category = row[j];
+
+                for (k = 0; k < category.length; k++) {
+                    var val = category[k];
+                    if (val !== "-") {
+
+                        // does this column contain a decimal?
+                        if (hasDecimals[currentColumn]) {
+                            var maxSize = sizes[currentColumn];
+                            var padding = 0;
+
+                            if (val.includes("."))
+                            // padding is equal to the difference in decimal lengths
+                                padding = maxSize - val.split(".")[1].length;
+                            else
+                            // adds one to account for the decimal place
+                                padding = maxSize + 1;
+
+                            fractionArray[i][j][k] = val + " ".repeat(padding);
+
+                        }
+
+                        currentColumn++;
+                    }
+
+                }
+            }
+
+            currentColumn = 0;
+        }
 
         return fractionArray;
     }

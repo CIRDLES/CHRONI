@@ -1,4 +1,3 @@
-
 <ion-view view-title="Aliquot Table">
     <ion-content id="tableContent" scroll="false">
         <div id="tableButtonDiv" class="alignCenter">
@@ -6,10 +5,10 @@
             <button class="button button-small">Report Settings</button>
         </div>
         <div style="display: flex;">
-            <ion-scroll has-bouncing="false" zooming="true" scroll="false" scrollbar-x="false" scrollbar-y="false" style="min-width: {{ columnLengths[0]*10 + 2 }}px; max-width: {{ columnLengths[0]*10 + 2 }}px;">
+            <ion-scroll has-bouncing="false" zooming="false" scroll="false" scrollbar-x="false" scrollbar-y="false" style="min-width: {{ columnLengths[0]*10 + 2 }}px; max-width: {{ columnLengths[0]*10 + 2 }}px;">
                 <table>
-                    <thead>
-                        <tr class="tableHead" ng-repeat="row in headerArray">
+                    <thead id="tableHeadLeft">
+                        <tr ng-repeat="row in headerArray">
                             <th class="tableCell" style="min-width: {{ columnLengths[0]*10 }}px; max-width: {{ columnLengths[0]*10 }}px;">
                                 {{ row[0] }}
                             </th>
@@ -17,9 +16,9 @@
                     </thead>
                 </table>
             </ion-scroll>
-            <ion-scroll on-scroll="headerScrollReset()" delegate-handle="headScroll" id="headScroll" has-bouncing="false" zooming="true" scrollbar-x="false" scrollbar-y="false" direction="xy" style="height: {{ headerHeight ? (headerHeight * zoomLevel) + .5 + 'px' : 'auto'; }}">
+            <ion-scroll on-scroll="headerScrollReset()" delegate-handle="headScroll" id="headScroll" has-bouncing="false" zooming="false" scrollbar-x="false" scrollbar-y="false" direction="xy" style="height: {{ headerHeight ? headerHeight + 1 + 'px' : 'auto'; }}">
                 <table>
-                    <thead class="tableHead">
+                    <thead id="tableHeadRight">
                         <tr ng-repeat="row in headerArray">
                             <th class="tableCell" ng-if="$parent.$first && !$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
                                 {{ column }}
@@ -33,9 +32,9 @@
             </ion-scroll>
         </div>
         <div style="display: flex;">
-            <ion-scroll has-bouncing="false" zooming="true" direction="y" scrollbar-x="false" scrollbar-y="false" style="height: {{ bodyScrollHeight / zoomLevel }}px; min-width: {{ columnLengths[0]*10 + 2 }}px; max-width: {{ columnLengths[0]*10 + 2 }}px;">
+            <ion-scroll on-scroll="leftBodyScrollReset()" delegate-handle="leftBodyScroll" id="leftBodyScroll" has-bouncing="false" zooming="false" direction="y" scrollbar-x="false" scrollbar-y="false" style="height: {{ bodyScrollHeight }}px; min-width: {{ columnLengths[0]*10 + 2 }}px; max-width: {{ columnLengths[0]*10 + 2 }}px;">
                 <table>
-                    <tbody id="tableBody">
+                    <tbody id="tableBodyLeft">
                         <tr ng-repeat="row in fractionArray">
                             <td class="tableCell" style=" min-width: {{ columnLengths[0]*10 }}px; max-width: {{ columnLengths[0]*10 }}px;">
                                 {{ row[0] }}
@@ -44,11 +43,11 @@
                     </tbody>
                 </table>
             </ion-scroll>
-            <ion-scroll on-scroll="bodyScrollReset()" delegate-handle="bodyScroll" id="bodyScroll" has-bouncing="false" zooming="true" direction="xy" style="height: {{ bodyScrollHeight / zoomLevel }}px;">
+            <ion-scroll on-scroll="mainBodyScrollReset()" delegate-handle="mainBodyScroll" id="mainBodyScroll" has-bouncing="false" zooming="false" direction="xy" style="height: {{ bodyScrollHeight }}px;">
                 <table>
                     <tbody id="tableBody">
                         <tr ng-repeat="row in fractionArray">
-                            <td class="tableCell" ng-if="!$first" ng-repeat="column in row track by $index" style="min-width: {{ columnLengths[$index] }}em; max-width: {{ columnLengths[$index] }}em;">
+                            <td class="tableCell" ng-if="!$first" ng-repeat="column in row track by $index" style="min-width: {{ columnLengths[$index] }}em; max-width: {{ columnLengths[$index] }}em; {{ column === '-' ? 'text-align: center;' : '' }}">
                                 {{ column }}
                             </td>
                         </tr>
