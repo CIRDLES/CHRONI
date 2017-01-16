@@ -54,37 +54,79 @@ $ionicons-font-path: "../lib/ionic/fonts" !default; // Include all of Ionic
     background-color: #92C4DE;
 }
 
-#tableHead {
+#tableHeadLeft {
     text-align: center;
     background-color: #B9D9EA;
-    & tr:first-child,
-    & tr:last-child th:first-child,
-    & tr:last-child th:last-child {
+    text-align: left;
+    th {
+        border-top: 2px solid #000000;
+        border-left: 2px solid #000000;
+        border-right: 2px solid #000000;
+        &:last-child {
+            border-bottom: 2px solid #000000;
+        }
+    }
+}
+
+#tableHeadRight {
+    text-align: center;
+    background-color: #B9D9EA;
+    tr:first-child {
         text-align: left;
+    }
+    tr:first-child th:last-child,
+    tr:last-child th:last-child {
+        text-align: right;
+    }
+    th {
+        border-top: 2px solid #000000;
+        border-right: 2px solid #000000;
+    }
+    tr:last-child th {
+        border-bottom: 2px solid #000000;
+    }
+}
+
+#tableBodyLeft {
+    text-align: left;
+    tr:nth-child(odd) {
+        background-color: #E1E1E1;
+    }
+    tr:nth-child(even) {
+        background-color: #FFFFFF;
+    }
+    tr:first-child {
+        color: #FFFFFF;
+        background-color: #107AB3;
+    }
+    td {
+        border-left: 2px solid #000000;
+        border-bottom: 2px solid #000000;
+        border-right: 2px solid #000000;
     }
 }
 
 #tableBody {
     text-align: right;
-    & tr td:first-child,
-    & tr td:last-child {
-        text-align: left;
-    }
-    & tr:nth-child(odd) {
+    tr:nth-child(odd) {
         background-color: #E1E1E1;
     }
-    & tr:nth-child(even) {
+    tr:nth-child(even) {
         background-color: #FFFFFF;
     }
-    & tr:first-child {
+    tr:first-child {
         color: #FFFFFF;
         background-color: #107AB3;
+    }
+    td {
+        border-right: 2px solid #000000;
+        border-bottom: 2px solid #000000;
     }
 }
 
 .tableCell {
-    border: 2px solid #000000;
-    padding: 5px;
+    // border: 2px solid #000000;
+    padding: 8px;
     white-space: nowrap;
     font-family: monospace;
 }

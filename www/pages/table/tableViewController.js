@@ -13,119 +13,108 @@ angular.module('chroni.controllers')
         $scope.headerHeight = 0;
         $scope.bodyScrollHeight = window.screen.height;
 
-        $scope.$on('$ionicView.enter', function() {
+        var calculateHeights = function(decrement) {
             // sets the height of the table body scroll view to fit the page properly
             var contentHeight = document.getElementById("tableContent").offsetHeight;
             var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
 
-            $scope.headerHeight = document.getElementById("headScroll").offsetHeight;
+            // uses decrement to differentiate between first openin and screen rotation
+            $scope.headerHeight = document.getElementById("headScroll").offsetHeight - decrement;
             $scope.bodyScrollHeight = (contentHeight - buttonDivHeight - $scope.headerHeight);
+        };
+
+        $scope.$on('$ionicView.enter', function() {
+            calculateHeights(0);
         });
 
-        $scope.zoomLevel = 1;
+        window.addEventListener("orientationchange", function() {
+            $scope.headerHeight = 0;
+            $scope.bodyScrollHeight = window.screen.height;
+            $scope.$apply(calculateHeights(1));
+        });
 
         // sets scrolling gestures
         var headerScrollEl = angular.element(document.getElementById("headScroll"));
-        var bodyScrollEl = angular.element(document.getElementById("bodyScroll"));
+        var mainBodyScrollEl = angular.element(document.getElementById("mainBodyScroll"));
+        var leftBodyScrollEl = angular.element(document.getElementById("leftBodyScroll"));
+
+        var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
+        var mainBodyScrollDel = $ionicScrollDelegate.$getByHandle("mainBodyScroll");
+        var leftBodyScrollDel = $ionicScrollDelegate.$getByHandle("leftBodyScroll");
 
         $scope.headerScroll = function(event) {
             $scope.$apply(function() {
-                // turns off the scrolling gesture for the body
-                $ionicGesture.off($scope.bodyGesture, 'scroll', $scope.bodyScroll);
-
-                var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
-                var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
-
-                var position = headerScrollDel.getScrollPosition();
+                // turns off the scrolling gesture for the main body and left body
+                $ionicGesture.off($scope.mainBodyGesture, 'scroll', $scope.mainBodyScroll);
+                $ionicGesture.off($scope.leftBodyGesture, 'scroll', $scope.leftBodyScroll);
 
                 // scrolls the body with the header in the x direction
-                bodyScrollDel.scrollTo(
-                    position.left,
-                    bodyScrollDel.getScrollPosition().top,
+                mainBodyScrollDel.scrollTo(
+                    headerScrollDel.getScrollPosition().left,
+                    mainBodyScrollDel.getScrollPosition().top,
                     false
                 );
-                bodyScrollDel.zoomTo(
-                    position.zoom,
-                    false
-                );
-                if (position.zoom !== $scope.zoomLevel) {
-                    headerScrollDel.zoomTo(
-                        position.zoom,
-                        false
-                    );
-                    $scope.zoomLevel = position.zoom;
-
-                    var contentHeight = document.getElementById("tableContent").offsetHeight;
-                    var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
-                    var headerHeight = ($scope.headerHeight * $scope.zoomLevel) + .5;
-                    $scope.bodyScrollHeight = (contentHeight - buttonDivHeight - headerHeight);
-                    console.log($scope.bodyScrollHeight);
-
-                }
             });
         }
 
-        $scope.bodyScroll = function(event) {
+        $scope.mainBodyScroll = function(event) {
             $scope.$apply(function() {
-                // turns off the scrolling gesture for the header
+                // turns off the scrolling gesture for the header and left body
                 $ionicGesture.off($scope.headerGesture, 'scroll', $scope.headerScroll);
+                $ionicGesture.off($scope.leftBodyGesture, 'scroll', $scope.leftBodyScroll);
 
-                var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
-                var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
+                var mainPosition = mainBodyScrollDel.getScrollPosition();
 
-                var position = bodyScrollDel.getScrollPosition();
-
-                // scrolls the header with the body in the x direction
+                // scrolls the header with the main body in the x direction
                 headerScrollDel.scrollTo(
-                    position.left,
+                    mainPosition.left,
                     headerScrollDel.getScrollPosition().top,
                     false
                 );
-                if (position.zoom !== $scope.zoomLevel) {
-                    headerScrollDel.zoomTo(
-                        position.zoom,
-                        false
-                    );
-                    $scope.zoomLevel = position.zoom;
-                }
+                // scrolls the left body with the main body in the y direction
+                leftBodyScrollDel.scrollTo(
+                    leftBodyScrollDel.getScrollPosition().left,
+                    mainPosition.top,
+                    false
+                );
+            });
+        }
+
+        $scope.leftBodyScroll = function(event) {
+            $scope.$apply(function() {
+                // turns off the scrolling gesture for the header and main body
+                $ionicGesture.off($scope.mainBodyGesture, 'scroll', $scope.mainBodyScroll);
+                $ionicGesture.off($scope.headerGesture, 'scroll', $scope.headerScroll);
+
+                // scrolls the main body with the left body in the y direction
+                mainBodyScrollDel.scrollTo(
+                    mainBodyScrollDel.getScrollPosition().left,
+                    leftBodyScrollDel.getScrollPosition().top,
+                    false
+                );
             });
         }
 
         $scope.headerGesture = $ionicGesture.on("scroll", $scope.headerScroll, headerScrollEl);
-        $scope.bodyGesture = $ionicGesture.on("scroll", $scope.bodyScroll, bodyScrollEl);
+        $scope.mainBodyGesture = $ionicGesture.on("scroll", $scope.mainBodyScroll, mainBodyScrollEl);
+        $scope.leftBodyGesture = $ionicGesture.on("scroll", $scope.leftBodyScroll, leftBodyScrollEl);
 
         $scope.headerScrollReset = function() {
             // called when performing a header scroll to turn on the header scroll gesture
             $scope.headerGesture = $ionicGesture.on("scroll", $scope.headerScroll, headerScrollEl);
         }
-
-        $scope.bodyScrollReset = function() {
+        $scope.mainBodyScrollReset = function() {
             // called when performing a body scroll to turn on the body scroll gesture
-            $scope.bodyGesture = $ionicGesture.on("scroll", $scope.bodyScroll, bodyScrollEl);
+            $scope.mainBodyGesture = $ionicGesture.on("scroll", $scope.mainBodyScroll, mainBodyScrollEl);
         }
-
-        // sets zooming gestures
-        $scope.headerZoom = function() {
-            var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
-            var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
-            // zooms to body to the same level as head
-            bodyScrollDel.zoomTo(
-                headerScrollDel.getScrollPosition().zoom,
-                false
-            );
-        }
-
-        $scope.bodyZoom = function() {
-            var headerScrollDel = $ionicScrollDelegate.$getByHandle("headScroll");
-            var bodyScrollDel = $ionicScrollDelegate.$getByHandle("bodyScroll");
-            // zooms to body to the same level as head
-            headerScrollDel.zoomTo(
-                bodyScrollDel.getScrollPosition().zoom,
-                false
-            );
+        $scope.leftBodyScrollReset = function() {
+            // called when performing a body scroll to turn on the body scroll gesture
+            $scope.leftBodyGesture = $ionicGesture.on("scroll", $scope.leftBodyScroll, leftBodyScrollEl);
         }
 
     });
+
+    // now calculates the data to be displayed in the table
 
     var tableArray = JSON.parse($state.params.tableArray);
 
@@ -141,8 +130,19 @@ angular.module('chroni.controllers')
         var category = displayArray[i];
         var newCategory = [];
         category.forEach(function(column) {
-            column.forEach(function(item) {
-                newCategory.push(item);
+            column.forEach(function(item, itemIndex) {
+                if (item && item != "") {
+                    // accounts for spaces, as HTML will remove them
+                    if (i > 4 && item.includes(" ")) {
+                        var re = new RegExp("\u0020", "g");
+                        item = item.replace(re, "\u00A0");
+                    }
+                    newCategory.push(item);
+                } else
+                // puts just a space in if the field is empty
+                    newCategory.push("\u00A0");
+
+
             });
         });
         displayArray[i] = newCategory;
