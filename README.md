@@ -1,4 +1,4 @@
-CHRONI - Ionic
+CHRONI
 =====================
 
 **CHRONI** is a mobile application that presents archived data downloaded from the Geochron database in a customizable format for use by geologists in the field. The project is led and maintained by [CIRDLES](https://cirdles.org), an undergraduate research lab at the College of Charleston in Charleston, South Carolina.
@@ -8,7 +8,9 @@ This material is based upon work supported by the National Science Foundation un
 For more information about this project, please contact [Jim Bowring](mailto://bowringj@cofc.edu).
 
 
-Getting Started: For Contributors
+<br/>
+
+Getting Started for Contributors and Users:
 -------------
 
 Please have installed git tools, Xcode (mac), and a text editor. Make sure there is an updated Node.js version installed: http://nodejs.org/en/
@@ -62,35 +64,13 @@ $ ionic platform add android
 $ ionic platform
 ```
 
-To emulate on android:
+Change directories to the CHRONI directory on the local and run:
 
 ```bash
 $ ionic build android
 $ ionic run android
 ```
 
-
-
-
-
-
-
-A starting project for Ionic that optionally supports using custom SCSS.
-
-## Using this project
-
-We recommend using the [Ionic CLI](https://github.com/driftyco/ionic-cli) to create new Ionic projects that are based on this project but use a ready-made starter template.
-
-For example, to start a new Ionic project with the default tabs interface, make sure the `ionic` utility is installed:
-
-```bash
-$ npm install -g ionic
-```
-
-Then run:
-
-```bash
-$ ionic start myProject tabs
-```
+<br/>
 
 More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/getting-started) page and the [Ionic CLI](https://github.com/driftyco/ionic-cli) repo.
