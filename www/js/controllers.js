@@ -1,1 +1,0 @@
-angular.module('chroni.controllers', ['ionic', 'chroni.services', 'ngCordova']);

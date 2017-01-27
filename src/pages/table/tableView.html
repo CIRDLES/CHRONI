@@ -1,0 +1,58 @@
+<!-- <ion-content id="tableContent" scroll="false">
+    <div id="tableButtonDiv" class="alignCenter">
+        <button ion-button small>Aliquot</button>
+        <button ion-button small>Report Settings</button>
+    </div>
+    <div style="display: flex;">
+        <ion-scroll zooming="false" scroll="false" scrollbar-x="false" scrollbar-y="false" style="min-width: {{ columnLengths[0]*10 + 2 }}px; max-width: {{ columnLengths[0]*10 + 2 }}px;">
+            <table>
+                <thead id="tableHeadLeft">
+                    <tr ng-repeat="row in headerArray">
+                        <th class="tableCell" style="min-width: {{ columnLengths[0]*10 }}px; max-width: {{ columnLengths[0]*10 }}px;">
+                            {{ row[0] }}
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </ion-scroll>
+        <ion-scroll on-scroll="headerScrollReset()" delegate-handle="headScroll" id="headScroll" zooming="false" scrollbar-x="false" scrollbar-y="false" scrollX="true" scrollY="true" style="height: {{ headerHeight ? headerHeight + 1 + 'px' : 'auto'; }}">
+            <table>
+                <thead id="tableHeadRight">
+                    <tr ng-repeat="row in headerArray">
+                        <th class="tableCell" ng-if="$parent.$first && !$first" ng-repeat="column in row track by $index" colspan="{{ firstRowColSpans[$index] }}">
+                            {{ column }}
+                        </th>
+                        <th class="tableCell" ng-if="!$parent.$first && !$first" ng-repeat="column in row track by $index" style="min-width: {{ columnLengths[$index] }}em; max-width: {{ columnLengths[$index] }}em;">
+                            {{ column }}
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </ion-scroll>
+    </div>
+    <div style="display: flex;">
+        <ion-scroll on-scroll="leftBodyScrollReset()" delegate-handle="leftBodyScroll" id="leftBodyScroll" zooming="false" scrollX="false" scrollY="true" scrollbar-x="false" scrollbar-y="false" style="height: {{ bodyScrollHeight }}px; min-width: {{ columnLengths[0]*10 + 2 }}px; max-width: {{ columnLengths[0]*10 + 2 }}px;">
+            <table>
+                <tbody id="tableBodyLeft">
+                    <tr ng-repeat="row in fractionArray">
+                        <td class="tableCell" style=" min-width: {{ columnLengths[0]*10 }}px; max-width: {{ columnLengths[0]*10 }}px;">
+                            {{ row[0] }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ion-scroll>
+        <ion-scroll on-scroll="mainBodyScrollReset()" delegate-handle="mainBodyScroll" id="mainBodyScroll" zooming="false" scrollX="true" scrollY="true" style="height: {{ bodyScrollHeight }}px;">
+            <table>
+                <tbody id="tableBody">
+                    <tr ng-repeat="row in fractionArray">
+                        <td class="tableCell" ng-if="!$first" ng-repeat="column in row track by $index" style="min-width: {{ columnLengths[$index] }}em; max-width: {{ columnLengths[$index] }}em; {{ column === '-' ? 'text-align: center;' : '' }}">
+                            {{ column }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ion-scroll>
+    </div>
+</ion-content>
+ -->
