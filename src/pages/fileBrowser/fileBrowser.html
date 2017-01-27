@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start *ngIf="!inRoot">
+            <button ion-button clear icon-left (click)="chooseBackFile()">
+                <ion-icon name="ios-arrow-back"></ion-icon>
+                {{ parentName }}
+            </button>
+        </ion-buttons>
+        <ion-title>Files</ion-title>
+        <ion-buttons end>
+            <button ion-button clear (click)="dismiss()">Close</button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ion-item-sliding *ngFor="let file of files" #itemSliding>
+            <button ion-item (click)="chooseFile(file)">
+                <ion-icon item-left *ngIf="!file.isFile" name="folder"></ion-icon>
+                <ion-icon item-left *ngIf="file.isFile" name="document"></ion-icon>
+                {{ file.name }}
+            </button>
+            <ion-item-options side="right">
+                <button ion-button color="danger" (click)="deleteWarning(file, itemSliding)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </button>
+                <button ion-button color="light" (click)="showMoreOptions(file, itemSliding)">
+                    <ion-icon name="ios-more"></ion-icon>
+                    More
+                </button>
+            </ion-item-options>
+        </ion-item-sliding>
+    </ion-list>
+</ion-content>
+<ion-footer>
+    <ion-toolbar>
+        <ion-buttons end *ngIf="copying || cutting">
+            <button ion-button (click)="pasteFile()">Paste</button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>

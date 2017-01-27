@@ -1,12 +1,6 @@
 {
   "name": "Chroni",
-  "app_id": "94594f0a",
-  "gulpStartupTasks": [
-    "sass",
-    "watch"
-  ],
-  "watchPatterns": [
-    "www/**/*",
-    "!www/lib/**/*"
-  ]
+  "app_id": "",
+  "v2": true,
+  "typescript": true
 }
