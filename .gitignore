@@ -9,6 +9,7 @@ log.txt
 
 # ionic
 node_modules/
+www/build/
 platforms/
 plugins/
 .io-config.json
