@@ -10,15 +10,19 @@ import { ScreenOrientation } from 'ionic-native';
 export class TableView {
 
     constructor(public platform: Platform) {
-
-        this.platform.ready().then(() => {
-            ScreenOrientation.unlockOrientation();
-        });
         
     }
 
+    ionViewWillEnter() {
+        this.platform.ready().then(() => {
+            ScreenOrientation.unlockOrientation();
+        });
+    }
+
     ionViewWillLeave() {
-        ScreenOrientation.lockOrientation('portrait');
+        this.platform.ready().then((val) => {
+            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        });
     }
 
 }

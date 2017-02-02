@@ -11,10 +11,12 @@ export class About {
 
     constructor(public platform: Platform) {
 
-        this.platform.ready().then(() => {
-            ScreenOrientation.lockOrientation('portrait');
-        });
+    }
 
+    ionViewWillEnter() {
+        this.platform.ready().then((val) => {
+            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        });
     }
     
 }

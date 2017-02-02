@@ -26,10 +26,6 @@ export class FileBrowser {
     cutting: boolean = false;
 
     constructor(public viewCtrl: ViewController, public params: NavParams, public platform: Platform, public actionSheetCtrl: ActionSheetController, public alertCtrl: AlertController, public toastCtrl: ToastController, public xml: XMLUtility) {
-        
-        this.platform.ready().then(() => {
-            ScreenOrientation.lockOrientation('portrait');
-        });
 
         this.fileSystem = cordova.file.dataDirectory;
 
@@ -60,6 +56,12 @@ export class FileBrowser {
             .catch(err => File.createDir(this.fileSystem, 'chroni/Report Settings', true));
 
         this.updateFiles();
+    }
+
+    ionViewWillEnter() {
+        this.platform.ready().then((val) => {
+            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        });
     }
 
     updateFiles() {
