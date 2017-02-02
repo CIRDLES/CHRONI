@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, ModalController } from 'ionic-angular';
-import { StatusBar, Splashscreen, File, Transfer } from 'ionic-native';
+import { StatusBar, Splashscreen, File, Transfer, ScreenOrientation } from 'ionic-native';
 import { Storage } from '@ionic/storage';
 
 import { About } from '../pages/about/about';
@@ -80,6 +80,12 @@ export class Chroni {
                 console.log(error);
             }
 
+        });
+    }
+
+    ionViewWillEnter() {
+        this.platform.ready().then((val) => {
+            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
         });
     }
 

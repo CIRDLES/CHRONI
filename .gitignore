@@ -18,9 +18,6 @@ plugins/
 /.idea/
 /.brackets.json
 
-# using SASS instead of CSS
-/www/css/
-
 # iOS Platform
 *.mode1v3
 *.perspectivev3

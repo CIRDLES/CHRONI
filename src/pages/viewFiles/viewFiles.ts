@@ -20,11 +20,16 @@ export class ViewFiles {
     constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage) {
 
         this.platform.ready().then(() => {
-            ScreenOrientation.lockOrientation('portrait');
             this.fileSystem = cordova.file.dataDirectory;
             this.getCurrentFiles();
         });
 
+    }
+
+    ionViewWillEnter() {
+        this.platform.ready().then((val) => {
+            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        });
     }
 
     openFileViewer(directory) {
