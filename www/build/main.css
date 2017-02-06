@@ -22230,3 +22230,13 @@ sub {
 /*.menu-ios-background {
   background-color: color($colors, secondary);
 }*/
+.about_p {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
