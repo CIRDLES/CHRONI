@@ -31,9 +31,14 @@ $colors: (
   dark:       #222
 );
 
-$background-ios-color: color($colors, secondary);
-$background-md-color: color($colors, secondary);
-$background-wp-color: color($colors, secondary);
+/*ion-side-menu.menu-left.menu {
+  background-color: color($colors, light);
+}*/
+
+$background-color: color($colors, secondary);
+//$background-ios-color: color($colors, secondary);
+
+
 
 // App iOS Variables
 // --------------------------------------------------

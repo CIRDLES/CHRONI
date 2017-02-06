@@ -1,4 +1,7 @@
 @charset "UTF-8";
+/*ion-side-menu.menu-left.menu {
+  background-color: color($colors, light);
+}*/
 /*!
   Ionicons, v3.0.0-alpha.3
   Created by Ben Sperry for the Ionic Framework, http://ionicons.com/
@@ -5202,7 +5205,7 @@ ion-alert input {
   border-style: solid;
   border-radius: 50%;
   border-color: #c8c7cc;
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .alert-ios [aria-checked=true] .alert-checkbox-icon {
@@ -7223,7 +7226,7 @@ ion-card-content {
   width: calc(100% - 24px);
   border-radius: 2px;
   font-size: 1.4rem;
-  background: #fff;
+  background: #B9D9EA;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -7593,7 +7596,7 @@ ion-card-content {
   width: calc(100% - 20px);
   border-radius: 2px;
   font-size: 1.4rem;
-  background: #fff;
+  background: #B9D9EA;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
@@ -7997,7 +8000,7 @@ ion-card-content {
   width: calc(100% - 16px);
   border-radius: 1px;
   font-size: 1.4rem;
-  background: #fff;
+  background: #B9D9EA;
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -8409,7 +8412,7 @@ ion-card-content {
   border-style: solid;
   border-radius: 50%;
   border-color: #c8c7cc;
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .checkbox-ios .checkbox-checked {
@@ -8506,7 +8509,7 @@ ion-card-content {
   border-style: solid;
   border-radius: 2px;
   border-color: #787878;
-  background-color: #fff;
+  background-color: #B9D9EA;
   transition-duration: 280ms;
   transition-property: background;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -8610,7 +8613,7 @@ ion-card-content {
   border-style: solid;
   border-radius: 0;
   border-color: #333;
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .checkbox-wp .checkbox-checked {
@@ -10743,7 +10746,7 @@ ion-item-sliding.active-swipe-left button[expandable] {
   border-radius: 0;
   font-size: 1.7rem;
   color: #000;
-  background-color: #fff;
+  background-color: #B9D9EA;
   transition: background-color 200ms linear;
 }
 
@@ -10983,7 +10986,7 @@ ion-item-group .item-wrapper:last-child .item-ios .item-inner {
 }
 
 .list-ios ion-item-sliding {
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .item-md {
@@ -10994,7 +10997,7 @@ ion-item-group .item-wrapper:last-child .item-ios .item-inner {
   font-weight: normal;
   text-transform: none;
   color: #000;
-  background-color: #fff;
+  background-color: #B9D9EA;
   box-shadow: none;
   transition: background-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -11223,7 +11226,7 @@ ion-item-group .item-md .item-wrapper:last-child .item-inner {
 }
 
 .list-md ion-item-sliding {
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .item-md ion-reorder {
@@ -11239,7 +11242,7 @@ ion-item-group .item-md .item-wrapper:last-child .item-inner {
   font-weight: normal;
   text-transform: none;
   color: #000;
-  background-color: #fff;
+  background-color: #B9D9EA;
   box-shadow: none;
 }
 
@@ -11463,7 +11466,7 @@ ion-item-group .item-md .item-wrapper:last-child .item-inner {
 }
 
 .list-wp ion-item-sliding {
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 ion-label {
@@ -11867,7 +11870,7 @@ ion-list[inset] {
 }
 
 .list-ios[inset] ion-list-header {
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .list-ios[inset] .item {
@@ -12014,7 +12017,7 @@ ion-list[inset] {
 }
 
 .list-md[inset] ion-list-header {
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .list-md[no-lines] .item-block,
@@ -12146,7 +12149,7 @@ ion-list[inset] {
 }
 
 .list-wp[inset] ion-list-header {
-  background-color: #fff;
+  background-color: #B9D9EA;
 }
 
 .list-wp[no-lines] .item,
@@ -12729,7 +12732,7 @@ ion-picker-cmp {
 .picker-ios .picker-wrapper {
   height: 260px;
   border-top: 1px solid #c8c7cc;
-  background: #fff;
+  background: #B9D9EA;
 }
 
 .picker-ios .picker-toolbar {
@@ -12738,7 +12741,7 @@ ion-picker-cmp {
   display: flex;
   height: 44px;
   border-bottom: 0.55px solid #c8c7cc;
-  background: #fff;
+  background: #B9D9EA;
 }
 
 .picker-ios .picker-toolbar-button {
@@ -12816,7 +12819,7 @@ ion-picker-cmp {
   width: 100%;
   height: 81px;
   border-bottom: 1px solid #c8c7cc;
-  background: linear-gradient(to bottom, white 20%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(to bottom, #b9d9ea 20%, rgba(185, 217, 234, 0.7) 100%);
   -webkit-transform: translate3d(0, 0, 90px);
   transform: translate3d(0, 0, 90px);
 }
@@ -12830,7 +12833,7 @@ ion-picker-cmp {
   width: 100%;
   height: 119px;
   border-top: 1px solid #c8c7cc;
-  background: linear-gradient(to top, white 30%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(to top, #b9d9ea 30%, rgba(185, 217, 234, 0.7) 100%);
   -webkit-transform: translate3d(0, 0, 90px);
   transform: translate3d(0, 0, 90px);
 }
@@ -12838,7 +12841,7 @@ ion-picker-cmp {
 .picker-md .picker-wrapper {
   height: 260px;
   border-top: 0.55px solid #dedede;
-  background: #fff;
+  background: #B9D9EA;
 }
 
 .picker-md .picker-toolbar {
@@ -12849,7 +12852,7 @@ ion-picker-cmp {
   -ms-flex-pack: end;
   justify-content: flex-end;
   height: 44px;
-  background: #fff;
+  background: #B9D9EA;
 }
 
 .picker-md .picker-button,
@@ -12913,7 +12916,7 @@ ion-picker-cmp {
   width: 100%;
   height: 81px;
   border-bottom: 1px solid #dedede;
-  background: linear-gradient(to bottom, white 20%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(to bottom, #b9d9ea 20%, rgba(185, 217, 234, 0.7) 100%);
   -webkit-transform: translate3d(0, 0, 90px);
   transform: translate3d(0, 0, 90px);
 }
@@ -12926,7 +12929,7 @@ ion-picker-cmp {
   width: 100%;
   height: 119px;
   border-top: 1px solid #dedede;
-  background: linear-gradient(to top, white 30%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(to top, #b9d9ea 30%, rgba(185, 217, 234, 0.7) 100%);
   -webkit-transform: translate3d(0, 0, 90px);
   transform: translate3d(0, 0, 90px);
 }
@@ -12934,7 +12937,7 @@ ion-picker-cmp {
 .picker-wp .picker-wrapper {
   height: 260px;
   border-top: 0.55px solid transparent;
-  background: #fff;
+  background: #B9D9EA;
 }
 
 .picker-wp .picker-toolbar {
@@ -12946,7 +12949,7 @@ ion-picker-cmp {
   justify-content: flex-end;
   height: 44px;
   border-width: 0.55px;
-  background: #fff;
+  background: #B9D9EA;
 }
 
 .picker-wp .picker-toolbar-button {
@@ -13022,7 +13025,7 @@ ion-picker-cmp {
   width: 100%;
   height: 81px;
   border-bottom: 1px solid transparent;
-  background: linear-gradient(to bottom, white 20%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(to bottom, #b9d9ea 20%, rgba(185, 217, 234, 0.7) 100%);
   -webkit-transform: translate3d(0, 0, 90px);
   transform: translate3d(0, 0, 90px);
 }
@@ -13035,7 +13038,7 @@ ion-picker-cmp {
   width: 100%;
   height: 119px;
   border-top: 1px solid transparent;
-  background: linear-gradient(to top, white 30%, rgba(255, 255, 255, 0.7) 100%);
+  background: linear-gradient(to top, #b9d9ea 30%, rgba(185, 217, 234, 0.7) 100%);
   -webkit-transform: translate3d(0, 0, 90px);
   transform: translate3d(0, 0, 90px);
 }
@@ -17162,7 +17165,7 @@ ion-toast {
   bottom: 2px;
   left: 2px;
   border-radius: 16px;
-  background-color: #fff;
+  background-color: #B9D9EA;
   content: "";
   -webkit-transform: scale3d(1, 1, 1);
   transform: scale3d(1, 1, 1);
@@ -17178,7 +17181,7 @@ ion-toast {
   width: 28px;
   height: 28px;
   border-radius: 14px;
-  background-color: #fff;
+  background-color: #B9D9EA;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.16), 0 3px 1px rgba(0, 0, 0, 0.1);
   transition: width 120ms ease-in-out 80ms, left 110ms ease-in-out 80ms, -webkit-transform 300ms;
   transition: transform 300ms, width 120ms ease-in-out 80ms, left 110ms ease-in-out 80ms;
@@ -22227,9 +22230,6 @@ sub {
   background-color: #F4FAFF;
 }
 
-/*.menu-ios-background {
-  background-color: color($colors, secondary);
-}*/
 .about_p {
   margin-left: 5%;
   margin-right: 5%;
@@ -22239,4 +22239,8 @@ sub {
   margin-left: auto;
   margin-right: auto;
   display: block;
+}
+
+.card {
+  background-color: #F4FAFF;
 }
