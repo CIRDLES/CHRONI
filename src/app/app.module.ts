@@ -13,6 +13,8 @@ import { Profile } from '../pages/profile/profile';
 import { Login } from '../pages/profile/login';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
+import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
+import { HelpPage } from '../pages/help/help';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
     Login,
     ViewFiles,
     FileName,
-    FileBrowser
+    FileBrowser,
+    AliquotDownloadPage,
+    HelpPage
   ],
   imports: [
     IonicModule.forRoot(Chroni)
@@ -38,7 +42,9 @@ import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
     Profile,
     Login,
     ViewFiles,
-    FileBrowser
+    FileBrowser,
+    AliquotDownloadPage,
+    HelpPage
   ],
   providers: [
     Storage, XMLUtility, HistoryUtility,
