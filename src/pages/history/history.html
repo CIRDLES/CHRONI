@@ -6,4 +6,12 @@
         <ion-title>History</ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content></ion-content>
+<ion-content>
+    <ion-list>
+        <button ion-item *ngFor="let item of history">
+            <h2>{{ item.aliquot | name }}</h2>
+            <h3>{{ item.date | date }}</h3>
+            <p>{{ item.reportSettings | name }}</p>
+        </button>
+    </ion-list>
+</ion-content>
