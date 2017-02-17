@@ -8,6 +8,8 @@ import { History } from '../pages/history/history';
 import { ImportFiles } from '../pages/importFiles/importFiles';
 import { Profile } from '../pages/profile/profile';
 import { ViewFiles } from '../pages/viewFiles/viewFiles';
+import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
+import { HelpPage } from '../pages/help/help';
 
 declare var cordova: any;
 
@@ -27,10 +29,12 @@ export class Chroni {
         // used for an example of ngFor and navigation
         this.pages = [
             { title: 'View Files', component: ViewFiles },
+            { title: 'Aliquot Download', component: AliquotDownloadPage },
             { title: 'Import Files', component: ImportFiles },
             { title: 'History', component: History },
             { title: 'Profile', component: Profile },
-            { title: 'About', component: About }
+            { title: 'About', component: About },
+            { title: 'Help', component: HelpPage }
         ];
 
         this.platform.ready().then(() => {

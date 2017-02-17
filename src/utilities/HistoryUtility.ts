@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { File } from 'ionic-native';
 import { Storage } from '@ionic/storage';
 
+/**
+ * Entry Schema:
+ *     aliquot: string (filename),
+ *     reportSettings: string (filename),
+ *     date: Date
+ */
+
 @Injectable()
 export class HistoryUtility {
 
