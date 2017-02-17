@@ -8,7 +8,7 @@ import { HistoryUtility } from '../utilities/HistoryUtility';
 import { Chroni } from './app.component';
 import { About } from '../pages/about/about';
 import { ImportFiles } from '../pages/importFiles/importFiles';
-import { History } from '../pages/history/history';
+import { History, Name } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { Login } from '../pages/profile/login';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
@@ -22,6 +22,7 @@ import { HelpPage } from '../pages/help/help';
     About,
     ImportFiles,
     History,
+    Name,
     Profile,
     Login,
     ViewFiles,
