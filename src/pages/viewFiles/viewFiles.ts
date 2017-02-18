@@ -1,9 +1,12 @@
 import { Component, Pipe } from '@angular/core';
 
 import { NavController, Platform, ModalController } from 'ionic-angular';
-import { FileBrowser } from '../fileBrowser/fileBrowser';
 import { File, ScreenOrientation } from 'ionic-native';
 import { Storage } from '@ionic/storage';
+
+import { FileBrowser } from '../fileBrowser/fileBrowser';
+import { TableView } from '../table/tableView';
+import { XMLUtility, Aliquot, ReportSettings } from '../../utilities/XMLUtility';
 
 declare var cordova: any;
 
@@ -17,7 +20,7 @@ export class ViewFiles {
     currentAliquot: any = {};
     currentReportSettings: any = {};
 
-    constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage) {
+    constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage, public xml: XMLUtility) {
 
         this.platform.ready().then(() => {
             this.fileSystem = cordova.file.dataDirectory;
@@ -50,6 +53,23 @@ export class ViewFiles {
                     this.currentAliquot = file;
                 else if (directory === 'Report Settings')
                     this.currentReportSettings = file;
+            }
+        });
+    }
+
+    openTable() {
+        this.xml.createAliquot(this.currentAliquot).then(al => {
+            if (al) {
+                var aliquot: Aliquot = <Aliquot> al;
+                this.xml.createReportSettings(this.currentReportSettings).then(rs => {
+                    if (rs) {
+                        var reportSettings: ReportSettings = <ReportSettings> rs;
+                        var tableArray = this.xml.createTableData(aliquot, reportSettings);
+                        this.navCtrl.push(TableView, {
+                            tableArray: tableArray
+                        });
+                    }
+                });
             }
         });
     }

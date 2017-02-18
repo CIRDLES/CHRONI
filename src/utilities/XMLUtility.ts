@@ -44,14 +44,7 @@ export class XMLUtility {
         
     }
 
-    parseFile(file) {
-        var path = file.fullPath.substring(1);
-        File.readAsText(this.fileSystem, path).then((fileData: string) => {
-            console.log(JSON.stringify(this.x2js.xml2js(fileData)));
-        });
-    }
-
-    createReportSettingsArray(reportSettings: ReportSettings) {
+    private createReportSettingsArray(reportSettings: ReportSettings) {
         // the Report Settings section of the table will have 4 rows
         var reportSettingsArray = [
             [],
@@ -134,7 +127,7 @@ export class XMLUtility {
         return [reportSettingsArray, visibleCategories];
     }
 
-    createFractionArray(aliquot: Aliquot, reportSettings: ReportSettings, reportSettingsArray: Array<any>, visibleCategories: Array<any>) {
+    private createFractionArray(aliquot: Aliquot, reportSettings: ReportSettings, reportSettingsArray: Array<any>, visibleCategories: Array<any>) {
 
         var sizes = [];
         var hasDecimals = [];
@@ -530,7 +523,7 @@ export class XMLUtility {
         return fractionArray;
     }
 
-    checkFileValidity(file) {
+    public checkFileValidity(file) {
         var path = file.fullPath;
         if (path[0] === '/')
             path = path.substring(1);
@@ -549,7 +542,7 @@ export class XMLUtility {
         });
     }
 
-    createAliquot(file) {
+    public createAliquot(file) {
 
         return new Promise((resolve, reject) => {
             this.checkFileValidity(file).then((result) => {
@@ -626,7 +619,7 @@ export class XMLUtility {
 
     }
 
-    createReportSettings(file) {
+    public createReportSettings(file) {
 
         return new Promise((resolve, reject) => {
             this.checkFileValidity(file).then((result) => {
@@ -672,7 +665,7 @@ export class XMLUtility {
 
     }
 
-    createTableData(aliquot: Aliquot, reportSettings: ReportSettings) {
+    public createTableData(aliquot: Aliquot, reportSettings: ReportSettings) {
 
         // stores the returned list of the Report Settings array and visible categories into a temporary variable
         var temp = this.createReportSettingsArray(reportSettings);
