@@ -11,11 +11,11 @@ import { Gesture } from 'ionic-angular/gestures/gesture';
 export class TableView {
 
     @ViewChild("headerScroll")
-    headerEl: Scroll;
+    headerEl: Content;
     @ViewChild("mainBodyScroll")
-    mainBodyEl: Scroll;
+    mainBodyEl: Content;
     @ViewChild("leftBodyScroll")
-    leftBodyEl: Scroll;
+    leftBodyEl: Content;
 
     headerHeight: number = 0;
     bodyScrollHeight: number = 0;
@@ -93,86 +93,86 @@ export class TableView {
         this.fractionArray = displayArray.slice(4);
     }
 
-    scrollHeader(event) {
-        console.log("SCROLLING HEADER...");
-        // called when performing a header scroll to turn on the header scroll gesture
-        // this.headerGesture.on('scroll', this.scrollHeader);
-        this.headerEl.scrollElement.addEventListener('scroll', this.scrollHeader);
+    // scrollHeader(event) {
+    //     console.log("SCROLLING HEADER...");
+    //     // called when performing a header scroll to turn on the header scroll gesture
+    //     // this.headerGesture.on('scroll', this.scrollHeader);
+    //     this.headerEl.scrollElement.addEventListener('scroll', this.scrollHeader);
         
-        // turns off the scrolling gesture for the main body and left body
-        // this.mainBodyGesture.off('scroll', this.scrollMainBody);
-        // this.leftBodyGesture.off('scroll', this.scrollLeftBody);
-        this.mainBodyEl.scrollElement.removeEventListener('scroll', this.scrollMainBody);
-        this.leftBodyEl.scrollElement.removeEventListener('scroll', this.scrollLeftBody);
+    //     // turns off the scrolling gesture for the main body and left body
+    //     // this.mainBodyGesture.off('scroll', this.scrollMainBody);
+    //     // this.leftBodyGesture.off('scroll', this.scrollLeftBody);
+    //     this.mainBodyEl.scrollElement.removeEventListener('scroll', this.scrollMainBody);
+    //     this.leftBodyEl.scrollElement.removeEventListener('scroll', this.scrollLeftBody);
 
-        // scrolls the body with the header in the x direction
-        // this.mainBodyEl.scrollTo(
-        //     this.headerEl.getContentDimensions().contentLeft,
-        //     this.mainBodyEl.getContentDimensions().contentTop
-        // );
-        this.mainBodyEl.scrollElement.scrollTo(
-            this.headerEl.scrollElement.scrollLeft,
-            this.mainBodyEl.scrollElement.scrollTop
-        );
-    }
+    //     // scrolls the body with the header in the x direction
+    //     // this.mainBodyEl.scrollTo(
+    //     //     this.headerEl.getContentDimensions().contentLeft,
+    //     //     this.mainBodyEl.getContentDimensions().contentTop
+    //     // );
+    //     this.mainBodyEl.scrollElement.scrollTo(
+    //         this.headerEl.scrollElement.scrollLeft,
+    //         this.mainBodyEl.scrollElement.scrollTop
+    //     );
+    // }
 
-    scrollMainBody(event) {
-        console.log("SCROLLING MAIN BODY...");
-        // called when performing a body scroll to turn on the body scroll gesture
-        // this.mainBodyGesture.on('scroll', this.scrollMainBody);
-        this.mainBodyEl.scrollElement.addEventListener('scroll', this.scrollMainBody);
+    // scrollMainBody(event) {
+    //     console.log("SCROLLING MAIN BODY...");
+    //     // called when performing a body scroll to turn on the body scroll gesture
+    //     // this.mainBodyGesture.on('scroll', this.scrollMainBody);
+    //     this.mainBodyEl.scrollElement.addEventListener('scroll', this.scrollMainBody);
 
-        // turns off the scrolling gesture for the header and left body
-        // this.headerGesture.off('scroll', this.scrollHeader);
-        // this.leftBodyGesture.off('scroll', this.scrollLeftBody);
-        this.headerEl.scrollElement.removeEventListener('scroll', this.scrollHeader);
-        this.leftBodyEl.scrollElement.removeEventListener('scroll', this.scrollLeftBody);
+    //     // turns off the scrolling gesture for the header and left body
+    //     // this.headerGesture.off('scroll', this.scrollHeader);
+    //     // this.leftBodyGesture.off('scroll', this.scrollLeftBody);
+    //     this.headerEl.scrollElement.removeEventListener('scroll', this.scrollHeader);
+    //     this.leftBodyEl.scrollElement.removeEventListener('scroll', this.scrollLeftBody);
 
-        // var mainPosition = this.mainBodyEl.getContentDimensions();
+    //     // var mainPosition = this.mainBodyEl.getContentDimensions();
 
-        // scrolls the header with the main body in the x direction
-        // this.headerEl.scrollTo(
-        //     mainPosition.contentLeft,
-        //     this.headerEl.getContentDimensions().contentTop
-        // );
-        this.headerEl.scrollElement.scrollTo(
-            this.mainBodyEl.scrollElement.scrollLeft,
-            this.headerEl.scrollElement.scrollTop
-        );
+    //     // scrolls the header with the main body in the x direction
+    //     // this.headerEl.scrollTo(
+    //     //     mainPosition.contentLeft,
+    //     //     this.headerEl.getContentDimensions().contentTop
+    //     // );
+    //     this.headerEl.scrollElement.scrollTo(
+    //         this.mainBodyEl.scrollElement.scrollLeft,
+    //         this.headerEl.scrollElement.scrollTop
+    //     );
 
-        // scrolls the left body with the main body in the y direction
-        // this.leftBodyEl.scrollTo(
-        //     this.leftBodyEl.getContentDimensions().contentLeft,
-        //     mainPosition.contentTop
-        // );
-        this.leftBodyEl.scrollElement.scrollTo(
-            this.leftBodyEl.scrollElement.scrollLeft,
-            this.mainBodyEl.scrollElement.scrollTop
-        );
-    }
+    //     // scrolls the left body with the main body in the y direction
+    //     // this.leftBodyEl.scrollTo(
+    //     //     this.leftBodyEl.getContentDimensions().contentLeft,
+    //     //     mainPosition.contentTop
+    //     // );
+    //     this.leftBodyEl.scrollElement.scrollTo(
+    //         this.leftBodyEl.scrollElement.scrollLeft,
+    //         this.mainBodyEl.scrollElement.scrollTop
+    //     );
+    // }
 
-    scrollLeftBody(event) {
-        console.log("SCROLLING LEFT BODY...");
-        // called when performing a body scroll to turn on the body scroll gesture
-        // this.leftBodyGesture.on('scroll', this.scrollLeftBody);
-        this.leftBodyEl.scrollElement.addEventListener('scroll', this.scrollLeftBody);
+    // scrollLeftBody(event) {
+    //     console.log("SCROLLING LEFT BODY...");
+    //     // called when performing a body scroll to turn on the body scroll gesture
+    //     // this.leftBodyGesture.on('scroll', this.scrollLeftBody);
+    //     this.leftBodyEl.scrollElement.addEventListener('scroll', this.scrollLeftBody);
 
-        // turns off the scrolling gesture for the header and main body
-        // this.mainBodyGesture.off('scroll', this.scrollMainBody);
-        // this.headerGesture.off('scroll', this.scrollHeader);
-        this.mainBodyEl.scrollElement.removeEventListener('scroll', this.scrollMainBody);
-        this.headerEl.scrollElement.removeEventListener('scroll', this.scrollHeader);
+    //     // turns off the scrolling gesture for the header and main body
+    //     // this.mainBodyGesture.off('scroll', this.scrollMainBody);
+    //     // this.headerGesture.off('scroll', this.scrollHeader);
+    //     this.mainBodyEl.scrollElement.removeEventListener('scroll', this.scrollMainBody);
+    //     this.headerEl.scrollElement.removeEventListener('scroll', this.scrollHeader);
 
-        // scrolls the main body with the left body in the y direction
-        // this.mainBodyEl.scrollTo(
-        //     this.mainBodyEl.getContentDimensions().contentLeft,
-        //     this.leftBodyEl.getContentDimensions().contentTop
-        // );
-        this.mainBodyEl.scrollElement.scrollTo(
-            this.mainBodyEl.scrollElement.scrollLeft,
-            this.leftBodyEl.scrollElement.scrollTop
-        );
-    }
+    //     // scrolls the main body with the left body in the y direction
+    //     // this.mainBodyEl.scrollTo(
+    //     //     this.mainBodyEl.getContentDimensions().contentLeft,
+    //     //     this.leftBodyEl.getContentDimensions().contentTop
+    //     // );
+    //     this.mainBodyEl.scrollElement.scrollTo(
+    //         this.mainBodyEl.scrollElement.scrollLeft,
+    //         this.leftBodyEl.scrollElement.scrollTop
+    //     );
+    // }
 
     calculateHeights(decrement) {
         // sets the height of the table body scroll view to fit the page properly
@@ -199,10 +199,21 @@ export class TableView {
         // this.mainBodyScroll = <HTMLElement> document.getElementById("mainBodyScroll").firstChild;
         // this.leftBodyScroll = <HTMLElement> document.getElementById("leftBodyScroll").firstChild;
 
-        console.log(this.mainBodyEl.scrollElement);
-        this.headerEl.scrollElement.addEventListener('scroll', this.scrollHeader);
-        this.mainBodyEl.scrollElement.addEventListener('scroll', this.scrollMainBody);
-        this.leftBodyEl.scrollElement.addEventListener('scroll', this.scrollLeftBody);
+        this.headerEl.statusbarPadding = false;
+
+        this.headerEl.ionScroll.subscribe(value => {
+            console.log("he: " + JSON.stringify(value));
+        });
+
+        this.headerEl.ionScroll.subscribe(value => {
+            console.log("hey: " + JSON.stringify(value));
+            this.mainBodyEl._scroll.setLeft(value.startX + value.deltaX);
+        });
+
+        this.headerEl.ionScrollEnd.subscribe(value => {
+            this.mainBodyEl._scroll.scrollTo(value.startX + value.deltaX, value.startY, 1000);
+        });
+        
 
         // sets scrolling gestures
         // this.headerGesture = new Gesture(this.headerEl.getNativeElement());
