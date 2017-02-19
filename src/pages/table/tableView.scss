@@ -1,4 +1,9 @@
 page-tableView {
+    .scrollbox {
+        position: absolute;
+        top: 0;
+    }
+
     #tableContent {
         .scroll-content {
             overflow: hidden;
@@ -108,5 +113,7 @@ page-tableView {
         padding: 8px;
         white-space: nowrap;
         font-family: monospace;
+        font-size: 1.1em;
+        line-height: 1.5rem;
     }
 }

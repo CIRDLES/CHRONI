@@ -66,7 +66,9 @@ export class ViewFiles {
                         var reportSettings: ReportSettings = <ReportSettings> rs;
                         var tableArray = this.xml.createTableData(aliquot, reportSettings);
                         this.navCtrl.push(TableView, {
-                            tableArray: tableArray
+                            tableArray: tableArray,
+                            aliquot: this.currentAliquot,
+                            reportSettings: this.currentReportSettings
                         });
                     }
                 });
