@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
 import { ViewController, NavParams, Platform, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
-import { File, ScreenOrientation } from 'ionic-native';
+import { ScreenOrientation } from 'ionic-native';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
+import { FileUtility } from '../../utilities/FileUtility';
 
-declare var cordova: any;
+import { Name } from '../history/history';
+
 
 @Component({
     templateUrl: 'fileBrowser.html'
@@ -25,9 +27,7 @@ export class FileBrowser {
     copying: any = false;
     cutting: boolean = false;
 
-    constructor(public viewCtrl: ViewController, public params: NavParams, public platform: Platform, public actionSheetCtrl: ActionSheetController, public alertCtrl: AlertController, public toastCtrl: ToastController, public xml: XMLUtility) {
-
-        this.fileSystem = cordova.file.dataDirectory;
+    constructor(public viewCtrl: ViewController, public params: NavParams, public platform: Platform, public actionSheetCtrl: ActionSheetController, public alertCtrl: AlertController, public toastCtrl: ToastController, public xml: XMLUtility, public fileUtil: FileUtility) {
 
         var directory = params.get('directory');
         if (!directory || directory === '') {
@@ -45,16 +45,8 @@ export class FileBrowser {
                 this.lookingFor = 'Report Settings'
         }
 
-        // checks the directories and creates them if they don't exist
-        File.checkDir(this.fileSystem, 'chroni')
-            .catch(err => File.createDir(this.fileSystem, 'chroni', true));
-
-        File.checkDir(this.fileSystem, 'chroni/Aliquots')
-            .catch(err => File.createDir(this.fileSystem, 'chroni/Aliquots', true));
-
-        File.checkDir(this.fileSystem, 'chroni/Report Settings')
-            .catch(err => File.createDir(this.fileSystem, 'chroni/Report Settings', true));
-
+        this.fileUtil.createDefaultDirectories();
+        this.fileUtil.downloadDefaultFiles();
         this.updateFiles();
     }
 
@@ -66,16 +58,18 @@ export class FileBrowser {
 
     updateFiles() {
         // must remove leading '/' from currentDirectory file path
-        File.listDir(this.fileSystem, this.currentDirectory.substring(1)).then((files) => {
-            this.files = files;
-        }).catch(err => console.log(JSON.stringify(err)));
+        this.fileUtil.getFilesAtDirectory(this.currentDirectory.substring(1))
+            .subscribe(
+                files => this.files = files,
+                error => console.log(JSON.stringify(error))
+            );
     }
 
     chooseFile(file) {
         if (file.isFile) {
             if (this.lookingFor === 'Aliquot') {
                 // checks to make sure the file is an Aliquot XML file
-                this.xml.checkFileValidity(file).then((result) => {
+                this.xml.checkFileValidity(file).subscribe(result => {
                     if (result === 'Aliquot') {
                         this.sendFileBack(file);
                     } else {
@@ -90,7 +84,7 @@ export class FileBrowser {
 
             } else if (this.lookingFor === 'Report Settings') {
                 // checks to make sure the file is an Report Settings XML file
-                this.xml.checkFileValidity(file).then((result) => {
+                this.xml.checkFileValidity(file).subscribe(result => {
                     if (result === 'Report Settings') {
                         this.sendFileBack(file);
                     } else {
@@ -155,9 +149,13 @@ export class FileBrowser {
 
     deleteFile(file) {
         var filePath = file.fullPath.substring(1);
-        if (file.isFile)
-            File.removeFile(this.fileSystem, filePath).then(() => this.updateFiles(), (error) => console.log(JSON.stringify(error)));
-        else {
+        if (file.isFile) {
+            this.fileUtil.removeFile(filePath)
+                .subscribe(
+                    success => this.updateFiles(),
+                    error => console.log(JSON.stringify(error))
+                );
+        } else {
             this.alertCtrl.create({
                 title: 'WARNING!',
                 message: 'Removing "' + file.name + '" will also delete all files/folders contained within it. Do you wish to continue?',
@@ -169,7 +167,11 @@ export class FileBrowser {
                     {
                         text: 'Continue',
                         handler: () => {
-                            File.removeRecursively(this.fileSystem, filePath).then(() => this.updateFiles(), (error) => console.log(JSON.stringify(error)));
+                            this.fileUtil.removeDirectory(filePath)
+                                .subscribe(
+                                    success => this.updateFiles(),
+                                    error => console.log(JSON.stringify(error))
+                                );
                         }
                     }
                 ]
@@ -186,10 +188,18 @@ export class FileBrowser {
                 var extension = '.' + split[split.length-1];
                 newPath = oldPath.substring(0, oldPath.length - file.name.length) + newName + extension;
 
-                File.moveFile(this.fileSystem, oldPath, this.fileSystem, newPath).then(_ => this.updateFiles());
+                this.fileUtil.moveFile(oldPath, newPath)
+                    .subscribe(
+                        success => this.updateFiles(),
+                        error => console.log(JSON.stringify(error))
+                    );
             } else {
                 newPath = oldPath.substring(0, oldPath.length - file.name.length) + newName;
-                File.moveDir(this.fileSystem, oldPath, this.fileSystem, newPath).then(_ => this.updateFiles());
+                this.fileUtil.moveDirectory(oldPath, newPath)
+                    .subscribe(
+                        success => this.updateFiles(),
+                        error => console.log(JSON.stringify(error))
+                    );
             }
         } else {
             this.alertCtrl.create({
@@ -214,21 +224,42 @@ export class FileBrowser {
     pasteFile() {
         if (this.copiedFile) {
             var newPath = (this.currentDirectory + '/' + this.copiedFile.name).substring(1);
-            File.checkFile(this.fileSystem, newPath).catch(err => {
-                if (this.cutting) {
-                    if (this.copiedFile.isFile)
-                        File.moveFile(this.fileSystem, this.copiedFile.fullPath.substring(1), this.fileSystem, newPath).then(() => this.updateFiles(), (error) => console.log(JSON.stringify(error)));
-                    else
-                        File.moveDir(this.fileSystem, this.copiedFile.fullPath.substring(1), this.fileSystem, newPath).then(() => this.updateFiles());
-                    this.copiedFile = null;
-                    this.cutting = false;
-                } else {
-                    if (this.copiedFile.isFile)
-                        File.copyFile(this.fileSystem, this.copiedFile.fullPath.substring(1), this.fileSystem, newPath).then(() => this.updateFiles());
-                    else
-                        File.copyDir(this.fileSystem, this.copiedFile.fullPath.substring(1), this.fileSystem, newPath).then(() => this.updateFiles());
-                }
-            });
+            this.fileUtil.fileExists(newPath)
+                .subscribe(exists => {
+                    if (!exists) {
+                        if (this.cutting) {
+                            console.log(JSON.stringify(this.copiedFile));
+                            if (this.copiedFile.isFile)
+                                this.fileUtil.moveFile(this.copiedFile.fullPath.substring(1), newPath)
+                                    .subscribe(
+                                        success => this.updateFiles(),
+                                        error => console.log(JSON.stringify(error))
+                                    );
+                            else
+                                this.fileUtil.moveDirectory(this.copiedFile.fullPath.substring(1), newPath)
+                                    .subscribe(
+                                        success => this.updateFiles(),
+                                        error => console.log(JSON.stringify(error))
+                                    );
+
+                            this.copiedFile = null;
+                            this.cutting = false;
+                        } else {
+                            if (this.copiedFile.isFile)
+                                this.fileUtil.copyFile(this.copiedFile.fullPath.substring(1), newPath)
+                                    .subscribe(
+                                        success => this.updateFiles(),
+                                        error => console.log(JSON.stringify(error))
+                                    );
+                            else
+                                this.fileUtil.copyDirectory(this.copiedFile.fullPath.substring(1), newPath)
+                                    .subscribe(
+                                        success => this.updateFiles(),
+                                        error => console.log(JSON.stringify(error))
+                                    );
+                        }
+                    }
+                }, error => console.log(JSON.stringify(error)));
         }
     }
 

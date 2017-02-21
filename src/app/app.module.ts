@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
+import { FileUtility } from '../utilities/FileUtility'
 
 import { Chroni } from './app.component';
 import { About } from '../pages/about/about';
@@ -51,7 +52,7 @@ import { HelpPage } from '../pages/help/help';
     HelpPage
   ],
   providers: [
-    Storage, XMLUtility, HistoryUtility,
+    Storage, XMLUtility, HistoryUtility, FileUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

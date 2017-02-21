@@ -23,7 +23,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: './src/test.ts', watched: false }
+      {
+        pattern: './src/test.ts', watched: false
+      },
+      {
+        pattern: '**/*.map',
+        served: true,
+        included: false,
+        watched: true,
+      }
     ],
 
 

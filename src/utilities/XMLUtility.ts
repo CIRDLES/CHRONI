@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { File } from 'ionic-native';
+import { Observable } from 'rxjs/Observable';
 import { BigNumber } from 'bignumber.js';
 import X2JS from 'x2js';
 
-declare var cordova: any;
+import { FileUtility } from './FileUtility';
 
 @Injectable()
 export class XMLUtility {
@@ -29,15 +29,13 @@ export class XMLUtility {
     ]
 
     x2js: X2JS;
-    fileSystem: string;
 
-    constructor(public platform: Platform) {
+    constructor(public platform: Platform, public fileUtil: FileUtility) {
 
         this.platform.ready().then(() => {
             this.x2js = new X2JS({
                 arrayAccessFormPaths: this.NODES_AS_ARRAYS
             });
-            this.fileSystem = cordova.file.dataDirectory;
             // sets the config for BigNumber so that it doesn't use scientific notation
             BigNumber.config({ EXPONENTIAL_AT: 1e+9, ERRORS: false });
         });
@@ -523,144 +521,142 @@ export class XMLUtility {
         return fractionArray;
     }
 
-    public checkFileValidity(file) {
+    public checkFileValidity(file): Observable<string> {
         var path = file.fullPath;
         if (path[0] === '/')
             path = path.substring(1);
 
-        return new Promise((resolve, reject) => {
-            File.readAsText(this.fileSystem, path).then((fileData: string) => {
-                var jsonObj = this.x2js.xml2js(fileData);
-                if (jsonObj) {
-                    if (jsonObj["Aliquot"])
-                        resolve("Aliquot");
-                    else if (jsonObj["ReportSettings"])
-                        resolve("Report Settings");
-                } else
-                    reject('Invalid File...');
-            });
+        return new Observable(observer => {
+            this.fileUtil.readFileText(path)
+                .subscribe(
+                    fileData => {
+                        var jsonObj = this.x2js.xml2js(fileData);
+                        if (jsonObj) {
+                            if (jsonObj['Aliquot'])
+                                observer.next('Aliquot');
+                            else if (jsonObj['ReportSettings'])
+                                observer.next('Report Settings');
+                            else
+                                observer.error('Invalid file...');
+                        } else
+                            observer.error('Invalid file...');
+                    }, error => console.log(JSON.stringify(error))
+                );
         });
     }
 
-    public createAliquot(file) {
+    public createAliquot(file): Observable<Aliquot> {
 
-        return new Promise((resolve, reject) => {
-            this.checkFileValidity(file).then((result) => {
+        return new Observable(observer => {
+            this.checkFileValidity(file).subscribe(result => {
                 if (result === 'Aliquot') {
                     var path = file.fullPath;
                     if (path[0] === '/')
                         path = path.substring(1);
 
-                    File.readAsText(cordova.file.dataDirectory, path).then((fileData: string) => {
-                            var aliquotJson = this.x2js.xml2js(fileData);
-                            if (aliquotJson) {
-                                // first obtains the root node in Aliquot XML
-                                var rootNodes = aliquotJson["Aliquot"];
+                    this.fileUtil.readFileText(path)
+                        .subscribe(
+                            fileData => {
+                                var aliquotJson = this.x2js.xml2js(fileData);
+                                if (aliquotJson) {
+                                    // first obtains the root node in Aliquot XML
+                                    var rootNodes = aliquotJson["Aliquot"];
 
-                                // then obtains each of the values for the aliquot
-                                var aliquotName = rootNodes["aliquotName"];
-                                var fractions = rootNodes["analysisFractions"]["AnalysisFraction"];
-                                var images = rootNodes["analysisImages"]["AnalysisImage"];
+                                    // then obtains each of the values for the aliquot
+                                    var aliquotName = rootNodes["aliquotName"];
+                                    var fractions = rootNodes["analysisFractions"]["AnalysisFraction"];
+                                    var images = rootNodes["analysisImages"]["AnalysisImage"];
 
-                                // checks to make sure all arrays are actually arrays (will be object if only one node)
-                                if (fractions && !Array.isArray(fractions)) {
-                                    var fractionArray = [];
-                                    fractionArray.push(fractions);
-                                    fractions = fractionArray;
-                                }
-                                if (images && !Array.isArray(images)) {
-                                    var imagesArray = [];
-                                    imagesArray.push(images);
-                                    images = imagesArray;
-                                }
-
-                                // adds a Value Models object to each fraction which contains every Value Model indexed by their names
-                                fractions.forEach(function(fraction) {
-                                    fraction["ValueModelsByName"] = {};
-                                    var valueModelObj = fraction["ValueModelsByName"];
-
-                                    for (var key in fraction) {
-                                        if (fraction.hasOwnProperty(key)) {
-                                            // obtains Value Models if they exist
-                                            var valueModelList = fraction[key]["ValueModel"];
-                                            if (valueModelList) {
-                                                // first ensures that it is a list
-                                                if (valueModelList && !Array.isArray(valueModelList)) {
-                                                    var valueModelArray = [];
-                                                    valueModelArray.push(valueModelList);
-                                                    valueModelList = valueModelArray;
-                                                }
-
-                                                // puts each Value Model into the fraction's new ValueModelsByName object
-                                                valueModelList.forEach(function(model) {
-                                                    valueModelObj[model.name] = model;
-                                                });
-                                            }
-                                        }
+                                    // checks to make sure all arrays are actually arrays (will be object if only one node)
+                                    if (fractions && !Array.isArray(fractions)) {
+                                        var fractionArray = [];
+                                        fractionArray.push(fractions);
+                                        fractions = fractionArray;
+                                    }
+                                    if (images && !Array.isArray(images)) {
+                                        var imagesArray = [];
+                                        imagesArray.push(images);
+                                        images = imagesArray;
                                     }
 
-                                });
+                                    // adds a Value Models object to each fraction which contains every Value Model indexed by their names
+                                    fractions.forEach(function(fraction) {
+                                        fraction["ValueModelsByName"] = {};
+                                        var valueModelObj = fraction["ValueModelsByName"];
+
+                                        for (var key in fraction) {
+                                            if (fraction.hasOwnProperty(key)) {
+                                                // obtains Value Models if they exist
+                                                var valueModelList = fraction[key]["ValueModel"];
+                                                if (valueModelList) {
+                                                    // first ensures that it is a list
+                                                    if (valueModelList && !Array.isArray(valueModelList)) {
+                                                        var valueModelArray = [];
+                                                        valueModelArray.push(valueModelList);
+                                                        valueModelList = valueModelArray;
+                                                    }
+
+                                                    // puts each Value Model into the fraction's new ValueModelsByName object
+                                                    valueModelList.forEach(function(model) {
+                                                        valueModelObj[model.name] = model;
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                    });
 
 
-                                var aliquot = new Aliquot(aliquotName, fractions, images);
-                                resolve(aliquot);
+                                    var aliquot: Aliquot = new Aliquot(aliquotName, fractions, images);
+                                    observer.next(aliquot);
+                                }
+                            }, error => observer.error(error)
+                        );
+                }
 
-                            }
-                        }, (error) => {
-                            reject(error);
-                        });
-                    } else
-                        reject('Invalid Aliquot XML...');
-
-            }, (invalid) => {
-                reject('Invalid Aliquot...');
-            });
+            }, error => observer.error(error));
         });
 
     }
 
-    public createReportSettings(file) {
+    public createReportSettings(file): Observable<ReportSettings> {
 
-        return new Promise((resolve, reject) => {
-            this.checkFileValidity(file).then((result) => {
+        return new Observable(observer => {
+            this.checkFileValidity(file).subscribe(result => {
                 if (result === 'Report Settings') {
                         var path = file.fullPath;
                         if (path[0] === '/')
                             path = path.substring(1);
 
-                        File.readAsText(cordova.file.dataDirectory, path).then((result: string) => {
-                                var aliquotJson = this.x2js.xml2js(result);
-                                if (aliquotJson) {
-                                    // first obtains the root node in ReportSettings XML
-                                    var rootNodes = aliquotJson["ReportSettings"];
+                        this.fileUtil.readFileText(path).subscribe(result => {
+                            var aliquotJson = this.x2js.xml2js(result);
+                            if (aliquotJson) {
+                                // first obtains the root node in ReportSettings XML
+                                var rootNodes = aliquotJson["ReportSettings"];
 
-                                    var categories = {};
-                                    this.REPORT_CATEGORY_LIST.forEach(function(category) {
-                                        var categoryNode = rootNodes[category];
+                                var categories = {};
+                                this.REPORT_CATEGORY_LIST.forEach(function(category) {
+                                    var categoryNode = rootNodes[category];
 
-                                        // checks to make sure the ReportColumn object is an array (if there is a single node it will be an object)
-                                        if (categoryNode["categoryColumns"]["ReportColumn"] && !Array.isArray(categoryNode["categoryColumns"]["ReportColumn"])) {
-                                            var reportColumnArray = [];
-                                            reportColumnArray.push(categoryNode["categoryColumns"]["ReportColumn"]);
-                                            categoryNode["categoryColumns"]["ReportColumn"] = reportColumnArray;
-                                        }
+                                    // checks to make sure the ReportColumn object is an array (if there is a single node it will be an object)
+                                    if (categoryNode["categoryColumns"]["ReportColumn"] && !Array.isArray(categoryNode["categoryColumns"]["ReportColumn"])) {
+                                        var reportColumnArray = [];
+                                        reportColumnArray.push(categoryNode["categoryColumns"]["ReportColumn"]);
+                                        categoryNode["categoryColumns"]["ReportColumn"] = reportColumnArray;
+                                    }
 
-                                        categories[category] = categoryNode;
-                                    });
+                                    categories[category] = categoryNode;
+                                });
 
-                                    var reportSettings = new ReportSettings(categories);
-                                    resolve(reportSettings);
+                                var reportSettings: ReportSettings = new ReportSettings(categories);
+                                observer.next(reportSettings);
 
-                                }
-                            }, (error) => {
-                                reject(error);
-                            });
+                            }
+                        }, error => observer.error(error));
                     } else
-                        reject("Invalid Report Settings XML...");
+                        observer.error("Invalid Report Settings XML...");
                         
-            }, (invalid) => {
-                reject('Invalid Report Settings...');
-            });
+            }, error => observer.error(error));
         });
 
     }

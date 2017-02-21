@@ -67,7 +67,10 @@ export class Name {
     transform(value, args) {
         if (value && value !== '') {
             var split = value.split('/');
-            return split[split.length - 1];
+            if (split[split.length - 1] === '')
+                return split[split.length - 2];
+            else
+                return split[split.length - 1];
         }
     }
 }

@@ -6,7 +6,7 @@
                 {{ parentName }}
             </button>
         </ion-buttons>
-        <ion-title>Files</ion-title>
+        <ion-title>{{ currentDirectory | name }}</ion-title>
         <ion-buttons end>
             <button ion-button clear (click)="dismiss()">Close</button>
         </ion-buttons>
