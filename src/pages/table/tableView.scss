@@ -1,0 +1,119 @@
+page-tableView {
+    .scrollbox {
+        position: absolute;
+        top: 0;
+    }
+
+    #tableContent {
+        .scroll-content {
+            overflow: hidden;
+        }
+        background-color: #92C4DE;
+    }
+
+    #headerScrollLeft {
+        .scroll-content {
+            overflow: hidden;
+        }
+        flex: 1;
+    }
+
+    #headerScrollRight {
+        .scroll-content {
+            overflow-x: auto;
+        }
+        flex: 1;
+    }
+
+    #leftBodyScroll {
+        .scroll-content {
+            overflow-y: auto;
+        }
+        flex: 1;
+    }
+
+    #mainBodyScroll {
+        .scroll-content {
+            overflow: auto;
+        }
+        flex: 1;
+    }
+
+    #tableHeadLeft {
+        background-color: #B9D9EA;
+        text-align: left;
+        th {
+            border-top: 2px solid #000000;
+            border-left: 2px solid #000000;
+            border-right: 2px solid #000000;
+            &:last-child {
+                border-bottom: 2px solid #000000;
+            }
+        }
+    }
+
+    #tableHeadRight {
+        text-align: center;
+        background-color: #B9D9EA;
+        tr:first-child {
+            text-align: left;
+        }
+        tr:first-child th:last-child,
+        tr:last-child th:last-child {
+            text-align: right;
+        }
+        th {
+            border-top: 2px solid #000000;
+            border-right: 2px solid #000000;
+        }
+        tr:last-child th {
+            border-bottom: 2px solid #000000;
+        }
+    }
+
+    #tableBodyLeft {
+        text-align: left;
+        tr:nth-child(odd) {
+            background-color: #E1E1E1;
+        }
+        tr:nth-child(even) {
+            background-color: #FFFFFF;
+        }
+        tr:first-child {
+            color: #FFFFFF;
+            background-color: #107AB3;
+        }
+        td {
+            border-left: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+            border-right: 2px solid #000000;
+        }
+    }
+
+    #tableBody {
+        text-align: right;
+        tr:nth-child(odd) {
+            background-color: #E1E1E1;
+        }
+        tr:nth-child(even) {
+            background-color: #FFFFFF;
+        }
+        tr:first-child {
+            color: #FFFFFF;
+            background-color: #107AB3;
+        }
+        td {
+            border-right: 2px solid #000000;
+            border-bottom: 2px solid #000000;
+        }
+    }
+
+    .tableCell {
+        // border: 2px solid #000000;
+        padding: 8px;
+        white-space: nowrap;
+        font-family: monospace;
+        font-size: 1.1em;
+        line-height: 1.5rem;
+    }
+}

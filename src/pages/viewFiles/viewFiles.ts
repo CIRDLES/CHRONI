@@ -1,11 +1,14 @@
 import { Component, Pipe } from '@angular/core';
 
 import { NavController, Platform, ModalController } from 'ionic-angular';
-import { FileBrowser } from '../fileBrowser/fileBrowser';
-import { File, ScreenOrientation } from 'ionic-native';
+import { ScreenOrientation } from 'ionic-native';
 import { Storage } from '@ionic/storage';
 
-declare var cordova: any;
+import { FileBrowser } from '../fileBrowser/fileBrowser';
+import { TableView } from '../table/tableView';
+
+import { XMLUtility, Aliquot, ReportSettings } from '../../utilities/XMLUtility';
+import { FileUtility } from '../../utilities/FileUtility';
 
 @Component({
     selector: 'page-viewFiles',
@@ -17,12 +20,9 @@ export class ViewFiles {
     currentAliquot: any = {};
     currentReportSettings: any = {};
 
-    constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage) {
+    constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage, public xml: XMLUtility, public fileUtil: FileUtility) {
 
-        this.platform.ready().then(() => {
-            this.fileSystem = cordova.file.dataDirectory;
-            this.getCurrentFiles();
-        });
+        this.getCurrentFiles();
 
     }
 
@@ -54,39 +54,49 @@ export class ViewFiles {
         });
     }
 
+    openTable() {
+        this.xml.createAliquot(this.currentAliquot).subscribe(al => {
+            if (al) {
+                var aliquot: Aliquot = <Aliquot> al;
+                this.xml.createReportSettings(this.currentReportSettings).subscribe(rs => {
+                    if (rs) {
+                        var reportSettings: ReportSettings = <ReportSettings> rs;
+                        var tableArray = this.xml.createTableData(aliquot, reportSettings);
+                        this.navCtrl.push(TableView, {
+                            tableArray: tableArray,
+                            aliquot: this.currentAliquot,
+                            reportSettings: this.currentReportSettings
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     getCurrentFiles() {
         this.storage.get('currentAliquot').then((value) => {
             if (!value) {
-                // if no current aliquot, sets it to Default Aliquot
-                File.resolveDirectoryUrl(this.fileSystem).then((directory) => {
-                    File.getFile(directory, 'chroni/Aliquots/Default Aliquot.xml', {}).then((file) => {
-                        if (file) {
+                this.fileUtil.getFile('chroni/Aliquots/Default Aliquot.xml')
+                    .subscribe(
+                        file => {
                             this.storage.set('currentAliquot', file);
                             this.currentAliquot = file;
-                        }
-                        else
-                            this.currentAliquot = null;
-                    }).catch(error => {
-                        console.log('Could not set current Aliquot: ' + JSON.stringify(error));
-                    });
-                });
+                        },
+                        error => console.log(JSON.stringify(error))
+                    );
             } else
                 this.currentAliquot = value;
         });
         this.storage.get('currentReportSettings').then((value) => {
             if (!value) {
-                // if no current aliquot, sets it to Default Aliquot
-                File.resolveDirectoryUrl(this.fileSystem).then((directory) => {
-                    File.getFile(directory, 'chroni/Report Settings/Default Report Settings.xml', {}).then((file) => {
-                        if (file) {
+                this.fileUtil.getFile('chroni/Report Settings/Default Report Settings.xml')
+                    .subscribe(
+                        file => {
                             this.storage.set('currentReportSettings', file);
                             this.currentReportSettings = file;
-                        } else
-                            this.currentReportSettings = null;
-                    }).catch(error => {
-                        console.log('Could not set current Report Settings: ' + JSON.stringify(error));
-                    });
-                });
+                        },
+                        error => console.log(JSON.stringify(error))
+                    );
             } else
                 this.currentReportSettings = value;
         });

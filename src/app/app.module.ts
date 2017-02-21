@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
+import { FileUtility } from '../utilities/FileUtility'
 
 import { Chroni } from './app.component';
 import { About } from '../pages/about/about';
@@ -12,6 +13,7 @@ import { History, Name } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { Login } from '../pages/profile/login';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
+import { TableView } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
 import { HelpPage } from '../pages/help/help';
@@ -26,6 +28,7 @@ import { HelpPage } from '../pages/help/help';
     Profile,
     Login,
     ViewFiles,
+    TableView,
     FileName,
     FileBrowser,
     AliquotDownloadPage,
@@ -43,12 +46,13 @@ import { HelpPage } from '../pages/help/help';
     Profile,
     Login,
     ViewFiles,
+    TableView,
     FileBrowser,
     AliquotDownloadPage,
     HelpPage
   ],
   providers: [
-    Storage, XMLUtility, HistoryUtility,
+    Storage, XMLUtility, HistoryUtility, FileUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
