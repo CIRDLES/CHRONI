@@ -4,6 +4,8 @@ import { Storage } from '@ionic/storage';
 
 import { Chroni } from './app.component';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
+
+import { FileUtility } from '../utilities/FileUtility';
  
 let comp: Chroni;
 let fixture: ComponentFixture<Chroni>;
@@ -21,7 +23,7 @@ describe('Component: Root Component', () => {
             ],
  
             providers: [
-                Storage
+                FileUtility, Storage
             ],
  
             imports: [
@@ -44,15 +46,15 @@ describe('Component: Root Component', () => {
         comp = null;
     });
  
-    // it('is created', () => {
+    it('is created', () => {
  
-    //     expect(fixture).toBeTruthy();
-    //     expect(comp).toBeTruthy();
+        expect(fixture).toBeTruthy();
+        expect(comp).toBeTruthy();
  
-    // });
+    });
  
-    // it('initialises with a root page of ViewFiles', () => {
-    //     expect(comp['rootPage']).toBe(ViewFiles);
-    // });
+    it('initialises with a root page of ViewFiles', () => {
+        expect(comp['rootPage']).toBe(ViewFiles);
+    });
  
 });
