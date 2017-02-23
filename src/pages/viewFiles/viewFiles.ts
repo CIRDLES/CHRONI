@@ -65,6 +65,7 @@ export class ViewFiles {
                         var reportSettings: ReportSettings = <ReportSettings> rs;
                         var tableArray = this.xml.createTableData(aliquot, reportSettings);
                         var entry = new HistoryEntry(this.currentAliquot, this.currentReportSettings, new Date());
+                        console.log(JSON.stringify(entry.toJSON()));
                         this.historyUtil.addEntry(entry);
                         this.navCtrl.push(TableView, {
                             tableArray: tableArray,
