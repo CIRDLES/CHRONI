@@ -49,7 +49,7 @@ export class HistoryUtility {
 
     private createEntriesFromJSON(jsonItems: Array<any>) {
         var entries: Array<HistoryEntry> = [];
-        for (let item in jsonItems) {
+        for (let item of jsonItems) {
             var entry: HistoryEntry = new HistoryEntry(
                 item['aliquot'],
                 item['reportSettings'],
@@ -60,7 +60,7 @@ export class HistoryUtility {
         return entries;
     }
 
-    public getHistoryEntries() {
+    public getHistoryEntries(): Array<HistoryEntry> {
         return this.historyEntries;
     }
 

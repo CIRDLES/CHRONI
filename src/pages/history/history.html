@@ -10,8 +10,8 @@
     <ion-list>
         <button ion-item *ngFor="let item of history">
             <h2>{{ item.getAliquotFile().name | name }}</h2>
-            <h3>{{ item.getDate | date }}</h3>
-            <p>{{ item.getReportSettingsFile().name | name }}</p>
+            <h3>{{ item.getReportSettingsFile().name | name }}</h3>
+            <p>{{ item.getDate() | date }}</p>
         </button>
     </ion-list>
 </ion-content>
