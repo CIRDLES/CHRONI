@@ -9,6 +9,8 @@ import { TableView } from '../table/tableView';
 
 import { XMLUtility, Aliquot, ReportSettings } from '../../utilities/XMLUtility';
 import { FileUtility } from '../../utilities/FileUtility';
+import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
+
 
 @Component({
     selector: 'page-viewFiles',
@@ -20,7 +22,7 @@ export class ViewFiles {
     currentAliquot: any = {};
     currentReportSettings: any = {};
 
-    constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage, public xml: XMLUtility, public fileUtil: FileUtility) {
+    constructor(public navCtrl: NavController, public modalCtrl: ModalController, public platform: Platform, public storage: Storage, public xml: XMLUtility, public fileUtil: FileUtility, public historyUtil: HistoryUtility) {
 
         this.getCurrentFiles();
 
@@ -62,6 +64,8 @@ export class ViewFiles {
                     if (rs) {
                         var reportSettings: ReportSettings = <ReportSettings> rs;
                         var tableArray = this.xml.createTableData(aliquot, reportSettings);
+                        var entry = new HistoryEntry(this.currentAliquot, this.currentReportSettings, new Date());
+                        this.historyUtil.addEntry(entry);
                         this.navCtrl.push(TableView, {
                             tableArray: tableArray,
                             aliquot: this.currentAliquot,
