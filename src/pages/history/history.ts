@@ -33,7 +33,7 @@ export class History {
     	//}
     	// end TEMPORARY
 
-         this.history = historyUtil.getHistory();
+         // this.history = historyUtil.getHistory();
 
 
         // PERMANENT
