@@ -20,7 +20,6 @@ import { FileUtility } from './utilities/FileUtility'
 
 import { Chroni } from './app/app.component';
 import { About } from './pages/about/about';
-import { ImportFiles } from './pages/importFiles/importFiles';
 import { History, Name } from './pages/history/history';
 import { Profile } from './pages/profile/profile';
 import { Login } from './pages/profile/login';
