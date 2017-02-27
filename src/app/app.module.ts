@@ -8,7 +8,6 @@ import { FileUtility } from '../utilities/FileUtility'
 
 import { Chroni } from './app.component';
 import { About } from '../pages/about/about';
-import { ImportFiles } from '../pages/importFiles/importFiles';
 import { History, Name } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { Login } from '../pages/profile/login';
@@ -17,12 +16,13 @@ import { TableView } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
 import { HelpPage } from '../pages/help/help';
+import { AliquotImportPage } from '../pages/aliquot-import/aliquot-import';
+import { ReportSettingsImportPage } from '../pages/report-settings-import/report-settings-import';
 
 @NgModule({
   declarations: [
     Chroni,
     About,
-    ImportFiles,
     History,
     Name,
     Profile,
@@ -32,7 +32,9 @@ import { HelpPage } from '../pages/help/help';
     FileName,
     FileBrowser,
     AliquotDownloadPage,
-    HelpPage
+    HelpPage,
+    AliquotImportPage,
+    ReportSettingsImportPage
   ],
   imports: [
     IonicModule.forRoot(Chroni)
@@ -41,7 +43,6 @@ import { HelpPage } from '../pages/help/help';
   entryComponents: [
     Chroni,
     About,
-    ImportFiles,
     History,
     Profile,
     Login,
@@ -49,7 +50,9 @@ import { HelpPage } from '../pages/help/help';
     TableView,
     FileBrowser,
     AliquotDownloadPage,
-    HelpPage
+    HelpPage,
+    AliquotImportPage,
+    ReportSettingsImportPage
   ],
   providers: [
     Storage, XMLUtility, HistoryUtility, FileUtility,
