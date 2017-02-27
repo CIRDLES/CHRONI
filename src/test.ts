@@ -71,7 +71,6 @@ export class TestUtils {
       declarations: [
         Chroni,
         About,
-        ImportFiles,
         History,
         Name,
         Profile,
