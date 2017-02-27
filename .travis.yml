@@ -11,6 +11,10 @@ install:
   - npm install -g cordova
   - npm install -g ionic
 
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
 script:
   - ionic build ios
   - npm test
