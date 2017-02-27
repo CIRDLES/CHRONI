@@ -17,4 +17,4 @@ before_script:
 
 script:
   - ionic build ios
-  - npm test
+  - npm run test-travis
