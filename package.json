@@ -8,7 +8,8 @@
     "build": "ionic-app-scripts build",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
-    "test": "ng test"
+    "test": "ng test --watch false",
+    "test-travis": "ng test --watch false --browsers Firefox"
   },
   "dependencies": {
     "@angular/common": "2.2.1",
@@ -42,6 +43,7 @@
     "jasmine-spec-reporter": "^3.2.0",
     "karma": "^1.4.1",
     "karma-chrome-launcher": "^2.0.0",
+    "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.1.0",
     "karma-mocha-reporter": "^2.2.2",
     "karma-remap-istanbul": "^0.6.0",

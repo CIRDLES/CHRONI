@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
-import { FileUtility } from '../utilities/FileUtility'
+import { FileUtility } from '../utilities/FileUtility';
 
 import { Chroni } from './app.component';
 import { About } from '../pages/about/about';
