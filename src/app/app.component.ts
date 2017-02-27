@@ -6,11 +6,13 @@ import { FileUtility } from '../utilities/FileUtility';
 
 import { About } from '../pages/about/about';
 import { History } from '../pages/history/history';
-import { ImportFiles } from '../pages/importFiles/importFiles';
 import { Profile } from '../pages/profile/profile';
 import { ViewFiles } from '../pages/viewFiles/viewFiles';
 import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
 import { HelpPage } from '../pages/help/help';
+import { AliquotImportPage } from '../pages/aliquot-import/aliquot-import';
+import { ReportSettingsImportPage } from '../pages/report-settings-import/report-settings-import';
+
 
 @Component({
     templateUrl: 'app.html'
@@ -26,9 +28,10 @@ export class Chroni {
 
         // used for an example of ngFor and navigation
         this.pages = [
-            { title: 'View Files', component: ViewFiles },
+            { title: 'View Table', component: ViewFiles },
             { title: 'Aliquot Download', component: AliquotDownloadPage },
-            { title: 'Import Files', component: ImportFiles },
+            { title: 'Aliquot Import', component: AliquotImportPage},
+            { title: 'Report Settings Import', component: ReportSettingsImportPage},
             { title: 'History', component: History },
             { title: 'Profile', component: Profile },
             { title: 'About', component: About },
