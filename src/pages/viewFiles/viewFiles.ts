@@ -18,7 +18,6 @@ import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 })
 export class ViewFiles {
 
-    fileSystem: string;
     currentAliquot: any = {};
     currentReportSettings: any = {};
 

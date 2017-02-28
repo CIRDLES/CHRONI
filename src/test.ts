@@ -26,7 +26,8 @@ import { Login } from './pages/profile/login';
 import { ViewFiles, FileName } from './pages/viewFiles/viewFiles';
 import { TableView } from './pages/table/tableView';
 import { FileBrowser } from './pages/fileBrowser/fileBrowser';
-import { AliquotDownloadPage } from './pages/aliquot-download/aliquot-download';
+import { AliquotsPage } from './pages/aliquots/aliquots';
+import { ReportSettingsPage } from './pages/reportSettings/reportSettings';
 import { HelpPage } from './pages/help/help';
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
@@ -79,7 +80,8 @@ export class TestUtils {
         TableView,
         FileName,
         FileBrowser,
-        AliquotDownloadPage,
+        AliquotsPage,
+        ReportSettingsPage,
         HelpPage
       ],
       providers: [

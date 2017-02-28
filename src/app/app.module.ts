@@ -14,10 +14,9 @@ import { Login } from '../pages/profile/login';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
 import { TableView } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
-import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
+import { AliquotsPage } from '../pages/aliquots/aliquots';
+import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
 import { HelpPage } from '../pages/help/help';
-import { AliquotImportPage } from '../pages/aliquot-import/aliquot-import';
-import { ReportSettingsImportPage } from '../pages/report-settings-import/report-settings-import';
 
 @NgModule({
   declarations: [
@@ -31,10 +30,9 @@ import { ReportSettingsImportPage } from '../pages/report-settings-import/report
     TableView,
     FileName,
     FileBrowser,
-    AliquotDownloadPage,
-    HelpPage,
-    AliquotImportPage,
-    ReportSettingsImportPage
+    AliquotsPage,
+    ReportSettingsPage,
+    HelpPage
   ],
   imports: [
     IonicModule.forRoot(Chroni)
@@ -49,10 +47,9 @@ import { ReportSettingsImportPage } from '../pages/report-settings-import/report
     ViewFiles,
     TableView,
     FileBrowser,
-    AliquotDownloadPage,
-    HelpPage,
-    AliquotImportPage,
-    ReportSettingsImportPage
+    AliquotsPage,
+    ReportSettingsPage,
+    HelpPage
   ],
   providers: [
     Storage, XMLUtility, HistoryUtility, FileUtility,

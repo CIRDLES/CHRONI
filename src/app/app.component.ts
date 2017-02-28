@@ -8,10 +8,9 @@ import { About } from '../pages/about/about';
 import { History } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { ViewFiles } from '../pages/viewFiles/viewFiles';
-import { AliquotDownloadPage } from '../pages/aliquot-download/aliquot-download';
+import { AliquotsPage } from '../pages/aliquots/aliquots';
+import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
 import { HelpPage } from '../pages/help/help';
-import { AliquotImportPage } from '../pages/aliquot-import/aliquot-import';
-import { ReportSettingsImportPage } from '../pages/report-settings-import/report-settings-import';
 
 
 @Component({
@@ -29,9 +28,8 @@ export class Chroni {
         // used for an example of ngFor and navigation
         this.pages = [
             { title: 'View Table', component: ViewFiles },
-            { title: 'Aliquot Download', component: AliquotDownloadPage },
-            { title: 'Aliquot Import', component: AliquotImportPage},
-            { title: 'Report Settings Import', component: ReportSettingsImportPage},
+            { title: 'Aliquots', component: AliquotsPage },
+            { title: 'Report Settings', component: ReportSettingsPage},
             { title: 'History', component: History },
             { title: 'Profile', component: Profile },
             { title: 'About', component: About },
