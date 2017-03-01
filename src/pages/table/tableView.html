@@ -1,20 +1,9 @@
 <ion-header id="toolbar">
     <ion-navbar>
-        <button ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
         <ion-title>{{ aliquot.name | fileName }}</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content id="tableContent">
-    <ion-row id="tableButtonDiv">
-        <ion-col text-center>
-            <button ion-button small>Aliquot</button>
-        </ion-col>
-        <ion-col txt-center>
-            <button ion-button small>Report Settings</button>
-        </ion-col>
-    </ion-row>
     <ion-row>
         <ion-content id="headerScrollLeft" zoom="false" [ngStyle]="{'height': headerHeight + 'px', 'max-width': (columnLengths[0]*10 + 2) + 'px'}">
             <table class="scrollbox">

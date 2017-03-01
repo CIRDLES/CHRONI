@@ -97,12 +97,11 @@ export class TableView {
     calculateHeights(decrement) {
         // sets the height of the table body scroll view to fit the page properly
         var contentHeight = document.getElementById("tableContent").offsetHeight;
-        var buttonDivHeight = document.getElementById("tableButtonDiv").offsetHeight;
         var toolbarHeight = document.getElementById("toolbar").offsetHeight;
 
         // uses decrement to differentiate between first openin and screen rotation
         this.headerHeight = document.getElementById("tableHeadLeft").offsetHeight - decrement + 2;
-        this.bodyScrollHeight = (contentHeight - buttonDivHeight - toolbarHeight - this.headerHeight);
+        this.bodyScrollHeight = (contentHeight - toolbarHeight - this.headerHeight);
     };
 
     ionViewWillEnter() {

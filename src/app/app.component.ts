@@ -27,11 +27,11 @@ export class Chroni {
 
         // used for an example of ngFor and navigation
         this.pages = [
-            { title: 'View Table', component: ViewFiles },
+            { title: 'Manage Report Table', component: ViewFiles },
             { title: 'Aliquots', component: AliquotsPage },
             { title: 'Report Settings', component: ReportSettingsPage},
             { title: 'History', component: History },
-            { title: 'Profile', component: Profile },
+            { title: 'GeoChron Credentials', component: Profile },
             { title: 'About', component: About },
             { title: 'Help', component: HelpPage }
         ];
