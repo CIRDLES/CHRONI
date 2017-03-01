@@ -26,7 +26,7 @@ export class HelpPage {
 
   launch(url) {
     this.plt.ready().then(() => {
-      let browser = new InAppBrowser(url, "_blank");
+      let browser = new InAppBrowser(url, "_system");
     });
   }
 
