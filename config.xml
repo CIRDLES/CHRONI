@@ -50,4 +50,5 @@
   <allow-navigation href="http://10.5.129.45:8100"/>
   <allow-navigation href="http://192.168.1.67:8100"/>
   <allow-navigation href="http://10.5.199.17:8100"/>
+  <allow-navigation href="http://192.168.1.125:8100"/>
 </widget>

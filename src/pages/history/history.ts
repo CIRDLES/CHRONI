@@ -1,9 +1,14 @@
 import { Component, Pipe } from '@angular/core';
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 
-import { Platform } from 'ionic-angular';
 import { ScreenOrientation, File } from 'ionic-native';
 
+import { XMLUtility, Aliquot, ReportSettings } from '../../utilities/XMLUtility';
+import { FileBrowser } from '../fileBrowser/fileBrowser';
+import { TableView } from '../table/tableView';
+import { FileUtility } from '../../utilities/FileUtility';
+import { NavController, Platform, ModalController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 declare var cordova: any;
 
 @Component({
@@ -14,7 +19,7 @@ export class History {
 	fileSystem: string;
 	public history: Array<HistoryEntry> = [];
 
-    constructor(public platform: Platform, public historyUtil: HistoryUtility) {
+    constructor(public platform: Platform, public historyUtil: HistoryUtility, public navCtrl: NavController, public xml: XMLUtility, public fileUtil: FileUtility, public modalCtrl: ModalController, public storage: Storage) {
     	this.platform.ready().then(() => {
             this.fileSystem = cordova.file.dataDirectory;
         });
@@ -29,7 +34,30 @@ export class History {
         });
     }
 
+    openTable(i) {
+        this.xml.createAliquot(history[i].getAliquotFile()).subscribe(al => {
+            if (al) {
+                var aliquot: Aliquot = <Aliquot> al;
+                this.xml.createReportSettings(history[i].getReportSettingsFile()).subscribe(rs => {
+                    if (rs) {
+                        var reportSettings: ReportSettings = <ReportSettings> rs;
+                        var tableArray = this.xml.createTableData(aliquot, reportSettings);
+                        var entry = new HistoryEntry(history[i].getAliquotFile(), history[i].getReportSettingsFile(), new Date());
+                        this.historyUtil.addEntry(entry);
+                        this.navCtrl.push(TableView, {
+                            tableArray: tableArray,
+                            aliquot: history[i].getAliquotFile(),
+                            reportSettings: history[i].getReportSettingsFile()
+                        });
+                    }
+                });
+            }
+        });
+    }
+
 }
+
+
 
 @Pipe({
     name: 'name'
