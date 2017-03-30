@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
-import { ScreenOrientation, FileEntry } from 'ionic-native';
+// import { ScreenOrientation, FileEntry } from 'ionic-native';
 import { Storage } from '@ionic/storage';
 
 import { FileUtility } from '../../utilities/FileUtility';
@@ -20,9 +20,9 @@ export class AliquotsPage {
   }
 
   ionViewWillEnter() {
-    this.platform.ready().then((val) => {
-      ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-    });
+    // this.platform.ready().then((val) => {
+    //   ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+    // });
   }
 
   getCurrentAliquot() {

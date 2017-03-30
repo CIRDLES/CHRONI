@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Platform } from 'ionic-angular';
-import { ScreenOrientation } from 'ionic-native';
+// import { ScreenOrientation } from 'ionic-native';
 
 @Component({
     selector: 'page-about',
@@ -14,9 +14,9 @@ export class About {
     }
 
     ionViewWillEnter() {
-        this.platform.ready().then((val) => {
-            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-        });
+        // this.platform.ready().then((val) => {
+        //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        // });
     }
-    
+
 }

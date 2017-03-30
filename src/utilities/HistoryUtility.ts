@@ -1,5 +1,5 @@
 import { Component, Injectable } from '@angular/core';
-import { FileEntry } from 'ionic-native';
+import { FileEntry } from '@ionic-native/file';
 import { Storage } from '@ionic/storage';
 
 /**

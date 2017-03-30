@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import { InAppBrowser } from 'ionic-native';
+// import { InAppBrowser } from 'ionic-native';
 import { Platform } from 'ionic-angular';
 
 /*
@@ -26,7 +26,7 @@ export class HelpPage {
 
   launch(url) {
     this.plt.ready().then(() => {
-      let browser = new InAppBrowser(url, "_system");
+      // let browser = new InAppBrowser(url, "_system");
     });
   }
 

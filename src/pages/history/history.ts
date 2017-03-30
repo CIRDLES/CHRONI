@@ -2,7 +2,7 @@ import { Component, Pipe } from '@angular/core';
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 
 import { Platform } from 'ionic-angular';
-import { ScreenOrientation, File } from 'ionic-native';
+// import { ScreenOrientation, File } from 'ionic-native';
 
 declare var cordova: any;
 
@@ -24,9 +24,9 @@ export class History {
     }
 
     ionViewWillEnter() {
-        this.platform.ready().then((val) => {
-            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-        });
+        // this.platform.ready().then((val) => {
+        //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        // });
     }
 
 }
