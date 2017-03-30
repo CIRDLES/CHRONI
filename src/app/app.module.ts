@@ -2,6 +2,10 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
+import { File } from '@ionic-native/file';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
 import { FileUtility } from '../utilities/FileUtility';
@@ -52,6 +56,7 @@ import { HelpPage } from '../pages/help/help';
     HelpPage
   ],
   providers: [
+    File, Transfer, TransferObject, ScreenOrientation,
     Storage, XMLUtility, HistoryUtility, FileUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

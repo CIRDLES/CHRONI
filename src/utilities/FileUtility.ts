@@ -1,32 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { File, FileEntry, DirectoryEntry, Entry, Transfer } from 'ionic-native';
 import { Observable } from 'rxjs/Observable';
+import { File, FileEntry, DirectoryEntry, Entry } from '@ionic-native/file';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { Storage } from '@ionic/storage';
 
-declare var cordova: any;
-
-const defaultAliquotURL: string = 'http://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default-Aliquot-XML/Default Aliquot.xml';
-const defaultReportSettingsURL: string = 'http://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default Report Settings XML/Default Report Settings.xml';
-const defaultReportSettings2URL: string = 'http://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default Report Settings XML/Default Report Settings 2.xml';
+const defaultAliquotURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default-Aliquot-XML/Default%20Aliquot.xml';
+const defaultReportSettingsURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default%20Report%20Settings%20XML/Default%20Report%20Settings.xml';
+const defaultReportSettings2URL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default%20Report%20Settings%20XML/Default%20Report%20Settings%202.xml';
 
 @Injectable()
 export class FileUtility {
 
     private fileSystem: string;
-    private transfer: Transfer;
+    private fileTransfer: TransferObject = this.transfer.create();
 
-    constructor(public platform: Platform, public storage: Storage) {
-        this.platform.ready().then(() => {
-            this.fileSystem = cordova.file.dataDirectory;
-            this.transfer = new Transfer();
-        });
+    constructor(public platform: Platform, public storage: Storage, private transfer: Transfer, private file: File) {
+      this.fileSystem = this.file.dataDirectory;
     }
 
     public getFile(filePath: string): Observable<FileEntry> {
         return new Observable(observer => {
-            File.resolveDirectoryUrl(this.fileSystem).then((directory: DirectoryEntry) => {
-                File.getFile(directory, filePath, {})
+            this.file.resolveDirectoryUrl(this.fileSystem).then((directory: DirectoryEntry) => {
+                this.file.getFile(directory, filePath, {})
                     .then((file: FileEntry) => observer.next(file))
                     .catch((error) => observer.error(error));
             });
@@ -35,8 +31,8 @@ export class FileUtility {
 
     public getDirectory(dirPath: string): Observable<DirectoryEntry> {
         return new Observable(observer => {
-            File.resolveDirectoryUrl(this.fileSystem).then((directory: DirectoryEntry) => {
-                File.getDirectory(directory, dirPath, {})
+            this.file.resolveDirectoryUrl(this.fileSystem).then((directory: DirectoryEntry) => {
+                this.file.getDirectory(directory, dirPath, {})
                     .then((dir: DirectoryEntry) => observer.next(dir))
                     .catch((error) => observer.error(error));
             });
@@ -45,7 +41,7 @@ export class FileUtility {
 
     public removeFile(filePath: string): Observable<any> {
         return new Observable(observer => {
-            File.removeFile(this.fileSystem, filePath)
+            this.file.removeFile(this.fileSystem, filePath)
                 .then((success) => observer.next(success))
                 .catch((error) => observer.error(error));
         });
@@ -53,7 +49,7 @@ export class FileUtility {
 
     public removeDirectory(dirPath: string): Observable<any> {
         return new Observable(observer => {
-            File.removeRecursively(this.fileSystem, dirPath)
+            this.file.removeRecursively(this.fileSystem, dirPath)
                 .then((success) => observer.next(success))
                 .catch((error) => observer.error(error));
         });
@@ -61,7 +57,7 @@ export class FileUtility {
 
     public readFileText(filePath: string): Observable<string> {
         return new Observable(observer => {
-            File.readAsText(this.fileSystem, filePath)
+            this.file.readAsText(this.fileSystem, filePath)
                 .then((fileData: string) => observer.next(fileData))
                 .catch((error) => observer.error(error));
         });
@@ -69,7 +65,7 @@ export class FileUtility {
 
     public getFilesAtDirectory(dirPath: string): Observable<Array<Entry>> {
         return new Observable(observer => {
-            File.listDir(this.fileSystem, dirPath)
+            this.file.listDir(this.fileSystem, dirPath)
                 .then((entries: Array<Entry>) => observer.next(entries))
                 .catch((error) => observer.error(error));
         });
@@ -77,7 +73,7 @@ export class FileUtility {
 
     public createFile(filePath: string, replace: boolean): Observable<any> {
         return new Observable(observer => {
-            File.createFile(this.fileSystem, filePath, replace)
+            this.file.createFile(this.fileSystem, filePath, replace)
                 .then((success) => observer.next(success))
                 .catch((error) => observer.error(error));
         });
@@ -85,7 +81,7 @@ export class FileUtility {
 
     public createDirectory(dirPath: string, replace: boolean): Observable<any> {
         return new Observable(observer => {
-            File.createDir(this.fileSystem, dirPath, replace)
+            this.file.createDir(this.fileSystem, dirPath, replace)
                 .then((success) => observer.next(success))
                 .catch((error) => observer.error(error));
         });
@@ -93,7 +89,7 @@ export class FileUtility {
 
     public writeNewFile(filePath: string, text: string): Observable<Entry> {
         return new Observable(observer => {
-            File.writeFile(this.fileSystem, filePath, text)
+            this.file.writeFile(this.fileSystem, filePath, text)
                 .then((success) => observer.next(success))
                 .catch((error) => observer.error(error));
         });
@@ -101,7 +97,7 @@ export class FileUtility {
 
     public moveFile(oldFilePath: string, newFilePath: string): Observable<Entry> {
         return new Observable(observer => {
-            File.moveFile(this.fileSystem, oldFilePath, this.fileSystem, newFilePath)
+            this.file.moveFile(this.fileSystem, oldFilePath, this.fileSystem, newFilePath)
                 .then((newFile) => observer.next(newFile))
                 .catch((error) => observer.error(error));
         });
@@ -109,7 +105,7 @@ export class FileUtility {
 
     public moveDirectory(oldDirPath: string, newDirPath: string): Observable<DirectoryEntry> {
         return new Observable(observer => {
-            File.moveDir(this.fileSystem, oldDirPath, this.fileSystem, newDirPath)
+            this.file.moveDir(this.fileSystem, oldDirPath, this.fileSystem, newDirPath)
                 .then((newDir) => observer.next(newDir))
                 .catch((error) => observer.error(error));
         });
@@ -117,7 +113,7 @@ export class FileUtility {
 
     public copyFile(oldFilePath: string, newFilePath: string): Observable<Entry> {
         return new Observable(observer => {
-            File.copyFile(this.fileSystem, oldFilePath, this.fileSystem, newFilePath)
+            this.file.copyFile(this.fileSystem, oldFilePath, this.fileSystem, newFilePath)
                 .then((newFile) => observer.next(newFile))
                 .catch((error) => observer.error(error));
         });
@@ -125,7 +121,7 @@ export class FileUtility {
 
     public copyDirectory(oldDirPath: string, newDirPath: string): Observable<DirectoryEntry> {
         return new Observable(observer => {
-            File.copyDir(this.fileSystem, oldDirPath, this.fileSystem, newDirPath)
+            this.file.copyDir(this.fileSystem, oldDirPath, this.fileSystem, newDirPath)
                 .then((newDir) => observer.next(newDir))
                 .catch((error) => observer.error(error));
         });
@@ -133,7 +129,7 @@ export class FileUtility {
 
     public fileExists(filePath: string): Observable<boolean> {
         return new Observable(observer => {
-            File.checkFile(this.fileSystem, filePath)
+            this.file.checkFile(this.fileSystem, filePath)
                 .then((exists) => observer.next(true))
                 .catch((error) => observer.next(false));
         });
@@ -141,19 +137,21 @@ export class FileUtility {
 
     public directoryExists(dirPath: string): Observable<boolean> {
         return new Observable(observer => {
-            File.checkDir(this.fileSystem, dirPath)
+            this.file.checkDir(this.fileSystem, dirPath)
                 .then((exists) => observer.next(true))
                 .catch((error) => observer.next(false));
         });
     }
 
     public downloadFile(url: string, filePath: string): Observable<any> {
-        var webURI = encodeURI(url);
-        var filePathURI = encodeURI(this.fileSystem + filePath);
+        var path = this.fileSystem + filePath;
         return new Observable(observer => {
-            this.transfer.download(webURI, filePathURI)
+            this.fileTransfer.download(url, path)
                 .then((success) => observer.next("success"))
-                .catch((error) => observer.next(error));
+                .catch((error) => {
+                  console.log(error);
+                  observer.error(error);
+                });
         });
     }
 
