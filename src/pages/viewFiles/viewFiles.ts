@@ -1,7 +1,7 @@
 import { Component, Pipe } from '@angular/core';
 
 import { NavController, Platform, ModalController } from 'ionic-angular';
-import { ScreenOrientation } from 'ionic-native';
+// import { ScreenOrientation } from 'ionic-native';
 import { Storage } from '@ionic/storage';
 
 import { FileBrowser } from '../fileBrowser/fileBrowser';
@@ -28,9 +28,9 @@ export class ViewFiles {
     }
 
     ionViewWillEnter() {
-        this.platform.ready().then((val) => {
-            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-        });
+        // this.platform.ready().then((val) => {
+        //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        // });
     }
 
     openFileViewer(directory) {
@@ -47,10 +47,14 @@ export class ViewFiles {
 
         fileViewer.onDidDismiss(file => {
             if (file) {
-                if (directory === 'Aliquots')
+                if (directory === 'Aliquots') {
                     this.currentAliquot = file;
-                else if (directory === 'Report Settings')
+                    this.storage.set('currentAliquot', this.currentAliquot);
+                  }
+                else if (directory === 'Report Settings') {
                     this.currentReportSettings = file;
+                    this.storage.set('currentReportSettings', this.currentReportSettings);
+                  }
             }
         });
     }

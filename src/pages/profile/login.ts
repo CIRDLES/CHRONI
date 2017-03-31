@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ViewController, Platform } from 'ionic-angular';
-import { ScreenOrientation } from 'ionic-native';
+// import { ScreenOrientation } from 'ionic-native';
 
 @Component({
     templateUrl: 'login.html'
@@ -9,13 +9,13 @@ import { ScreenOrientation } from 'ionic-native';
 export class Login {
 
     constructor(public viewCtrl: ViewController, public platform: Platform) {
-        
+
     }
 
     ionViewWillEnter() {
-        this.platform.ready().then((val) => {
-            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-        });
+        // this.platform.ready().then((val) => {
+        //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        // });
     }
 
     dismiss() {

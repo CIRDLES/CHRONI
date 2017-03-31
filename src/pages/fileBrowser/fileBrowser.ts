@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ViewController, NavParams, Platform, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
-import { ScreenOrientation } from 'ionic-native';
+// import { ScreenOrientation } from 'ionic-native';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
 import { FileUtility } from '../../utilities/FileUtility';
@@ -46,14 +46,15 @@ export class FileBrowser {
         }
 
         this.fileUtil.createDefaultDirectories();
-        this.fileUtil.downloadDefaultFiles();
+        this.fileUtil.downloadDefaultFiles()
+          .subscribe(_ => {}, _ => {}, () => this.updateFiles());
         this.updateFiles();
     }
 
     ionViewWillEnter() {
-        this.platform.ready().then((val) => {
-            ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-        });
+        // this.platform.ready().then((val) => {
+        //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
+        // });
     }
 
     updateFiles() {
@@ -79,7 +80,7 @@ export class FileBrowser {
                             position: 'bottom'
                         }).present();
                     }
-                        
+
                 });
 
             } else if (this.lookingFor === 'Report Settings') {
@@ -94,12 +95,12 @@ export class FileBrowser {
                             position: 'bottom'
                         }).present();
                     }
-                        
+
                 });
 
             } else
                 // if not specifically looking for Aliquot or Report Settings, assumes valid
-                this.sendFileBack(file);                
+                this.sendFileBack(file);
 
         } else {
             this.parentDirectory = this.currentDirectory;

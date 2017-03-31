@@ -1,6 +1,11 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage';
+
+import { File } from '@ionic-native/file';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -35,7 +40,8 @@ import { HelpPage } from '../pages/help/help';
     HelpPage
   ],
   imports: [
-    IonicModule.forRoot(Chroni)
+    IonicModule.forRoot(Chroni),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -52,7 +58,10 @@ import { HelpPage } from '../pages/help/help';
     HelpPage
   ],
   providers: [
-    Storage, XMLUtility, HistoryUtility, FileUtility,
+    StatusBar,
+    SplashScreen,
+    File, Transfer, TransferObject,
+    XMLUtility, HistoryUtility, FileUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

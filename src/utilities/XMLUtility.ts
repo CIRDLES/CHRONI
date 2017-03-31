@@ -39,7 +39,7 @@ export class XMLUtility {
             // sets the config for BigNumber so that it doesn't use scientific notation
             BigNumber.config({ EXPONENTIAL_AT: 1e+9, ERRORS: false });
         });
-        
+
     }
 
     private createReportSettingsArray(reportSettings: ReportSettings) {
@@ -457,7 +457,7 @@ export class XMLUtility {
 
                                         }
                                     }
-                                    
+
                                     if (uncertaintyIsVisible)
                                         colIndex += 2;
                                     else
@@ -655,7 +655,7 @@ export class XMLUtility {
                         }, error => observer.error(error));
                     } else
                         observer.error("Invalid Report Settings XML...");
-                        
+
             }, error => observer.error(error));
         });
 
@@ -703,7 +703,7 @@ export class ReportSettings {
     getCategories() {
         return this.categories;
     }
-    
+
 }
 
 export class Numbers {
