@@ -47,10 +47,14 @@ export class ViewFiles {
 
         fileViewer.onDidDismiss(file => {
             if (file) {
-                if (directory === 'Aliquots')
+                if (directory === 'Aliquots') {
                     this.currentAliquot = file;
-                else if (directory === 'Report Settings')
+                    this.storage.set('currentAliquot', this.currentAliquot);
+                  }
+                else if (directory === 'Report Settings') {
                     this.currentReportSettings = file;
+                    this.storage.set('currentReportSettings', this.currentReportSettings);
+                  }
             }
         });
     }
