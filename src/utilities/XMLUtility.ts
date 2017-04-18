@@ -371,7 +371,7 @@ export class XMLUtility {
 
                                                 var modelNumber = new BigNumber(
                                                     valueToRound.times(
-                                                        uncertaintyValue.div(100)
+                                                        uncertaintyValue.times(0.01)
                                                     )
                                                 );
                                                 modelNumber = modelNumber.round(
