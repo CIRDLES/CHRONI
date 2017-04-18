@@ -1,35 +1,35 @@
 <ion-header>
     <ion-navbar>
-        <button ion-button menuToggle>
+        <button color="accent" ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
         <ion-title>Manage Report</ion-title>
     </ion-navbar>
 </ion-header>
 <ion-content>
-    <ion-card class="card">
+    <ion-card color="primary" class="card">
         <ion-card-header text-center>Aliquot</ion-card-header>
-        <ion-item text-wrap>
+        <ion-item color="light" text-wrap>
             <ion-row center>
                 <ion-col width-33>Current:</ion-col>
                 <ion-col>{{ currentAliquot.name | fileName }}</ion-col>
                 <ion-col width-20>
                     <button ion-button clear icon-only (click)="openFileViewer('Aliquots')">
-                        <ion-icon name="add"></ion-icon>
+                        <ion-icon color="accent" name="add"></ion-icon>
                     </button>
                 </ion-col>
             </ion-row>
         </ion-item>
     </ion-card>
-    <ion-card class="card">
+    <ion-card color="primary" class="card">
         <ion-card-header text-center>Report Settings</ion-card-header>
-        <ion-item text-wrap>
+        <ion-item color="light" text-wrap>
             <ion-row center>
                 <ion-col width-33>Current:</ion-col>
                 <ion-col>{{ currentReportSettings.name | fileName }}</ion-col>
                 <ion-col width-20>
                     <button ion-button clear icon-only (click)="openFileViewer('Report Settings')">
-                        <ion-icon name="add"></ion-icon>
+                        <ion-icon color="accent" name="add"></ion-icon>
                     </button>
                 </ion-col>
             </ion-row>

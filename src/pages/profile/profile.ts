@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Login } from '../profile/login';
 
-import { ModalController, Platform } from 'ionic-angular';
+import { ViewController, Platform } from 'ionic-angular';
 // import { ScreenOrientation } from 'ionic-native';
 
 @Component({
@@ -11,7 +11,7 @@ import { ModalController, Platform } from 'ionic-angular';
 })
 export class Profile {
 
-    constructor(public modalCtrl: ModalController, public platform: Platform) {
+    constructor(public viewCtrl: ViewController, public platform: Platform) {
 
     }
 
@@ -21,9 +21,9 @@ export class Profile {
         // });
     }
 
-    showLogin() {
-        let modal = this.modalCtrl.create(Login);
-        modal.present();
+    login() {
+        // TODO: finish login process
+        this.viewCtrl.dismiss();
     }
 
 }
