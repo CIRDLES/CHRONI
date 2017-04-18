@@ -23,12 +23,14 @@ $font-path: "../assets/fonts";
 // colors so you can add, rename and remove colors as needed.
 // The "primary" color is the only required color in the map.
 
+// Colors in logo: #B8949B #B37565 #6D2E22 #794126 #DE8E79 #D46D52
+
 $colors: (
-  primary:    #D76A56,
+  primary:    #D46D52,
   secondary:  #B9D9EA,
-  danger:     #F53D3D,
+  accent:     #6D2E22,
   light:      #F4FAFF,
-  dark:       #222
+  dark:       #222222
 );
 
 /*ion-side-menu.menu-left.menu {
