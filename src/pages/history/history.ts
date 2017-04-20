@@ -31,6 +31,7 @@ export class History {
     }
 
     ionViewWillEnter() {
+        this.history = this.historyUtil.getHistoryEntries();
         // this.platform.ready().then((val) => {
         //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
         // });
@@ -52,11 +53,13 @@ export class History {
                             tableArray: tableArray,
                             aliquot: this.historyIndex.getAliquotFile(),
                             reportSettings: this.historyIndex.getReportSettingsFile()
+                        }).then(() => {
+                            console.log("history updated")
                         });
                     }
                 });
             }
-        });
+        });     
     }
 
 }
