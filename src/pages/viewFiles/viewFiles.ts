@@ -12,6 +12,7 @@ import { FileUtility } from '../../utilities/FileUtility';
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 
 
+
 @Component({
     selector: 'page-viewFiles',
     templateUrl: 'viewFiles.html'
