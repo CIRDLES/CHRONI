@@ -32,8 +32,7 @@ export class HistoryUtility {
     public addEntry(entry: HistoryEntry) {
         var place = 0;
         var index = -1;
-        console.log(entry.getAliquotFile());
-        console.log(entry.getReportSettingsFile());
+
         for (let x of this.historyEntries)
         {
             if (entry.getAliquotFile().name === x.getAliquotFile().name && entry.getReportSettingsFile().name === x.getReportSettingsFile().name) {
