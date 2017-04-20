@@ -73,8 +73,6 @@ export class ViewFiles {
                             tableArray: tableArray,
                             aliquot: this.currentAliquot,
                             reportSettings: this.currentReportSettings
-                        }, {
-                          animate: false
                         });
                     }
                 });
