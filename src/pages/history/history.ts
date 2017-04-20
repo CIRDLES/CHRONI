@@ -38,7 +38,7 @@ export class History {
     }
 
     openTable(i) {
-        
+
         this.historyIndex = this.historyUtil.getHistoryEntry(i);
         this.xml.createAliquot(this.historyIndex.getAliquotFile()).subscribe(al => {
             if (al) {
@@ -53,13 +53,11 @@ export class History {
                             tableArray: tableArray,
                             aliquot: this.historyIndex.getAliquotFile(),
                             reportSettings: this.historyIndex.getReportSettingsFile()
-                        }).then(() => {
-                            console.log("history updated")
                         });
                     }
                 });
             }
-        });     
+        });
     }
 
 }

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Content, NavParams, MenuController, NavController } from 'ionic-angular';
+import { Platform, Scroll, NavParams, MenuController, NavController } from 'ionic-angular';
 // import { ScreenOrientation } from 'ionic-native';
 import { FileName } from '../viewFiles/viewFiles';
 
@@ -11,11 +11,11 @@ import { FileName } from '../viewFiles/viewFiles';
 export class TableView {
 
   @ViewChild("headerScroll")
-  headerEl: Content;
+  headerEl: Scroll;
   @ViewChild("mainBodyScroll")
-  mainBodyEl: Content;
+  mainBodyEl: Scroll;
   @ViewChild("leftBodyScroll")
-  leftBodyEl: Content;
+  leftBodyEl: Scroll;
 
   aliquot: any;
   reportSettings: any;
@@ -112,16 +112,16 @@ export class TableView {
     this.calculateHeights(0);
     this.menu.swipeEnable(false, "sideMenu");
 
-    // subscribes to table scrolling to scroll other relevant table pieces
-    this.headerEl.ionScroll.subscribe(value => {
-      this.mainBodyEl._scroll.setLeft(value.startX + value.deltaX);
+    // table scrolling events to scroll other relevant table pieces
+    this.mainBodyEl.addScrollEventListener(() => {
+      this.leftBodyEl.scrollElement.scrollTop = this.mainBodyEl.scrollElement.scrollTop;
+      this.headerEl.scrollElement.scrollLeft = this.mainBodyEl.scrollElement.scrollLeft;
     });
-    this.leftBodyEl.ionScroll.subscribe(value => {
-      this.mainBodyEl._scroll.setTop(value.startY + value.deltaY);
+    this.leftBodyEl.addScrollEventListener(() => {
+      this.mainBodyEl.scrollY = this.leftBodyEl.scrollY;
     });
-    this.mainBodyEl.ionScroll.subscribe(value => {
-      this.leftBodyEl._scroll.setTop(value.startY + value.deltaY);
-      this.headerEl._scroll.setLeft(value.startX + value.deltaX);
+    this.headerEl.addScrollEventListener(() => {
+      this.mainBodyEl.scrollX = this.headerEl.scrollX;
     });
   }
 
