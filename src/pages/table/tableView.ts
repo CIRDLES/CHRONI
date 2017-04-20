@@ -118,10 +118,10 @@ export class TableView {
       this.headerEl.scrollElement.scrollLeft = this.mainBodyEl.scrollElement.scrollLeft;
     });
     this.leftBodyEl.addScrollEventListener(() => {
-      this.mainBodyEl.scrollY = this.leftBodyEl.scrollY;
+      this.mainBodyEl.scrollElement.scrollTop = this.leftBodyEl.scrollElement.scrollTop;
     });
     this.headerEl.addScrollEventListener(() => {
-      this.mainBodyEl.scrollX = this.headerEl.scrollX;
+      this.mainBodyEl.scrollElement.scrollLeft = this.headerEl.scrollElement.scrollLeft;
     });
   }
 
