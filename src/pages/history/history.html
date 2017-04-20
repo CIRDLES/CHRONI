@@ -11,7 +11,7 @@
         <button ion-item *ngFor="let item of history, let i = index" (click)="openTable(i)">
             <h2>{{ item.getAliquotFile().name | name }}</h2>
             <h3>{{ item.getReportSettingsFile().name | name }}</h3>
-            <p>{{ item.getDate() | date }}</p>
+            <p>{{ item.getDate() | date:'medium' }}</p>
         </button>
     </ion-list>
 </ion-content>
