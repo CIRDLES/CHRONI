@@ -10,12 +10,12 @@ import { FileName } from '../viewFiles/viewFiles';
 })
 export class TableView {
 
-  @ViewChild("headerScroll")
-  headerEl: Scroll;
-  @ViewChild("mainBodyScroll")
-  mainBodyEl: Scroll;
-  @ViewChild("leftBodyScroll")
-  leftBodyEl: Scroll;
+  // @ViewChild("headerScroll")
+  // headerEl: Scroll;
+  // @ViewChild("mainBodyScroll")
+  // mainBodyEl: Scroll;
+  // @ViewChild("leftBodyScroll")
+  // leftBodyEl: Scroll;
 
   aliquot: any;
   reportSettings: any;
@@ -112,17 +112,17 @@ export class TableView {
     this.calculateHeights(0);
     this.menu.swipeEnable(false, "sideMenu");
 
-    // table scrolling events to scroll other relevant table pieces
-    this.mainBodyEl.addScrollEventListener(() => {
-      this.leftBodyEl.scrollElement.scrollTop = this.mainBodyEl.scrollElement.scrollTop;
-      this.headerEl.scrollElement.scrollLeft = this.mainBodyEl.scrollElement.scrollLeft;
-    });
-    this.leftBodyEl.addScrollEventListener(() => {
-      this.mainBodyEl.scrollElement.scrollTop = this.leftBodyEl.scrollElement.scrollTop;
-    });
-    this.headerEl.addScrollEventListener(() => {
-      this.mainBodyEl.scrollElement.scrollLeft = this.headerEl.scrollElement.scrollLeft;
-    });
+    // // table scrolling events to scroll other relevant table pieces
+    // this.mainBodyEl.addScrollEventListener(() => {
+    //   this.leftBodyEl.scrollElement.scrollTop = this.mainBodyEl.scrollElement.scrollTop;
+    //   this.headerEl.scrollElement.scrollLeft = this.mainBodyEl.scrollElement.scrollLeft;
+    // });
+    // this.leftBodyEl.addScrollEventListener(() => {
+    //   this.mainBodyEl.scrollElement.scrollTop = this.leftBodyEl.scrollElement.scrollTop;
+    // });
+    // this.headerEl.addScrollEventListener(() => {
+    //   this.mainBodyEl.scrollElement.scrollLeft = this.headerEl.scrollElement.scrollLeft;
+    // });
   }
 
   ionViewWillLeave() {
