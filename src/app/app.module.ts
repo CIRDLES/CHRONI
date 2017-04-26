@@ -22,6 +22,7 @@ import { TableView } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { AliquotsPage } from '../pages/aliquots/aliquots';
 import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
+import { DownloadPage } from '../pages/download/download';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
     FileName,
     FileBrowser,
     AliquotsPage,
-    ReportSettingsPage
+    ReportSettingsPage,
+    DownloadPage
   ],
   imports: [
     IonicModule.forRoot(Chroni),
@@ -53,7 +55,8 @@ import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
     TableView,
     FileBrowser,
     AliquotsPage,
-    ReportSettingsPage
+    ReportSettingsPage,
+    DownloadPage
   ],
   providers: [
     StatusBar, SplashScreen, ThemeableBrowser,

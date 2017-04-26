@@ -12,6 +12,7 @@ import { Profile } from '../pages/profile/profile';
 import { ViewFiles } from '../pages/viewFiles/viewFiles';
 import { AliquotsPage } from '../pages/aliquots/aliquots';
 import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
+import { DownloadPage } from '../pages/download/download';
 
 
 @Component({
@@ -32,8 +33,9 @@ export class Chroni {
         // used for an example of ngFor and navigation
         this.pages = [
             { title: 'Manage Report Table', component: ViewFiles },
-            { title: 'Aliquots', component: AliquotsPage },
-            { title: 'Report Settings', component: ReportSettingsPage},
+            { title: 'Download', component: DownloadPage },
+            // { title: 'Aliquots', component: AliquotsPage },
+            // { title: 'Report Settings', component: ReportSettingsPage},
             { title: 'History', component: History },
             { title: 'GeoChron Credentials', component: Profile },
             { title: 'About', component: About }
