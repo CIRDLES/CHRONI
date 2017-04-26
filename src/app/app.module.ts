@@ -6,6 +6,7 @@ import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -21,7 +22,6 @@ import { TableView } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { AliquotsPage } from '../pages/aliquots/aliquots';
 import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
-import { HelpPage } from '../pages/help/help';
 
 @NgModule({
   declarations: [
@@ -36,8 +36,7 @@ import { HelpPage } from '../pages/help/help';
     FileName,
     FileBrowser,
     AliquotsPage,
-    ReportSettingsPage,
-    HelpPage
+    ReportSettingsPage
   ],
   imports: [
     IonicModule.forRoot(Chroni),
@@ -54,12 +53,10 @@ import { HelpPage } from '../pages/help/help';
     TableView,
     FileBrowser,
     AliquotsPage,
-    ReportSettingsPage,
-    HelpPage
+    ReportSettingsPage
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
+    StatusBar, SplashScreen, ThemeableBrowser,
     File, Transfer, TransferObject,
     XMLUtility, HistoryUtility, FileUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

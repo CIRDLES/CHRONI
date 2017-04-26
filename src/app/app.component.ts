@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, ModalController } from 'ionic-angular';
-// import { StatusBar, Splashscreen } from 'ionic-native';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { ThemeableBrowser, ThemeableBrowserObject, ThemeableBrowserOptions } from '@ionic-native/themeable-browser';
 
 import { FileUtility } from '../utilities/FileUtility';
 
@@ -12,7 +12,6 @@ import { Profile } from '../pages/profile/profile';
 import { ViewFiles } from '../pages/viewFiles/viewFiles';
 import { AliquotsPage } from '../pages/aliquots/aliquots';
 import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
-import { HelpPage } from '../pages/help/help';
 
 
 @Component({
@@ -24,7 +23,10 @@ export class Chroni {
     rootPage: any = ViewFiles;
     pages: Array<{title: string, component: any}>;
 
-    constructor(public platform: Platform, public modalCtrl: ModalController, public fileUtil: FileUtility, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+    private helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
+    private browser: ThemeableBrowserObject;
+
+    constructor(public platform: Platform, public modalCtrl: ModalController, public fileUtil: FileUtility, public statusBar: StatusBar, public splashScreen: SplashScreen, private iab: ThemeableBrowser) {
         this.initializeApp();
 
         // used for an example of ngFor and navigation
@@ -34,8 +36,7 @@ export class Chroni {
             { title: 'Report Settings', component: ReportSettingsPage},
             { title: 'History', component: History },
             { title: 'GeoChron Credentials', component: Profile },
-            { title: 'About', component: About },
-            { title: 'Help', component: HelpPage }
+            { title: 'About', component: About }
         ];
 
         this.platform.ready().then(() => {
@@ -64,5 +65,41 @@ export class Chroni {
         // Resets the content nav to have just this page
         // we wouldn't want the back button to show in this scenario
         this.nav.setRoot(page.component);
+    }
+
+    openHelp() {
+      let options: ThemeableBrowserOptions = {
+        location: 'no',
+        toolbarposition: 'top',
+        toolbar: {
+          height: 40,
+          color: '#D26D56'
+        },
+        title: {
+           color: '#3F3F3F',
+           showPageTitle: true
+       },
+       backButton: {
+           wwwImage: 'assets/icon/close-icon.png',
+           wwwImagePressed: 'assets/icon/close-icon-pressed.png',
+           wwwImageDensity: 13,
+           align: 'left',
+           event: 'backPressed'
+       },
+       forwardButton: {
+           image: 'forward',
+           imagePressed: 'forward_pressed',
+           align: 'left',
+           event: 'forwardPressed'
+       },
+       closeButton: {
+           image: 'close',
+           imagePressed: 'close_pressed',
+           align: 'left',
+           event: 'closePressed'
+       },
+       backButtonCanClose: true
+      };
+      this.browser = this.iab.create(this.helpURL, '_blank', options);
     }
 }
