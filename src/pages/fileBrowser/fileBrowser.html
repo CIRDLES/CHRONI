@@ -3,7 +3,7 @@
         <ion-buttons start *ngIf="!inRoot">
             <button ion-button clear icon-left (click)="chooseBackFile()">
                 <ion-icon name="ios-arrow-back"></ion-icon>
-                {{ parentName }}
+                {{ parentName + "/" }}
             </button>
         </ion-buttons>
         <ion-title>{{ currentDirectory | name }}</ion-title>
