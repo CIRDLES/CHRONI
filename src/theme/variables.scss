@@ -40,7 +40,8 @@ $colors: (
 $background-color: color($colors, secondary);
 //$background-ios-color: color($colors, secondary);
 
-
+// darkens the list border color
+$list-border-color:          #B3B1B8 !default;
 
 // App iOS Variables
 // --------------------------------------------------
