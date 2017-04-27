@@ -1,8 +1,8 @@
 <ion-header>
   <ion-navbar>
     <button color="accent" ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Download</ion-title>
   </ion-navbar>
 </ion-header>
@@ -10,17 +10,17 @@
   <ion-list>
     <ion-item>
       <ion-label floating>Web URL for XML File</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="url"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>File Name</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="fileName"></ion-input>
     </ion-item>
   </ion-list>
   <ion-grid>
     <ion-row>
       <ion-col class="textCenter">
-        <button ion-button round>Download</button>
+        <button ion-button round (click)="download()">Download</button>
       </ion-col>
     </ion-row>
   </ion-grid>

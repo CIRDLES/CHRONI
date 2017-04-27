@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
+import { FileEntry } from '@ionic-native/file';
+
 import { BigNumber } from 'bignumber.js';
 import X2JS from 'x2js';
 
@@ -521,7 +523,7 @@ export class XMLUtility {
         return fractionArray;
     }
 
-    public checkFileValidity(file): Observable<string> {
+    public checkFileValidity(file: FileEntry): Observable<string> {
         var path = file.fullPath;
         if (path[0] === '/')
             path = path.substring(1);
@@ -545,7 +547,7 @@ export class XMLUtility {
         });
     }
 
-    public createAliquot(file): Observable<Aliquot> {
+    public createAliquot(file: FileEntry): Observable<Aliquot> {
 
         return new Observable(observer => {
             this.checkFileValidity(file).subscribe(result => {
@@ -619,7 +621,7 @@ export class XMLUtility {
 
     }
 
-    public createReportSettings(file): Observable<ReportSettings> {
+    public createReportSettings(file: FileEntry): Observable<ReportSettings> {
 
         return new Observable(observer => {
             this.checkFileValidity(file).subscribe(result => {
