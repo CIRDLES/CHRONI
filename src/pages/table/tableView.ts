@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Scroll, NavParams, MenuController, NavController } from 'ionic-angular';
+import { Platform, Col, NavParams, MenuController, NavController } from 'ionic-angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { FileName } from '../viewFiles/viewFiles';
@@ -10,13 +10,6 @@ import { FileName } from '../viewFiles/viewFiles';
   templateUrl: 'tableView.html'
 })
 export class TableView {
-
-  @ViewChild("headerScroll")
-  headerEl: Scroll;
-  @ViewChild("mainBodyScroll")
-  mainBodyEl: Scroll;
-  @ViewChild("leftBodyScroll")
-  leftBodyEl: Scroll;
 
   aliquot: any;
   reportSettings: any;
@@ -111,16 +104,35 @@ export class TableView {
     this.calculateHeights(0);
     this.menu.swipeEnable(false, "sideMenu");
 
-    // table scrolling events to scroll other relevant table pieces
-    this.mainBodyEl.addScrollEventListener(() => {
-      this.leftBodyEl.scrollElement.scrollTop = this.mainBodyEl.scrollElement.scrollTop;
-      this.headerEl.scrollElement.scrollLeft = this.mainBodyEl.scrollElement.scrollLeft;
+    this.initCustomScrolling();
+  }
+
+  initCustomScrolling() {
+    let mainBodyEl: HTMLElement = document.getElementById('mainBodyScroll');
+    let leftBodyEl: HTMLElement = document.getElementById('leftBodyScroll');
+    let headerEl: HTMLElement = document.getElementById('headerScrollRight');
+
+    mainBodyEl.addEventListener('scroll', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (mainBodyEl.scrollLeft !== headerEl.scrollLeft)
+        headerEl.scrollLeft = mainBodyEl.scrollLeft;
+      if (mainBodyEl.scrollTop !== leftBodyEl.scrollTop)
+        leftBodyEl.scrollTop = mainBodyEl.scrollTop;
     });
-    this.leftBodyEl.addScrollEventListener(() => {
-      this.mainBodyEl.scrollElement.scrollTop = this.leftBodyEl.scrollElement.scrollTop;
+
+    leftBodyEl.addEventListener('scroll', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (leftBodyEl.scrollTop !== mainBodyEl.scrollTop)
+        mainBodyEl.scrollTop = leftBodyEl.scrollTop;
     });
-    this.headerEl.addScrollEventListener(() => {
-      this.mainBodyEl.scrollElement.scrollLeft = this.headerEl.scrollElement.scrollLeft;
+
+    headerEl.addEventListener('scroll', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (headerEl.scrollLeft !== mainBodyEl.scrollLeft)
+        mainBodyEl.scrollLeft = headerEl.scrollLeft;
     });
   }
 

@@ -15,6 +15,8 @@ page-tableView {
     .scroll-content {
       overflow: hidden;
     }
+    padding: 0px;
+    overflow: scroll;
     flex: 1;
   }
 
@@ -22,6 +24,8 @@ page-tableView {
     .scroll-content {
       overflow-x: auto;
     }
+    padding: 0px;
+    overflow: scroll;
     flex: 1;
   }
 
@@ -29,6 +33,8 @@ page-tableView {
     .scroll-content {
       overflow-y: auto;
     }
+    padding: 0px;
+    overflow: scroll;
     flex: 1;
   }
 
@@ -36,6 +42,8 @@ page-tableView {
     .scroll-content {
       overflow: auto;
     }
+    padding: 0px;
+    overflow: scroll;
     flex: 1;
   }
 
