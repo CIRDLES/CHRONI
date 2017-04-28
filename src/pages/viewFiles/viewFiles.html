@@ -11,8 +11,8 @@
         <ion-card-header text-center>Aliquot</ion-card-header>
         <ion-item color="light" text-wrap>
             <ion-row center>
-                <ion-col>{{ currentAliquot.name | fileName }}</ion-col>
-                <ion-col width-20>
+                <ion-col>{{ currentAliquot?.name | fileName }}</ion-col>
+                <ion-col col-2 text-center>
                     <button ion-button clear icon-only (click)="openFileViewer('Aliquots')">
                         <ion-icon name="ios-create-outline"></ion-icon>
                     </button>
@@ -24,8 +24,8 @@
         <ion-card-header text-center>Report Settings</ion-card-header>
         <ion-item color="light" text-wrap>
             <ion-row center>
-                <ion-col>{{ currentReportSettings.name | fileName }}</ion-col>
-                <ion-col width-20>
+                <ion-col>{{ currentReportSettings?.name | fileName }}</ion-col>
+                <ion-col col-2 text-center>
                     <button ion-button clear icon-only (click)="openFileViewer('Report Settings')">
                         <ion-icon name="ios-create-outline"></ion-icon>
                     </button>
@@ -35,7 +35,7 @@
     </ion-card>
     <ion-row>
         <ion-col text-center>
-            <button ion-button color="primary" (click)="openTable()">View Report</button>
+            <button ion-button [disabled]="!currentAliquot || !currentReportSettings" (click)="openTable()">View Report</button>
         </ion-col>
     </ion-row>
 </ion-content>

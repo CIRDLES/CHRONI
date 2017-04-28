@@ -4,6 +4,7 @@ import { NavController, Platform, ModalController, NavParams } from 'ionic-angul
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { ThreeDeeTouch, ThreeDeeTouchQuickAction } from '@ionic-native/three-dee-touch';
+import { FileEntry } from '@ionic-native/file';
 
 import { FileBrowser } from '../fileBrowser/fileBrowser';
 import { TableView } from '../table/tableView';
@@ -20,22 +21,28 @@ import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 })
 export class ViewFiles {
 
-  currentAliquot: any = {};
-  currentReportSettings: any = {};
+  currentAliquot: FileEntry;
+  currentReportSettings: FileEntry;
   opening: boolean = false;
 
   constructor(private navCtrl: NavController, private params: NavParams, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch) {
 
-    let finished: number = 0;
-    this.getCurrentFiles().subscribe((num: number) => {
-      finished++;
-      if (finished >= 2) {
-        this.threeDeeTouch.onHomeIconPressed().subscribe(
-          (payload: ThreeDeeTouchQuickAction) => {
-            if (payload.type === 'lastReport')
-              this.openTable();
-          });
-      }
+    this.platform.ready().then(() => {
+      // first makes sure the default directories are created
+      this.fileUtil.createDefaultDirectories().subscribe(_ => { }, _ => { }, () => {
+        // then downloads the default files if not alreadt there
+        this.fileUtil.downloadDefaultFiles().subscribe(_ => { }, _ => { }, () => {
+          // then updates the current Aliquot and Report Settings files
+            this.getCurrentFiles().subscribe(_ => { }, _ => { }, () => {
+              // checks to see if coming from a 3D touch
+              this.threeDeeTouch.onHomeIconPressed().subscribe(
+                (payload: ThreeDeeTouchQuickAction) => {
+                  if (payload.type === 'lastReport')
+                    this.openTable();
+                });
+            });
+          });;
+      });
     });
 
   }
@@ -87,43 +94,51 @@ export class ViewFiles {
 
   getCurrentFiles(): Observable<any> {
     return new Observable(observer => {
-      this.storage.get('currentAliquot').then((value) => {
-        if (!value) {
-          this.fileUtil.getFile('chroni/Aliquots/Default Aliquot.xml').subscribe(
-            file => {
-              this.storage.set('currentAliquot', file);
-              this.currentAliquot = file;
-              observer.next(1);
-            },
-            error => {
-              console.log(JSON.stringify(error));
-              observer.next(1);
-            });
-        } else {
-          this.currentAliquot = value;
-          observer.next(1);
-        }
+      let ob = new Observable<number>(observer2 => {
+        this.storage.get('currentAliquot').then((value) => {
+          if (!value) {
+            this.fileUtil.getFile('chroni/Aliquots/Default Aliquot.xml').subscribe(
+              (file: FileEntry) => {
+                this.storage.set('currentAliquot', file);
+                this.currentAliquot = file;
+                observer2.next(1);
+              },
+              error => {
+                console.log(JSON.stringify(error));
+                observer2.next(1);
+              });
+          } else {
+            this.currentAliquot = value;
+            observer2.next(1);
+          }
+        });
+        this.storage.get('currentReportSettings').then((value) => {
+          if (!value) {
+            this.fileUtil.getFile('chroni/Report Settings/Default Report Settings.xml').subscribe(
+              (file: FileEntry) => {
+                this.storage.set('currentReportSettings', file);
+                this.currentReportSettings = file;
+                observer2.next(1);
+              },
+              error => {
+                console.log(JSON.stringify(error));
+                observer2.next(1);
+              });
+          } else {
+            this.currentReportSettings = value;
+            observer2.next(1);
+          }
+        });
       });
-      this.storage.get('currentReportSettings').then((value) => {
-        if (!value) {
-          this.fileUtil.getFile('chroni/Report Settings/Default Report Settings.xml').subscribe(
-            file => {
-              this.storage.set('currentReportSettings', file);
-              this.currentReportSettings = file;
-              observer.next(1);
-            },
-            error => {
-              console.log(JSON.stringify(error));
-              observer.next(1);
-            });
-        } else {
-          this.currentReportSettings = value;
-          observer.next(1);
-        }
+
+      let numFinsished = 0;
+      ob.subscribe(value => {
+        numFinsished++;
+        if (numFinsished >= 2)
+          observer.complete();
       });
     });
   }
-
 }
 
 @Pipe({
