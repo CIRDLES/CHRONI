@@ -59,14 +59,10 @@ export class ViewFiles {
 
     fileViewer.onDidDismiss(file => {
       if (file) {
-        if (directory === 'Aliquots') {
+        if (directory === 'Aliquots')
           this.currentAliquot = file;
-          this.storage.set('currentAliquot', this.currentAliquot);
-        }
-        else if (directory === 'Report Settings') {
+        else if (directory === 'Report Settings')
           this.currentReportSettings = file;
-          this.storage.set('currentReportSettings', this.currentReportSettings);
-        }
       }
     });
   }
@@ -81,6 +77,8 @@ export class ViewFiles {
             var tableArray = this.xml.createTableData(aliquot, reportSettings);
             var entry = new HistoryEntry(this.currentAliquot, this.currentReportSettings, new Date());
             this.historyUtil.addEntry(entry);
+            this.storage.set('currentAliquot', this.currentAliquot);
+            this.storage.set('currentReportSettings', this.currentReportSettings);
             this.navCtrl.push(TableView, {
               tableArray: tableArray,
               aliquot: this.currentAliquot,
