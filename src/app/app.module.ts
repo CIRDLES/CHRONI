@@ -8,6 +8,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 import { ThreeDeeTouch } from '@ionic-native/three-dee-touch';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -60,7 +61,7 @@ import { DownloadPage } from '../pages/download/download';
     DownloadPage
   ],
   providers: [
-    StatusBar, SplashScreen, ThemeableBrowser, ThreeDeeTouch,
+    StatusBar, SplashScreen, ThemeableBrowser, ThreeDeeTouch, ScreenOrientation,
     File, Transfer, TransferObject,
     XMLUtility, HistoryUtility, FileUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

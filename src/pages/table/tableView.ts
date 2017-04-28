@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 
 import { Platform, Scroll, NavParams, MenuController, NavController } from 'ionic-angular';
-// import { ScreenOrientation } from 'ionic-native';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+
 import { FileName } from '../viewFiles/viewFiles';
 
 @Component({
@@ -30,7 +31,7 @@ export class TableView {
   headerArray: Array<Array<string>> = [];
   fractionArray: Array<Array<string>> = [];
 
-  constructor(public platform: Platform, public params: NavParams, public menu: MenuController, public navCtrl: NavController) {
+  constructor(public platform: Platform, public params: NavParams, public menu: MenuController, public navCtrl: NavController, private screenOrientation: ScreenOrientation) {
 
     this.bodyScrollHeight = window.screen.height;
 
@@ -105,9 +106,7 @@ export class TableView {
   };
 
   ionViewWillEnter() {
-    // this.platform.ready().then(() => {
-    //   ScreenOrientation.unlockOrientation();
-    // });
+    this.platform.ready().then(_ => this.screenOrientation.unlock());
 
     this.calculateHeights(0);
     this.menu.swipeEnable(false, "sideMenu");
@@ -126,9 +125,9 @@ export class TableView {
   }
 
   ionViewWillLeave() {
-    // this.platform.ready().then((val) => {
-    //   ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-    // });
+    this.platform.ready().then(_ => {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
+    });
     this.menu.swipeEnable(true, "sideMenu");
   }
 

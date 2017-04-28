@@ -22,6 +22,7 @@ export class ViewFiles {
 
   currentAliquot: any = {};
   currentReportSettings: any = {};
+  opening: boolean = false;
 
   constructor(private navCtrl: NavController, private params: NavParams, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch) {
 
@@ -37,12 +38,6 @@ export class ViewFiles {
       }
     });
 
-  }
-
-  ionViewWillEnter() {
-    // this.platform.ready().then((val) => {
-    //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-    // });
   }
 
   openFileViewer(directory) {
