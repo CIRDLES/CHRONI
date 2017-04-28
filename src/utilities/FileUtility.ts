@@ -40,9 +40,10 @@ export class FileUtility {
     });
   }
 
-  public removeFile(filePath: string): Observable<any> {
+  public removeFile(filePath: string, useTempDir: boolean = false): Observable<any> {
+    let dir = useTempDir ? this.file.tempDirectory : this.file.dataDirectory;
     return new Observable(observer => {
-      this.file.removeFile(this.file.dataDirectory, filePath)
+      this.file.removeFile(dir, filePath)
         .then((success) => observer.next(success))
         .catch((error) => observer.error(error));
     });
@@ -96,9 +97,10 @@ export class FileUtility {
     });
   }
 
-  public moveFile(oldFilePath: string, newFilePath: string): Observable<Entry> {
+  public moveFile(oldFilePath: string, newFilePath: string, fromTempDir: boolean = false): Observable<Entry> {
+    let oldDir = fromTempDir ? this.file.tempDirectory : this.file.dataDirectory;
     return new Observable(observer => {
-      this.file.moveFile(this.file.dataDirectory, oldFilePath, this.file.dataDirectory, newFilePath)
+      this.file.moveFile(oldDir, oldFilePath, this.file.dataDirectory, newFilePath)
         .then((newFile) => observer.next(newFile))
         .catch((error) => observer.error(error));
     });
@@ -144,11 +146,13 @@ export class FileUtility {
     });
   }
 
-  public downloadFile(url: string, filePath: string): Observable<any> {
-    var path = encodeURI(this.file.dataDirectory + filePath);
+  public downloadFile(url: string, filePath: string, useTempDir: boolean = false): Observable<any> {
+    let path = useTempDir ?
+                  encodeURI(this.file.tempDirectory + filePath) :
+                  encodeURI(this.file.dataDirectory + filePath);
     return new Observable(observer => {
-      this.fileTransfer.download(url, path)
-        .then((success) => observer.next("success"))
+      this.fileTransfer.download(encodeURI(url), path)
+        .then((file: FileEntry) => observer.next(file))
         .catch((error) => observer.error(error));
     });
   }

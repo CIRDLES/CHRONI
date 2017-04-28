@@ -1,8 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, ModalController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ThemeableBrowser, ThemeableBrowserObject, ThemeableBrowserOptions } from '@ionic-native/themeable-browser';
+import { ThreeDeeTouch, ThreeDeeTouchQuickAction } from '@ionic-native/three-dee-touch';
 
 import { FileUtility } from '../utilities/FileUtility';
 
@@ -10,8 +13,6 @@ import { About } from '../pages/about/about';
 import { History } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { ViewFiles } from '../pages/viewFiles/viewFiles';
-import { AliquotsPage } from '../pages/aliquots/aliquots';
-import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
 import { DownloadPage } from '../pages/download/download';
 
 
@@ -27,7 +28,7 @@ export class Chroni {
     private helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
     private browser: ThemeableBrowserObject;
 
-    constructor(public platform: Platform, public modalCtrl: ModalController, public fileUtil: FileUtility, public statusBar: StatusBar, public splashScreen: SplashScreen, private iab: ThemeableBrowser) {
+    constructor(private platform: Platform, private modalCtrl: ModalController, private fileUtil: FileUtility, private statusBar: StatusBar, private storage: Storage, private splashScreen: SplashScreen, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch) {
         this.initializeApp();
 
         // used for an example of ngFor and navigation
@@ -45,6 +46,21 @@ export class Chroni {
             this.fileUtil.createDefaultDirectories();
             this.fileUtil.downloadDefaultFiles();
             this.fileUtil.updateCurrentFiles();
+            
+            // sets up 3D touch capabilities if possible
+            this.threeDeeTouch.isAvailable().then((isAvailable: boolean) => {
+              if (isAvailable) {
+                let actions: Array<ThreeDeeTouchQuickAction> = [
+                  {
+                    type: 'lastReport',
+                    title: 'Last Report',
+                    subtitle: 'View last report',
+                    iconType: 'Time'
+                  }
+                ];
+                this.threeDeeTouch.configureQuickActions(actions);
+              }
+            });
         });
     }
 

@@ -3,7 +3,7 @@
     <ion-title>{{ aliquot.name | fileName }}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content id="tableContent">
+<ion-content id="tableContent" no-bounce>
   <ion-row>
     <ion-scroll id="headerScrollLeft" zoom="false" [ngStyle]="{'height': headerHeight + 'px', 'max-width': (columnLengths[0]*10) + 'px'}">
       <table class="scrollbox">
