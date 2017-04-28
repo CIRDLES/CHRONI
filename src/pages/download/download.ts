@@ -17,7 +17,7 @@ export class DownloadPage {
   url: string = "";
   fileName: string = "";
 
-  constructor(public platform: Platform, public storage: Storage, public fileUtil: FileUtility, public xmlUtil: XMLUtility, public toastCtrl: ToastController) {}
+  constructor(public platform: Platform, public storage: Storage, public fileUtil: FileUtility, public xmlUtil: XMLUtility, public toastCtrl: ToastController) { }
 
   ionViewWillEnter() {
     // this.platform.ready().then((val) => {
@@ -31,20 +31,26 @@ export class DownloadPage {
       name += ".xml";
     // downloads the file to a temp directory to check if it is valid
     this.fileUtil.downloadFile(this.url, name, true).subscribe((file: FileEntry) => {
-      this.xmlUtil.checkFileValidity(file).subscribe((result: string) => {
+      this.xmlUtil.checkFileValidity(file, true).subscribe((result: string) => {
         if (result === "Aliquot") {
           let path = "chroni/Aliquots/" + name;
           this.fileUtil.moveFile(name, path, true).subscribe(
-            (newFile: FileEntry) => this.displayToast(newFile.name + " has been successfully downloaded to the Aliquots directory"),
-            (error) => {
+            (newFile: FileEntry) => {
+              this.displayToast(newFile.name + " has been successfully downloaded to the Aliquots directory");
+              this.url = "";
+              this.fileName = "";
+            }, (error) => {
               this.displayToast("ERROR: " + name + " could not be downloaded to the Aliquots directory");
               this.fileUtil.removeFile(name, true);
             });
         } else if (result === "Report Settings") {
           let path = "chroni/Report Settings/" + name;
           this.fileUtil.moveFile(name, path, true).subscribe(
-            (newFile: FileEntry) => this.displayToast(name + " has been successfully downloaded to the Report Settings directory"),
-            (error) => {
+            (newFile: FileEntry) => {
+              this.displayToast(name + " has been successfully downloaded to the Report Settings directory");
+              this.url = "";
+              this.fileName = "";
+            }, (error) => {
               this.displayToast("ERROR: " + name + " could not be downloaded to the Report Settings directory");
               this.fileUtil.removeFile(name, true);
             });

@@ -57,9 +57,10 @@ export class FileUtility {
     });
   }
 
-  public readFileText(filePath: string): Observable<string> {
+  public readFileText(filePath: string, useTempDir: boolean = false): Observable<string> {
+    let dir = useTempDir ? this.file.tempDirectory : this.file.dataDirectory;
     return new Observable(observer => {
-      this.file.readAsText(this.file.dataDirectory, filePath)
+      this.file.readAsText(dir, filePath)
         .then((fileData: string) => observer.next(fileData))
         .catch((error) => observer.error(error));
     });
@@ -99,6 +100,7 @@ export class FileUtility {
 
   public moveFile(oldFilePath: string, newFilePath: string, fromTempDir: boolean = false): Observable<Entry> {
     let oldDir = fromTempDir ? this.file.tempDirectory : this.file.dataDirectory;
+    console.log(oldDir);
     return new Observable(observer => {
       this.file.moveFile(oldDir, oldFilePath, this.file.dataDirectory, newFilePath)
         .then((newFile) => observer.next(newFile))

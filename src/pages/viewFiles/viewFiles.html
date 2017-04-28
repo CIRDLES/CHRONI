@@ -1,41 +1,50 @@
 <ion-header>
-    <ion-navbar>
-        <button color="accent" ion-button menuToggle>
+  <ion-navbar>
+    <button color="accent" ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Manage Report</ion-title>
-    </ion-navbar>
+    <ion-title>Manage Report</ion-title>
+  </ion-navbar>
 </ion-header>
 <ion-content no-bounce>
-    <ion-card color="primary" class="card">
+  <ion-row>
+    <ion-col>
+      <ion-card color="primary" class="card">
         <ion-card-header text-center>Aliquot</ion-card-header>
         <ion-item color="light" text-wrap>
-            <ion-row center>
-                <ion-col>{{ currentAliquot?.name | fileName }}</ion-col>
-                <ion-col col-2 text-center>
-                    <button ion-button clear icon-only (click)="openFileViewer('Aliquots')">
-                        <ion-icon name="ios-create-outline"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
+          <ion-row center>
+            <ion-col>{{ currentAliquot?.name | fileName }}</ion-col>
+            <ion-col col-2 text-center>
+              <button ion-button clear icon-only (click)="openFileViewer('Aliquots')">
+                <ion-icon name="ios-create-outline"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
         </ion-item>
-    </ion-card>
-    <ion-card color="primary" class="card">
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-card color="primary" class="card">
         <ion-card-header text-center>Report Settings</ion-card-header>
         <ion-item color="light" text-wrap>
-            <ion-row center>
-                <ion-col>{{ currentReportSettings?.name | fileName }}</ion-col>
-                <ion-col col-2 text-center>
-                    <button ion-button clear icon-only (click)="openFileViewer('Report Settings')">
-                        <ion-icon name="ios-create-outline"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
+          <ion-row center>
+            <ion-col>{{ currentReportSettings?.name | fileName }}</ion-col>
+            <ion-col col-2 text-center>
+              <button ion-button clear icon-only (click)="openFileViewer('Report Settings')">
+                <ion-icon name="ios-create-outline"></ion-icon>
+              </button>
+            </ion-col>
+          </ion-row>
         </ion-item>
-    </ion-card>
-    <ion-row>
-        <ion-col text-center>
-            <button ion-button [disabled]="!currentAliquot || !currentReportSettings" (click)="openTable()">View Report</button>
-        </ion-col>
-    </ion-row>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col text-center>
+      <button *ngIf="!opening" ion-button round [disabled]="!currentAliquot || !currentReportSettings" (click)="openTable()">View Report</button>
+      <ion-spinner *ngIf="opening" color="primary"></ion-spinner>
+    </ion-col>
+  </ion-row>
 </ion-content>
