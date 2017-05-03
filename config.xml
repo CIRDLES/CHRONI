@@ -84,9 +84,9 @@
   <plugin name="cordova-plugin-splashscreen" spec="~4.0.1"/>
   <plugin name="cordova-plugin-file" spec="~4.3.1"/>
   <plugin name="cordova-plugin-file-transfer" spec="~1.6.1"/>
-  <plugin name="cordova-plugin-screen-orientation" spec="~1.4.2"/>
   <plugin name="cordova-sqlite-storage" spec="~2.0.2"/>
   <plugin name="cordova-plugin-3dtouch" spec="~1.3.5"/>
+  <plugin name="cordova-plugin-screen-orientation" spec="https://github.com/apache/cordova-plugin-screen-orientation"/>
   <allow-navigation href="http://10.5.205.81:8100"/>
   <allow-navigation href="http://10.0.0.3:8100"/>
   <allow-navigation href="http://10.237.247.10:8100"/>

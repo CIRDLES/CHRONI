@@ -5,9 +5,9 @@ import { File, FileEntry, DirectoryEntry, Entry } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { Storage } from '@ionic/storage';
 
-const defaultAliquotURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default-Aliquot-XML/Default%20Aliquot.xml';
-const defaultReportSettingsURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default%20Report%20Settings%20XML/Default%20Report%20Settings.xml';
-const defaultReportSettings2URL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default%20Report%20Settings%20XML/Default%20Report%20Settings%202.xml';
+const defaultAliquotURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default-Aliquot-XML/Default Aliquot.xml';
+const defaultReportSettingsURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default Report Settings XML/Default Report Settings.xml';
+const defaultReportSettings2URL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default Report Settings XML/Default Report Settings 2.xml';
 
 @Injectable()
 export class FileUtility {
@@ -57,9 +57,10 @@ export class FileUtility {
     });
   }
 
-  public readFileText(filePath: string): Observable<string> {
+  public readFileText(filePath: string, useTempDir: boolean = false): Observable<string> {
+    let dir = useTempDir ? this.file.tempDirectory : this.file.dataDirectory;
     return new Observable(observer => {
-      this.file.readAsText(this.file.dataDirectory, filePath)
+      this.file.readAsText(dir, filePath)
         .then((fileData: string) => observer.next(fileData))
         .catch((error) => observer.error(error));
     });
@@ -99,6 +100,7 @@ export class FileUtility {
 
   public moveFile(oldFilePath: string, newFilePath: string, fromTempDir: boolean = false): Observable<Entry> {
     let oldDir = fromTempDir ? this.file.tempDirectory : this.file.dataDirectory;
+    console.log(oldDir);
     return new Observable(observer => {
       this.file.moveFile(oldDir, oldFilePath, this.file.dataDirectory, newFilePath)
         .then((newFile) => observer.next(newFile))
@@ -148,8 +150,8 @@ export class FileUtility {
 
   public downloadFile(url: string, filePath: string, useTempDir: boolean = false): Observable<any> {
     let path = useTempDir ?
-                  encodeURI(this.file.tempDirectory + filePath) :
-                  encodeURI(this.file.dataDirectory + filePath);
+      encodeURI(this.file.tempDirectory + filePath) :
+      encodeURI(this.file.dataDirectory + filePath);
     return new Observable(observer => {
       this.fileTransfer.download(encodeURI(url), path)
         .then((file: FileEntry) => observer.next(file))
@@ -158,24 +160,55 @@ export class FileUtility {
   }
 
   public createDefaultDirectories() {
-    // checks the default directories and creates them if they don't exist
-    this.directoryExists('chroni/Aliquots').subscribe((exists) => {
-      if (!exists) {
-        this.createDirectory('chroni/Aliquots', false)
-          .subscribe(
-          success => console.log("Created chroni/Aliquots directory..."),
-          error => console.log("Could not create chroni/Aliquots directory... " + error)
-          );
-      }
-    });
-    this.directoryExists('chroni/Report Settings').subscribe((exists) => {
-      if (!exists) {
-        this.createDirectory('chroni/Report Settings', false)
-          .subscribe(
-          success => console.log("Created chroni/Report Settings directory..."),
-          error => console.log("Could not create chroni/Report Settings directory... " + error)
-          );
-      }
+    return new Observable<any>(observer => {
+      let ob = new Observable<number>(observer2 => {
+        // checks the default directories and creates them if they don't exist
+        this.directoryExists('chroni').subscribe((chroniExists) => {
+          let createInner = () => {
+            this.directoryExists('chroni/Aliquots').subscribe((exists) => {
+              if (!exists) {
+                this.createDirectory('chroni/Aliquots', false)
+                  .subscribe(
+                  success => observer2.next(1),
+                  error => {
+                    console.log("Could not create chroni/Aliquots directory... " + JSON.stringify(error));
+                    observer2.next(1);
+                  });
+              } else
+                observer2.next(1);
+            });
+            this.directoryExists('chroni/Report Settings').subscribe((exists) => {
+              if (!exists) {
+                this.createDirectory('chroni/Report Settings', false)
+                  .subscribe(
+                  success => observer2.next(1),
+                  error => {
+                    console.log("Could not create chroni/Report Settings directory... " + JSON.stringify(error));
+                    observer2.next(1);
+                  });
+              } else
+                observer2.next(1);
+            });
+          };
+          if (!chroniExists) {
+            this.createDirectory('chroni', false).subscribe(
+              success => createInner(),
+              error => {
+                console.log("Could not create chroni directory... " + JSON.stringify(error));
+                observer2.next(2);
+            });
+          } else
+            createInner();
+        });
+
+      });
+
+      let numFinsished = 0;
+      ob.subscribe(value => {
+        numFinsished++;
+        if (numFinsished >= 2)
+          observer.complete();
+      });
     });
   }
 
@@ -193,7 +226,7 @@ export class FileUtility {
                 observer2.next(1);
               },
               error => {
-                console.log("Could not download Default Aliquot... " + error);
+                console.log("Could not download Default Aliquot... " + JSON.stringify(error));
                 observer2.next(1);
               });
           } else
@@ -209,7 +242,7 @@ export class FileUtility {
                 observer2.next(1);
               },
               error => {
-                console.log("Could not download Default Report Settings... " + error);
+                console.log("Could not download Default Report Settings... " + JSON.stringify(error));
                 observer2.next(1);
               });
           } else
@@ -224,7 +257,7 @@ export class FileUtility {
                 observer2.next(1);
               },
               error => {
-                console.log("Could not download Default Report Settings 2... " + error);
+                console.log("Could not download Default Report Settings 2... " + JSON.stringify(error));
                 observer2.next(1);
               });
           } else
