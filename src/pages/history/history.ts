@@ -13,66 +13,66 @@ import { Storage } from '@ionic/storage';
 declare var cordova: any;
 
 @Component({
-    templateUrl: 'history.html'
+  templateUrl: 'history.html'
 })
 export class History {
 
-	fileSystem: string;
-	public history: Array<HistoryEntry> = [];
-    public historyIndex: HistoryEntry;
+  fileSystem: string;
+  public history: Array<HistoryEntry> = [];
+  public historyIndex: HistoryEntry;
+  opening: boolean = false;
 
-    constructor(public platform: Platform, public historyUtil: HistoryUtility, public navCtrl: NavController, public xml: XMLUtility, public fileUtil: FileUtility, public modalCtrl: ModalController, public storage: Storage) {
-    	this.platform.ready().then(() => {
-            this.fileSystem = cordova.file.dataDirectory;
-        });
+  constructor(public platform: Platform, public historyUtil: HistoryUtility, public navCtrl: NavController, public xml: XMLUtility, public fileUtil: FileUtility, public modalCtrl: ModalController, public storage: Storage) {
+    this.platform.ready().then(() => {
+      this.fileSystem = cordova.file.dataDirectory;
+    });
 
-        this.history = this.historyUtil.getHistoryEntries();
+    this.history = this.historyUtil.getHistoryEntries();
+  }
 
-    }
+  ionViewWillEnter() {
+    this.history = this.historyUtil.getHistoryEntries();
+  }
 
-    ionViewWillEnter() {
-        this.history = this.historyUtil.getHistoryEntries();
-        // this.platform.ready().then((val) => {
-        //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-        // });
-    }
-
-    openTable(i) {
-
-        this.historyIndex = this.historyUtil.getHistoryEntry(i);
-        this.xml.createAliquot(this.historyIndex.getAliquotFile()).subscribe(al => {
-            if (al) {
-                var aliquot: Aliquot = <Aliquot> al;
-                this.xml.createReportSettings(this.historyIndex.getReportSettingsFile()).subscribe(rs => {
-                    if (rs) {
-                        var reportSettings: ReportSettings = <ReportSettings> rs;
-                        var tableArray = this.xml.createTableData(aliquot, reportSettings);
-                        var entry = new HistoryEntry(this.historyIndex.getAliquotFile(), this.historyIndex.getReportSettingsFile(), new Date());
-                        this.historyUtil.addEntry(entry);
-                        this.navCtrl.push(TableView, {
-                            tableArray: tableArray,
-                            aliquot: this.historyIndex.getAliquotFile(),
-                            reportSettings: this.historyIndex.getReportSettingsFile()
-                        });
-                    }
-                });
+  openTable(i) {
+    if (!this.opening) {
+      this.opening = true;
+      this.historyIndex = this.historyUtil.getHistoryEntry(i);
+      this.xml.createAliquot(this.historyIndex.getAliquotFile()).subscribe(al => {
+        if (al) {
+          var aliquot: Aliquot = <Aliquot>al;
+          this.xml.createReportSettings(this.historyIndex.getReportSettingsFile()).subscribe(rs => {
+            if (rs) {
+              var reportSettings: ReportSettings = <ReportSettings>rs;
+              var tableArray = this.xml.createTableData(aliquot, reportSettings);
+              var entry = new HistoryEntry(this.historyIndex.getAliquotFile(), this.historyIndex.getReportSettingsFile(), new Date());
+              this.historyUtil.addEntry(entry);
+              this.opening = false;
+              this.navCtrl.push(TableView, {
+                tableArray: tableArray,
+                aliquot: this.historyIndex.getAliquotFile(),
+                reportSettings: this.historyIndex.getReportSettingsFile()
+              });
             }
-        });
+          });
+        }
+      });
     }
+  }
 
 }
 
 @Pipe({
-    name: 'name'
+  name: 'name'
 })
 export class Name {
-    transform(value, args) {
-        if (value && value !== '') {
-            var split = value.split('/');
-            if (split[split.length - 1] === '')
-                return split[split.length - 2];
-            else
-                return split[split.length - 1];
-        }
+  transform(value, args) {
+    if (value && value !== '') {
+      var split = value.split('/');
+      if (split[split.length - 1] === '')
+        return split[split.length - 2];
+      else
+        return split[split.length - 1];
     }
+  }
 }

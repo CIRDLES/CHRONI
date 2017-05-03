@@ -110,12 +110,12 @@ export class ViewFiles {
   getCurrentFiles(): Observable<any> {
     return new Observable(observer => {
       let ob = new Observable<number>(observer2 => {
-        this.storage.get('currentAliquot').then((value) => {
-          if (!value)
+        this.storage.get('currentAliquot').then((file: FileEntry) => {
+          if (!file)
             this.setCurrentAliquotAsDefault().subscribe(() => observer2.next(1));
           else {
-            this.currentAliquot = value;
-            this.fileUtil.fileExists(this.currentAliquot.name).subscribe((exists) => {
+            this.currentAliquot = file;
+            this.fileUtil.fileExists(this.currentAliquot.fullPath.slice(1)).subscribe((exists) => {
               if (!exists)
                 this.setCurrentAliquotAsDefault().subscribe(() => observer2.next(1));
               else
@@ -123,12 +123,12 @@ export class ViewFiles {
             }, error => observer2.next(1));
           }
         });
-        this.storage.get('currentReportSettings').then((value) => {
-          if (!value)
+        this.storage.get('currentReportSettings').then((file: FileEntry) => {
+          if (!file)
             this.setCurrentReportSettingsAsDefault().subscribe(() => observer2.next(1));
           else {
-            this.currentReportSettings = value;
-            this.fileUtil.fileExists(this.currentReportSettings.name).subscribe((exists) => {
+            this.currentReportSettings = file;
+            this.fileUtil.fileExists(this.currentReportSettings.fullPath.slice(1)).subscribe((exists) => {
               if (!exists)
                 this.setCurrentReportSettingsAsDefault().subscribe(() => observer2.next(1));
               else

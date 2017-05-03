@@ -12,139 +12,138 @@ import { Storage } from '@ionic/storage';
 @Injectable()
 export class HistoryUtility {
 
-    private maxSize: number = 10;
-    private historyJSON: Array<any> = [];
-    private historyEntries: Array<HistoryEntry> = [];
+  private maxSize: number = 10;
+  private historyJSON: Array<any> = [];
+  private historyEntries: Array<HistoryEntry> = [];
 
-    constructor(public storage: Storage) {
+  constructor(public storage: Storage) {
 
-        this.storage.get('history').then((result) => {
-            if (result) {
-                this.historyJSON = result;
-                this.historyEntries = this.createEntriesFromJSON(this.historyJSON);
-            }
-        }, (error) => {
-            this.storage.set('history', history);
-        });
+    this.storage.get('history').then((result) => {
+      if (result) {
+        this.historyJSON = result;
+        this.historyEntries = this.createEntriesFromJSON(this.historyJSON);
+      }
+    }, (error) => {
+      this.storage.set('history', history);
+    });
 
+  }
+
+  public addEntry(entry: HistoryEntry) {
+    let place = 0;
+    let index = -1;
+
+    for (let x of this.historyEntries) {
+      if (entry.getAliquotFile().fullPath === x.getAliquotFile().fullPath && entry.getReportSettingsFile().fullPath === x.getReportSettingsFile().fullPath)
+        index = place;
+      place++;
+    }
+    if (index > -1) {
+      // delete history[index]
+      this.historyEntries.splice(index, 1);
+      this.historyJSON.splice(index, 1);
     }
 
-    public addEntry(entry: HistoryEntry) {
-        var place = 0;
-        var index = -1;
+    this.historyEntries.unshift(entry);
+    this.historyJSON.unshift(entry.toJSON());
+    this.trimToSize();
+    this.saveHistory();
+  }
 
-        for (let x of this.historyEntries)
-        {
-            if (entry.getAliquotFile().name === x.getAliquotFile().name && entry.getReportSettingsFile().name === x.getReportSettingsFile().name) {
-                index = place;
-            }
-            place++;
-        }
-        if (index > -1) {
-            // delete history[index]
-            this.historyEntries.splice(index, 1);
-        }
+  public saveHistory() {
+    this.storage.set('history', this.historyJSON);
+  }
 
-        this.historyEntries.unshift(entry);
-        this.historyJSON.unshift(entry.toJSON());
-        this.trimToSize();
-        this.saveHistory();
+  private trimToSize() {
+    if (this.historyEntries.length > this.maxSize)
+      this.historyEntries = this.historyEntries.slice(0, this.maxSize);
+    if (this.historyJSON.length > this.maxSize)
+      this.historyJSON = this.historyJSON.slice(0, this.maxSize);
+  }
+
+  private createEntriesFromJSON(jsonItems: Array<any>) {
+    var entries: Array<HistoryEntry> = [];
+    for (let item of jsonItems) {
+      var entry: HistoryEntry = new HistoryEntry(
+        item['aliquot'],
+        item['reportSettings'],
+        item['date']
+      );
+      entries.push(entry);
     }
+    return entries;
+  }
 
-    public saveHistory() {
-        this.storage.set('history', this.historyJSON);
-    }
+  public getHistoryEntries(): Array<HistoryEntry> {
+    return this.historyEntries;
+  }
 
-    private trimToSize() {
-        if (this.historyEntries.length > this.maxSize)
-            this.historyEntries = this.historyEntries.slice(0, this.maxSize);
-        if (this.historyJSON.length > this.maxSize)
-            this.historyJSON = this.historyJSON.slice(0, this.maxSize);
-    }
+  public getHistoryJSONList() {
+    return this.historyJSON;
+  }
 
-    private createEntriesFromJSON(jsonItems: Array<any>) {
-        var entries: Array<HistoryEntry> = [];
-        for (let item of jsonItems) {
-            var entry: HistoryEntry = new HistoryEntry(
-                item['aliquot'],
-                item['reportSettings'],
-                item['date']
-            );
-            entries.push(entry);
-        }
-        return entries;
-    }
+  public getHistoryEntry(index: number) {
+    if (index >= this.historyEntries.length)
+      throw new RangeError('Index out of bounds...');
 
-    public getHistoryEntries(): Array<HistoryEntry> {
-        return this.historyEntries;
-    }
+    return this.historyEntries[index];
+  }
 
-    public getHistoryJSONList() {
-        return this.historyJSON;
-    }
+  public getHistoryJSON(index: number) {
+    if (index >= this.historyJSON.length)
+      throw new RangeError('Index out of bounds...');
 
-    public getHistoryEntry(index: number) {
-        if (index >= this.historyEntries.length)
-            throw new RangeError('Index out of bounds...');
+    return this.historyJSON[index];
+  }
 
-        return this.historyEntries[index];
-    }
-
-    public getHistoryJSON(index: number) {
-        if (index >= this.historyJSON.length)
-            throw new RangeError('Index out of bounds...');
-
-        return this.historyJSON[index];
-    }
-
-    public getMaxSize() {
-        return this.maxSize;
-    }
+  public getMaxSize() {
+    return this.maxSize;
+  }
 
 }
 
 export class HistoryEntry {
 
-    private _aliquotFile: FileEntry;
-    private _reportSettingsFile: FileEntry;
-    private _date: Date;
+  private _aliquotFile: FileEntry;
+  private _reportSettingsFile: FileEntry;
+  private _date: Date;
 
-    constructor(aliquotFile: FileEntry, reportSettingsFile: FileEntry, date: Date) {
-        this._aliquotFile = aliquotFile;
-        this._reportSettingsFile = reportSettingsFile
-        this._date = date;
-    }
+  constructor(aliquotFile: FileEntry, reportSettingsFile: FileEntry, date: Date) {
+    this._aliquotFile = aliquotFile;
+    this._reportSettingsFile = reportSettingsFile
+    this._date = date;
+  }
 
-    public getAliquotFile(): FileEntry {
-        return this._aliquotFile;
-    }
+  public getAliquotFile(): FileEntry {
+    return this._aliquotFile;
+  }
 
-    public getReportSettingsFile(): FileEntry {
-        return this._reportSettingsFile;
-    }
+  public getReportSettingsFile(): FileEntry {
+    return this._reportSettingsFile;
+  }
 
-    public getDate(): Date {
-        return this._date;
-    }
+  public getDate(): Date {
+    return this._date;
+  }
 
-    public setAliquotFile(newFile: FileEntry) {
-        this._aliquotFile = newFile;
-    }
+  public setAliquotFile(newFile: FileEntry) {
+    this._aliquotFile = newFile;
+  }
 
-    public setReportSettingsFile(newFile: FileEntry) {
-        this._reportSettingsFile = newFile;
-    }
+  public setReportSettingsFile(newFile: FileEntry) {
+    this._reportSettingsFile = newFile;
+  }
 
-    public setDate(newDate: Date) {
-        this._date = newDate;
-    }
+  public setDate(newDate: Date) {
+    this._date = newDate;
+  }
 
-    public toJSON() {
-        return {
-            aliquot: this._aliquotFile,
-            reportSettings: this._reportSettingsFile,
-            date: this._date
-        };
-    }
+  public toJSON() {
+    return {
+      aliquot: this._aliquotFile,
+      reportSettings: this._reportSettingsFile,
+      date: this._date
+    };
+  }
 
 }
