@@ -5,12 +5,22 @@
     </button>
     <ion-title>Download</ion-title>
   </ion-navbar>
+  <div padding>
+    <ion-segment [(ngModel)]="downloadType">
+      <ion-segment-button value="url">Website URL</ion-segment-button>
+      <ion-segment-button value="igsn">Geochron IGSN</ion-segment-button>
+    </ion-segment>
+  </div>
 </ion-header>
-<ion-content class="flexColumn" no-bounce>
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Web URL for XML File</ion-label>
+<ion-content no-bounce>
+  <ion-list id="list">
+    <ion-item *ngIf="downloadType === 'url'">
+      <ion-label floating>Website URL of XML File</ion-label>
       <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="url"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="downloadType === 'igsn'">
+      <ion-label floating>Geochron IGSN</ion-label>
+      <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="igsn"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>Downloaded File Name</ion-label>
@@ -20,7 +30,8 @@
   <ion-grid>
     <ion-row>
       <ion-col text-center>
-        <button ion-button round *ngIf="!downloading" [disabled]="url === '' || fileName === ''" (click)="download()">Download</button>
+        <button ion-button round *ngIf="!downloading && downloadType === 'url'" [disabled]="url === '' || fileName === ''" (click)="downloadFromURL()">Download</button>
+        <button ion-button round *ngIf="!downloading && downloadType === 'igsn'" [disabled]="igsn === '' || fileName === ''" (click)="downloadIGSN()">Download</button>
         <ion-spinner *ngIf="downloading" color="primary"></ion-spinner>
       </ion-col>
     </ion-row>

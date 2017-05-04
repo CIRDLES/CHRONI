@@ -1,33 +1,7 @@
 page-download {
 
-    #topContainer {
-        flex: 2;
-    }
-
-    .flexColumn {
-        display: flex;
-        flex-direction: column;
-    }
-    .flexRow {
-        display: flex;
-        flex-direction: row;
-    }
-    .flex {
-        flex: 1;
-    }
-    .fullHeight {
-        height: 100%;
-    }
-    .alignCenter {
-        align-items: center;
-    }
-    
-    .spaceAround {
-        justify-content: space-around;
-    }
-
-    // ion-card-header {
-    //     background-color: color($colors, primary);
-    // }
+  #list {
+    padding-top: 5px;
+  }
 
 }

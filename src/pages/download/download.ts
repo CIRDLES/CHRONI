@@ -6,6 +6,7 @@ import { FileEntry } from '@ionic-native/file';
 
 import { FileUtility } from '../../utilities/FileUtility';
 import { XMLUtility } from '../../utilities/XMLUtility';
+import { GeochronUtility } from '../../utilities/GeochronUtility';
 import { FileName } from '../viewFiles/viewFiles';
 
 @Component({
@@ -14,13 +15,28 @@ import { FileName } from '../viewFiles/viewFiles';
 })
 export class DownloadPage {
 
+  downloadType: string = "url";
   url: string = "";
+  igsn: string = "";
   fileName: string = "";
+
   downloading: boolean = false;
+  loggedIn: boolean = false;
+  username: string = "";
+  password: string = "";
 
-  constructor(public platform: Platform, public storage: Storage, public fileUtil: FileUtility, public xmlUtil: XMLUtility, public toastCtrl: ToastController) { }
+  constructor(public platform: Platform, public storage: Storage, public fileUtil: FileUtility, public xmlUtil: XMLUtility, private geochron: GeochronUtility, public toastCtrl: ToastController) {
+    this.storage.get('loggedIn').then((value) => {
+      if (value) {
+        this.downloadType = 'igsn';
+        this.loggedIn = true;
+        this.storage.get('geochronUsername').then((user: string) => this.username = user);
+        this.storage.get('geochronPassword').then((pass: string) => this.password = pass);
+      }
+    });
+  }
 
-  download() {
+  downloadFromURL() {
     this.downloading = true;
     let name = this.fileName;
     if (!this.fileName.endsWith(".xml"))
@@ -29,50 +45,37 @@ export class DownloadPage {
     let url: string = this.url;
     if (!url.match(/https?:\/\/.*/))
       url = "http://" + url;
-    // downloads the file to a temp directory to check if it is valid
-    this.fileUtil.downloadFile(url, name, true).subscribe((file: FileEntry) => {
-      this.xmlUtil.checkFileValidity(file, true).subscribe((result: string) => {
-        if (result === "Aliquot") {
-          let path = "chroni/Aliquots/" + name;
-          this.fileUtil.moveFile(name, path, true).subscribe(
-            (newFile: FileEntry) => {
-              this.displayToast(newFile.name + " has been successfully downloaded to the Aliquots directory");
-              this.downloading = false;
-              this.url = "";
-              this.fileName = "";
-            }, (error) => {
-              this.displayToast("ERROR: " + name + " could not be downloaded to the Aliquots directory");
-              this.downloading = false;
-              this.fileUtil.removeFile(name, true);
-            });
-        } else if (result === "Report Settings") {
-          let path = "chroni/Report Settings/" + name;
-          this.fileUtil.moveFile(name, path, true).subscribe(
-            (newFile: FileEntry) => {
-              this.displayToast(name + " has been successfully downloaded to the Report Settings directory");
-              this.downloading = false;
-              this.url = "";
-              this.fileName = "";
-            }, (error) => {
-              this.displayToast("ERROR: " + name + " could not be downloaded to the Report Settings directory");
-              this.downloading = false;
-              this.fileUtil.removeFile(name, true);
-            });
-        } else {
-          this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
-          this.downloading = false;
-          this.fileUtil.removeFile(name, true);
-        }
-      }, (error) => {
-        this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
-        this.downloading = false;
-        this.fileUtil.removeFile(name, true);
-      });
-    }, (error) => {
-      this.displayToast("ERROR: invalid URL");
+
+    this.geochron.downloadFromURL(url, name).subscribe((valid: boolean) => {
       this.downloading = false;
-      this.fileUtil.removeFile(name, true);
-    });
+      if (valid) {
+        this.url = "";
+        this.fileName = "";
+      }
+    }, (error) => console.log(JSON.stringify(error)));
+  }
+
+  downloadIGSN() {
+    this.downloading = true;
+    let name = this.fileName;
+    if (!this.fileName.endsWith(".xml"))
+      name += ".xml";
+
+    let igsn: string = this.igsn = this.igsn.toUpperCase();
+    if (igsn.length === 9) {
+      this.geochron.downloadIGSN(igsn, name,
+        this.username !== '' ? this.username : null,
+        this.password !== '' ? this.password : null).subscribe((valid: boolean) => {
+          this.downloading = false;
+          if (valid) {
+            this.url = "";
+            this.fileName = "";
+          }
+        }, (error) => console.log(JSON.stringify(error)));
+    } else {
+      this.displayToast('ERROR: invalid IGSN');
+      this.downloading = false;
+    }
   }
 
   displayToast(text: string) {
@@ -83,5 +86,4 @@ export class DownloadPage {
       cssClass: 'text-center'
     }).present();
   }
-
 }

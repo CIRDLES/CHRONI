@@ -49,10 +49,10 @@ export class Profile {
             () => {
               this.loggingIn = false;
               this.loggedIn = true;
-              this.displayToast('Successfully logged into GeoChron as ' + user);
+              this.displayToast('Successfully logged into Geochron as ' + user);
             });
         else
-          this.displayToast('Could not log in, invalid GeoChron credentials');
+          this.displayToast('Could not log in, invalid Geochron credentials');
       });
   }
 

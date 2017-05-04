@@ -148,10 +148,10 @@ export class FileUtility {
   }
 
   public downloadFile(url: string, filePath: string, useTempDir: boolean = false): Observable<any> {
-    let path = useTempDir ?
-      encodeURI(this.file.tempDirectory + filePath) :
-      encodeURI(this.file.dataDirectory + filePath);
     return new Observable(observer => {
+      let path = useTempDir ?
+        encodeURI(this.file.tempDirectory + filePath) :
+        encodeURI(this.file.dataDirectory + filePath);
       this.fileTransfer.download(encodeURI(url), path)
         .then((file: FileEntry) => observer.next(file))
         .catch((error) => observer.error(error));
@@ -195,7 +195,7 @@ export class FileUtility {
               error => {
                 console.log("Could not create chroni directory... " + JSON.stringify(error));
                 observer2.next(2);
-            });
+              });
           } else
             createInner();
         });
