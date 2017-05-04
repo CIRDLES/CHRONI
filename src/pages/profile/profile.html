@@ -1,27 +1,48 @@
 <ion-header>
-    <ion-navbar>
-        <button color="accent" ion-button menuToggle>
+  <ion-navbar>
+    <button color="accent" ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Profile</ion-title>
-    </ion-navbar>
+    <ion-title>Profile</ion-title>
+  </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-list>
+  <div *ngIf="!loggedIn">
+    <ion-list>
       <ion-item>
-          <ion-label floating>Username</ion-label>
-          <ion-input type="text"></ion-input>
+        <ion-label floating>Username</ion-label>
+        <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="username"></ion-input>
       </ion-item>
       <ion-item>
-          <ion-label floating>Password</ion-label>
-          <ion-input type="password"></ion-input>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
       </ion-item>
-  </ion-list>
-  <ion-grid>
+    </ion-list>
+    <ion-grid>
       <ion-row>
-          <ion-col>
-              <button class="center" text-center ion-button (click)="login()">Login</button>
-          </ion-col>
+        <ion-col text-center>
+          <button ion-button round *ngIf="!loggingIn" [disabled]="username === '' || password === ''" (click)="login()">Login</button>
+          <ion-spinner *ngIf="loggingIn" color="primary"></ion-spinner>
+        </ion-col>
       </ion-row>
+    </ion-grid>
+  </div>
+  <ion-grid *ngIf="loggedIn">
+    <ion-row text-center>
+      <ion-col style="margin: 0; padding: 0">
+        <h4 id="loggedInTop">Logged into Geochron as:</h4>
+      </ion-col>
+    </ion-row>
+    <ion-row text-center>
+      <ion-col>
+        <h5 id="loggedInUsername">{{ username }}</h5>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col text-center>
+        <button ion-button round class="center" *ngIf="!loggingOut" (click)="logout()">Logout</button>
+        <ion-spinner *ngIf="loggingOut" color="primary"></ion-spinner>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>

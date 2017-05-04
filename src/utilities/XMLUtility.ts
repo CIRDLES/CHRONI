@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { FileEntry } from '@ionic-native/file';
+import { Response } from '@angular/http';
 
 import { BigNumber } from 'bignumber.js';
 import X2JS from 'x2js';
@@ -30,9 +31,9 @@ export class XMLUtility {
     "Aliquot.analysisFractions.AnalysisFraction.ValueModel"
   ]
 
-  x2js: X2JS;
+  private x2js: X2JS;
 
-  constructor(public platform: Platform, public fileUtil: FileUtility) {
+  constructor(private platform: Platform, private fileUtil: FileUtility) {
 
     this.platform.ready().then(() => {
       this.x2js = new X2JS({
@@ -664,7 +665,6 @@ export class XMLUtility {
   }
 
   public createTableData(aliquot: Aliquot, reportSettings: ReportSettings) {
-
     // stores the returned list of the Report Settings array and visible categories into a temporary variable
     var temp = this.createReportSettingsArray(reportSettings);
     var reportSettingsArray = temp[0];
@@ -675,9 +675,7 @@ export class XMLUtility {
     var tableArray = reportSettingsArray.concat(fractionArray);
 
     return tableArray;
-
   }
-
 }
 
 export class Aliquot {

@@ -14,7 +14,7 @@ export class FileUtility {
 
   private fileTransfer: TransferObject;
 
-  constructor(public platform: Platform, public storage: Storage, private transfer: Transfer, private file: File) {
+  constructor(private platform: Platform, private storage: Storage, private transfer: Transfer, private file: File) {
     this.platform.ready().then(_ => {
       this.fileTransfer = this.transfer.create();
     });
@@ -100,7 +100,6 @@ export class FileUtility {
 
   public moveFile(oldFilePath: string, newFilePath: string, fromTempDir: boolean = false): Observable<Entry> {
     let oldDir = fromTempDir ? this.file.tempDirectory : this.file.dataDirectory;
-    console.log(oldDir);
     return new Observable(observer => {
       this.file.moveFile(oldDir, oldFilePath, this.file.dataDirectory, newFilePath)
         .then((newFile) => observer.next(newFile))
@@ -149,10 +148,10 @@ export class FileUtility {
   }
 
   public downloadFile(url: string, filePath: string, useTempDir: boolean = false): Observable<any> {
-    let path = useTempDir ?
-      encodeURI(this.file.tempDirectory + filePath) :
-      encodeURI(this.file.dataDirectory + filePath);
     return new Observable(observer => {
+      let path = useTempDir ?
+        encodeURI(this.file.tempDirectory + filePath) :
+        encodeURI(this.file.dataDirectory + filePath);
       this.fileTransfer.download(encodeURI(url), path)
         .then((file: FileEntry) => observer.next(file))
         .catch((error) => observer.error(error));
@@ -196,7 +195,7 @@ export class FileUtility {
               error => {
                 console.log("Could not create chroni directory... " + JSON.stringify(error));
                 observer2.next(2);
-            });
+              });
           } else
             createInner();
         });
