@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, ModalController } from 'ionic-angular';
+import { Nav, Platform, ModalController, ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -9,6 +9,7 @@ import { ThreeDeeTouch, ThreeDeeTouchQuickAction } from '@ionic-native/three-dee
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { FileUtility } from '../utilities/FileUtility';
+import { GeochronUtility } from '../utilities/GeochronUtility';
 
 import { About } from '../pages/about/about';
 import { History } from '../pages/history/history';
@@ -29,7 +30,7 @@ export class Chroni {
   private helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
   private browser: ThemeableBrowserObject;
 
-  constructor(private platform: Platform, private modalCtrl: ModalController, private fileUtil: FileUtility, private statusBar: StatusBar, private storage: Storage, private splashScreen: SplashScreen, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch, private screenOrientation: ScreenOrientation) {
+  constructor(private platform: Platform, private modalCtrl: ModalController, private geochron: GeochronUtility, private fileUtil: FileUtility, private statusBar: StatusBar, private storage: Storage, private splashScreen: SplashScreen, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController, private screenOrientation: ScreenOrientation) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -42,8 +43,18 @@ export class Chroni {
       { title: 'GeoChron Credentials', component: Profile },
       { title: 'About', component: About }
     ];
+  }
 
+  initializeApp() {
     this.platform.ready().then(() => {
+      // Okay, so the platform is ready and our plugins are available.
+      // Here you can do any higher level native things you might need.
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
+
+      // creates and/or downloads default files and directories
       this.fileUtil.createDefaultDirectories();
       this.fileUtil.downloadDefaultFiles();
       this.fileUtil.updateCurrentFiles();
@@ -62,17 +73,24 @@ export class Chroni {
           this.threeDeeTouch.configureQuickActions(actions);
         }
       });
-    });
-  }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
+      this.storage.set('loggedIn', false);
+      // attempts to log into GeoChron
+      this.storage.get('geochronUsername').then((user: string) => {
+        if (user) {
+          this.storage.get('geochronPassword').then((pass: string) => {
+            if (pass) {
+              this.geochron.validateCredentials(user, pass).subscribe((valid: boolean) => {
+                // if credentials are valid, set loggedIn to true
+                if (valid) {
+                  this.storage.set('loggedIn', true);
+                  this.displayToast('Successfully logged into GeoChron as ' + user);
+                }
+              });
+            }
+          });
+        }
+      });
     });
   }
 
@@ -116,5 +134,14 @@ export class Chroni {
       backButtonCanClose: true
     };
     this.browser = this.iab.create(this.helpURL, '_blank', options);
+  }
+
+  displayToast(text: string) {
+    this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: 'bottom',
+      cssClass: 'text-center'
+    }).present();
   }
 }

@@ -179,7 +179,8 @@ export class ViewFiles {
     this.toastCtrl.create({
       message: text,
       duration: 3000,
-      position: 'bottom'
+      position: 'bottom',
+      cssClass: 'text-center'
     }).present();
   }
 }

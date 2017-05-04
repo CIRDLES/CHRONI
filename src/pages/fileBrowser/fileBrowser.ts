@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 import { ViewController, NavParams, Platform, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
-// import { ScreenOrientation } from 'ionic-native';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
 import { FileUtility } from '../../utilities/FileUtility';
@@ -53,12 +52,6 @@ export class FileBrowser {
     this.updateFiles();
   }
 
-  ionViewWillEnter() {
-    // this.platform.ready().then((val) => {
-    //     ScreenOrientation.lockOrientation('portrait').catch((error) => console.log("Orientation Lock Error: " + error));
-    // });
-  }
-
   updateFiles() {
     // must remove leading '/' from currentDirectory file path
     this.fileUtil.getFilesAtDirectory(this.currentDirectory.substring(1))
@@ -79,7 +72,8 @@ export class FileBrowser {
             this.toastCtrl.create({
               message: '"' + file.name + '" is not a valid Aliquot file...',
               duration: 3000,
-              position: 'bottom'
+              position: 'bottom',
+              cssClass: 'text-center'
             }).present();
           }
 
@@ -94,7 +88,8 @@ export class FileBrowser {
             this.toastCtrl.create({
               message: '"' + file.name + '" is not a valid Report Settings file...',
               duration: 3000,
-              position: 'bottom'
+              position: 'bottom',
+              cssClass: 'text-center'
             }).present();
           }
 
@@ -136,7 +131,7 @@ export class FileBrowser {
           role: 'cancel'
         },
         {
-          text: 'Continue',
+          text: 'Delete',
           handler: () => {
             this.deleteFile(file);
           }

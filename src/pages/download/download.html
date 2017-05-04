@@ -13,14 +13,15 @@
       <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="url"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>File Name</ion-label>
+      <ion-label floating>Downloaded File Name</ion-label>
       <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="fileName"></ion-input>
     </ion-item>
   </ion-list>
   <ion-grid>
     <ion-row>
       <ion-col text-center>
-        <button ion-button round (click)="download()">Download</button>
+        <button ion-button round *ngIf="!downloading" [disabled]="url === '' || fileName === ''" (click)="download()">Download</button>
+        <ion-spinner *ngIf="downloading" color="primary"></ion-spinner>
       </ion-col>
     </ion-row>
   </ion-grid>
