@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 
-import { Platform, Col, NavParams, MenuController, NavController } from 'ionic-angular';
+import { Platform, Col, NavParams, MenuController, NavController, PopoverController, ViewController, ModalController } from 'ionic-angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { FileName } from '../viewFiles/viewFiles';
+import { Report, Aliquot, ReportSettings } from '../../utilities/ReportUtility';
 
 @Component({
   selector: 'page-tableView',
@@ -11,8 +12,7 @@ import { FileName } from '../viewFiles/viewFiles';
 })
 export class TableView {
 
-  aliquot: any;
-  reportSettings: any;
+  report: Report;
 
   headerHeight: number = 0;
   bodyScrollHeight: number = 0;
@@ -24,7 +24,7 @@ export class TableView {
   headerArray: Array<Array<string>> = [];
   fractionArray: Array<Array<string>> = [];
 
-  constructor(public platform: Platform, public params: NavParams, public menu: MenuController, public navCtrl: NavController, private screenOrientation: ScreenOrientation) {
+  constructor(private platform: Platform, private params: NavParams, private menu: MenuController, private popoverCtrl: PopoverController, private navCtrl: NavController, private screenOrientation: ScreenOrientation) {
 
     this.bodyScrollHeight = window.screen.height;
 
@@ -34,58 +34,13 @@ export class TableView {
       this.calculateHeights(1);
     });
 
-    // now calculates the data to be displayed in the table
+    this.report = this.params.get("report");
 
-    var tableArray = this.params.get("tableArray");
-    this.aliquot = this.params.get("aliquot");
-    this.reportSettings = this.params.get("reportSettings");
+    this.columnLengths = this.report.getColumnLengths();
+    this.firstRowColSpans = this.report.getFirstRowColSpans();
+    this.headerArray = this.report.getHeaderArray();
+    this.fractionArray = this.report.getFractionArray();
 
-    // claculates the colspan values for the first row of Categories
-    tableArray[1].forEach(categoryNames => {
-      this.firstRowColSpans.push(categoryNames.length);
-    });
-
-    // alters the array so that it can be more easily placed within <th> tags
-    var displayArray = tableArray;
-    for (let i = 0; i < displayArray.length; i++) {
-      var category = displayArray[i];
-      var newCategory = [];
-      category.forEach(function(column) {
-        column.forEach(function(item, itemIndex) {
-          if (item && item != "") {
-            // accounts for spaces, as HTML will remove them
-            if (i > 4 && item.includes(" ")) {
-              var re = new RegExp("\u0020", "g");
-              item = item.replace(re, "\u00A0");
-            }
-            newCategory.push(item);
-          } else
-            // puts just a space in if the field is empty
-            newCategory.push("\u00A0");
-
-
-        });
-      });
-      displayArray[i] = newCategory;
-    }
-
-    // first initializes all column lengths to 0 (uses the last row in header for this)
-    for (let i = 0; i < displayArray[3].length; i++) {
-      this.columnLengths.push(0);
-    }
-    // steps through each row except top one (displayArray contains row arrays which contain columns)
-    for (let i = 1; i < displayArray.length; i++) {
-      // steps through each column in the row
-      for (let j = 0; j < displayArray[i].length; j++) {
-        if (displayArray[i][j].length > this.columnLengths[j]) {
-          // the column contains a longer item than already found, updates lengths array
-          this.columnLengths[j] = displayArray[i][j].length;
-        }
-      }
-    }
-
-    this.headerArray = displayArray.slice(0, 4);
-    this.fractionArray = displayArray.slice(4);
   }
 
   calculateHeights(decrement) {
@@ -96,7 +51,14 @@ export class TableView {
     // uses decrement to differentiate between first openin and screen rotation
     this.headerHeight = document.getElementById("tableHeadLeft").offsetHeight - decrement;
     this.bodyScrollHeight = (contentHeight - toolbarHeight - this.headerHeight);
-  };
+  }
+
+  showMenu(event: Event) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: event
+    });
+  }
 
   ionViewWillEnter() {
     this.platform.ready().then(_ => this.screenOrientation.unlock());
@@ -142,5 +104,29 @@ export class TableView {
     });
     this.menu.swipeEnable(true, "sideMenu");
   }
+}
 
+@Component({
+  template: `
+    <ion-list>
+      <button ion-item (click)="close(); openConcordia()">Concordia</button>
+      <button ion-item (click)="close(); openProbabilityDensity()">Probability Density</button>
+      <button ion-item (click)="close(); openHelp()">Help</button>
+    </ion-list>
+  `
+})
+export class PopoverPage {
+  constructor(private viewCtrl: ViewController, private modalCtrl: ModalController) { }
+
+  openConcordia() {
+
+  }
+
+  openProbabilityDensity() {
+
+  }
+
+  close() {
+    this.viewCtrl.dismiss();
+  }
 }

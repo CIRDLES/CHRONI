@@ -9,11 +9,10 @@ import { FileEntry } from '@ionic-native/file';
 import { FileBrowser } from '../fileBrowser/fileBrowser';
 import { TableView } from '../table/tableView';
 
-import { XMLUtility, Aliquot, ReportSettings } from '../../utilities/XMLUtility';
+import { XMLUtility } from '../../utilities/XMLUtility';
+import { Report, Aliquot, ReportSettings } from '../../utilities/ReportUtility';
 import { FileUtility } from '../../utilities/FileUtility';
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
-
-
 
 @Component({
   selector: 'page-viewFiles',
@@ -75,20 +74,19 @@ export class ViewFiles {
     this.opening = true;
     this.xml.createAliquot(this.currentAliquot).subscribe(al => {
       if (al) {
-        var aliquot: Aliquot = <Aliquot>al;
+        let aliquot: Aliquot = <Aliquot> al;
         this.xml.createReportSettings(this.currentReportSettings).subscribe(rs => {
           if (rs) {
-            var reportSettings: ReportSettings = <ReportSettings>rs;
-            var tableArray = this.xml.createTableData(aliquot, reportSettings);
-            var entry = new HistoryEntry(this.currentAliquot, this.currentReportSettings, new Date());
+            let reportSettings: ReportSettings = <ReportSettings> rs;
+            let report = new Report(aliquot,
+              reportSettings,
+              this.xml.createTableData(aliquot, reportSettings));
+            let entry = new HistoryEntry(report, new Date());
             this.historyUtil.addEntry(entry);
             this.storage.set('currentAliquot', this.currentAliquot);
             this.storage.set('currentReportSettings', this.currentReportSettings);
-            this.navCtrl.push(TableView, {
-              tableArray: tableArray,
-              aliquot: this.currentAliquot,
-              reportSettings: this.currentReportSettings
-            });
+            this.opening = false;
+            this.navCtrl.push(TableView, { report: report });
           } else {
             this.opening = false;
             this.displayToast("Could not open table, invalid Report Settings XML file");

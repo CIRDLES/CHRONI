@@ -1,6 +1,11 @@
 <ion-header id="toolbar">
   <ion-navbar>
-    <ion-title>{{ aliquot.name | fileName }}</ion-title>
+    <ion-title>{{ report?.getAliquot()?.getName() | fileName }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showMenu($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content id="tableContent" no-bounce>

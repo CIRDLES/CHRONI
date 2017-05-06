@@ -8,6 +8,7 @@ import { BigNumber } from 'bignumber.js';
 import X2JS from 'x2js';
 
 import { FileUtility } from './FileUtility';
+import { Aliquot, ReportSettings } from './ReportUtility';
 
 @Injectable()
 export class XMLUtility {
@@ -55,7 +56,7 @@ export class XMLUtility {
     ];
     var visibleCategories = [];
 
-    var categories = reportSettings.categories;
+    var categories = reportSettings.getCategories();
 
     // first orders the Categories by position index
     var orderedCategories = new Array(this.REPORT_CATEGORY_LIST.length);
@@ -143,7 +144,7 @@ export class XMLUtility {
       // goes through each column in each category in the last row
       for (let j = 0; j < reportSettingsArray[3][i].length; j++) {
         if (reportSettingsArray[3][i][j] === "Fraction")
-          categoryArray.push(aliquot.name);
+          categoryArray.push(aliquot.getName());
         else
           categoryArray.push("");
       }
@@ -152,13 +153,13 @@ export class XMLUtility {
     fractionArray.push(firstRow);
 
     // steps through each fraction in the aliquot
-    aliquot.fractions.forEach(function(fraction) {
+    aliquot.getFractions().forEach(function(fraction) {
       var currentRowArray = [];
       var colIndex = 0;
 
       // steps through each visible Category
       visibleCategories.forEach(function(categoryName, catIndex) {
-        var category = reportSettings.categories[categoryName];
+        var category = reportSettings.getCategories()[categoryName];
         var currentCategoryArray = [];
 
         // steps through each Report Column per Category
@@ -608,9 +609,10 @@ export class XMLUtility {
 
                 });
 
-
-                var aliquot: Aliquot = new Aliquot(aliquotName, fractions, images);
-                observer.next(aliquot);
+                this.fileUtil.getFile(path).subscribe((file: FileEntry) => {
+                  let aliquot: Aliquot = new Aliquot(aliquotName, fractions, images, file, this.fileUtil);
+                  observer.next(aliquot);
+                });
               }
             }, error => observer.error(error)
             );
@@ -651,9 +653,10 @@ export class XMLUtility {
                 categories[category] = categoryNode;
               });
 
-              var reportSettings: ReportSettings = new ReportSettings(categories);
-              observer.next(reportSettings);
-
+              this.fileUtil.getFile(path).subscribe((file: FileEntry) => {
+                let reportSettings: ReportSettings = new ReportSettings(categories, file);
+                observer.next(reportSettings);
+              });
             }
           }, error => observer.error(error));
         } else
@@ -676,34 +679,6 @@ export class XMLUtility {
 
     return tableArray;
   }
-}
-
-export class Aliquot {
-
-  constructor(public name: string, public fractions: Array<any>, public images: Array<any>) { }
-
-  getName() {
-    return this.name;
-  }
-
-  getFractions() {
-    return this.fractions;
-  }
-
-  getImages() {
-    return this.images;
-  }
-
-}
-
-export class ReportSettings {
-
-  constructor(public categories: any) { }
-
-  getCategories() {
-    return this.categories;
-  }
-
 }
 
 export class Numbers {

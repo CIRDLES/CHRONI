@@ -20,10 +20,22 @@ export class FileUtility {
     });
   }
 
-  public getFile(filePath: string): Observable<FileEntry> {
+  public getFile(filePath: string, directory: string = "data"): Observable<FileEntry> {
     return new Observable(observer => {
-      this.file.resolveDirectoryUrl(this.file.dataDirectory).then((directory: DirectoryEntry) => {
-        this.file.getFile(directory, filePath, {})
+      let dir: string;
+      switch(directory) {
+        case "data":
+          dir = this.file.dataDirectory;
+          break;
+        case "temp":
+          dir = this.file.tempDirectory;
+          break;
+        case "cache":
+          dir = this.file.cacheDirectory;
+          break;
+      }
+      this.file.resolveDirectoryUrl(dir).then((dirEntry: DirectoryEntry) => {
+        this.file.getFile(dirEntry, filePath, {})
           .then((file: FileEntry) => observer.next(file))
           .catch((error) => observer.error(error));
       });
@@ -40,9 +52,20 @@ export class FileUtility {
     });
   }
 
-  public removeFile(filePath: string, useTempDir: boolean = false): Observable<any> {
-    let dir = useTempDir ? this.file.tempDirectory : this.file.dataDirectory;
+  public removeFile(filePath: string, directory: string = "data"): Observable<any> {
     return new Observable(observer => {
+      let dir: string;
+      switch(directory) {
+        case "data":
+          dir = this.file.dataDirectory;
+          break;
+        case "temp":
+          dir = this.file.tempDirectory;
+          break;
+        case "cache":
+          dir = this.file.cacheDirectory;
+          break;
+      }
       this.file.removeFile(dir, filePath)
         .then((success) => observer.next(success))
         .catch((error) => observer.error(error));
@@ -131,8 +154,20 @@ export class FileUtility {
     });
   }
 
-  public fileExists(filePath: string): Observable<boolean> {
+  public fileExists(filePath: string, directory: string = "data"): Observable<boolean> {
     return new Observable(observer => {
+      let dir: string;
+      switch(directory) {
+        case "data":
+          dir = this.file.dataDirectory;
+          break;
+        case "temp":
+          dir = this.file.tempDirectory;
+          break;
+        case "cache":
+          dir = this.file.cacheDirectory;
+          break;
+      }
       this.file.checkFile(this.file.dataDirectory, filePath)
         .then((exists) => observer.next(true))
         .catch((error) => observer.next(false));
@@ -147,12 +182,21 @@ export class FileUtility {
     });
   }
 
-  public downloadFile(url: string, filePath: string, useTempDir: boolean = false): Observable<any> {
+  public downloadFile(url: string, filePath: string, directory: string = "data"): Observable<FileEntry> {
     return new Observable(observer => {
-      let path = useTempDir ?
-        encodeURI(this.file.tempDirectory + filePath) :
-        encodeURI(this.file.dataDirectory + filePath);
-      this.fileTransfer.download(encodeURI(url), path)
+      let dir: string;
+      switch(directory) {
+        case "data":
+          dir = this.file.dataDirectory;
+          break;
+        case "temp":
+          dir = this.file.tempDirectory;
+          break;
+        case "cache":
+          dir = this.file.cacheDirectory;
+          break;
+      }
+      this.fileTransfer.download(encodeURI(url), encodeURI(dir + filePath))
         .then((file: FileEntry) => observer.next(file))
         .catch((error) => observer.error(error));
     });

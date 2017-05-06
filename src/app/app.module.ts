@@ -14,13 +14,14 @@ import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
 import { FileUtility } from '../utilities/FileUtility';
 import { GeochronUtility } from '../utilities/GeochronUtility';
+import { ReportUtility } from '../utilities/ReportUtility';
 
 import { Chroni } from './app.component';
 import { About } from '../pages/about/about';
 import { History, Name } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
-import { TableView } from '../pages/table/tableView';
+import { TableView, PopoverPage } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { AliquotsPage } from '../pages/aliquots/aliquots';
 import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
@@ -35,6 +36,7 @@ import { DownloadPage } from '../pages/download/download';
     Profile,
     ViewFiles,
     TableView,
+    PopoverPage,
     FileName,
     FileBrowser,
     AliquotsPage,
@@ -53,6 +55,7 @@ import { DownloadPage } from '../pages/download/download';
     Profile,
     ViewFiles,
     TableView,
+    PopoverPage,
     FileBrowser,
     AliquotsPage,
     ReportSettingsPage,
@@ -61,7 +64,7 @@ import { DownloadPage } from '../pages/download/download';
   providers: [
     StatusBar, SplashScreen, ThemeableBrowser, ThreeDeeTouch, ScreenOrientation,
     File, Transfer, TransferObject,
-    XMLUtility, HistoryUtility, FileUtility, GeochronUtility,
+    XMLUtility, HistoryUtility, FileUtility, GeochronUtility, ReportUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

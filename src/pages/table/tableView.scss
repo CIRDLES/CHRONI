@@ -34,7 +34,8 @@ page-tableView {
       overflow-y: auto;
     }
     padding: 0px;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: none;
     flex: 1;
   }
 

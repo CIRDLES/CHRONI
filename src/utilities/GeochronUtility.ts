@@ -29,7 +29,7 @@ export class GeochronUtility {
       let url = BASE_ALIQUOT_URL + igsn;
       if (username && username !== '' && password && password !== '')
         url += '&username=' + username + '&password=' + password;
-      this.fileUtil.downloadFile(url, filePath, true).subscribe(
+      this.fileUtil.downloadFile(url, filePath, "temp").subscribe(
         (file: FileEntry) => {
           this.validateAndTransferTempFile(file).subscribe(
             (valid: boolean) => observer.next(valid),
@@ -43,7 +43,7 @@ export class GeochronUtility {
   public downloadFromURL(url: string, fileName: string): Observable<boolean> {
     return new Observable(observer => {
       // downloads the file to a temp directory to check if it is valid
-      this.fileUtil.downloadFile(url, fileName, true).subscribe((file: FileEntry) => {
+      this.fileUtil.downloadFile(url, fileName, "temp").subscribe((file: FileEntry) => {
         this.validateAndTransferTempFile(file).subscribe(
           (valid: boolean) => observer.next(valid),
           (error) => observer.error(error)
@@ -64,7 +64,7 @@ export class GeochronUtility {
               observer.next(true);
             }, (error) => {
               this.displayToast("ERROR: " + name + " could not be downloaded to the Aliquots directory");
-              this.fileUtil.removeFile(name, true);
+              this.fileUtil.removeFile(name, "temp");
               observer.next(false);
             });
         } else if (result === "Report Settings") {
@@ -75,17 +75,17 @@ export class GeochronUtility {
               observer.next(true);
             }, (error) => {
               this.displayToast("ERROR: " + name + " could not be downloaded to the Report Settings directory");
-              this.fileUtil.removeFile(name, true);
+              this.fileUtil.removeFile(name, "temp");
               observer.next(false);
             });
         } else {
           this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
-          this.fileUtil.removeFile(name, true);
+          this.fileUtil.removeFile(name, "temp");
           observer.next(false);
         }
       }, (error) => {
         this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
-        this.fileUtil.removeFile(name, true);
+        this.fileUtil.removeFile(name, "temp");
         observer.next(false);
       });
     });
