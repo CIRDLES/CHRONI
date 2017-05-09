@@ -55,7 +55,7 @@ export class GeochronUtility {
   private validateAndTransferTempFile(file: FileEntry): Observable<boolean> {
     return new Observable(observer => {
       let name = file.name;
-      this.xmlUtil.checkFileValidity(file, true).subscribe((result: string) => {
+      this.xmlUtil.checkFileValidity(file, "temp").subscribe((result: string) => {
         if (result === "Aliquot") {
           let path = "chroni/Aliquots/" + name;
           this.fileUtil.moveFile(name, path, true).subscribe(

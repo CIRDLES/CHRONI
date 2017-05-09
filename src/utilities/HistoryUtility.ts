@@ -63,9 +63,16 @@ export class HistoryUtility {
   }
 
   private trimToSize() {
-    // TODO: delete concordia and probabilityDensity
-    if (this.historyEntries.length > this.maxSize)
+    if (this.historyEntries.length > this.maxSize) {
+      // deletes the concordia and probability density files
+      let aliquot = this.historyEntries[this.maxSize].getReport().getAliquot();
+      if (aliquot.hasConcordia())
+        this.fileUtil.removeFile(aliquot.getConcordia().fullPath.slice(1), "cache");
+      if (aliquot.hasProbabilityDensity())
+        this.fileUtil.removeFile(aliquot.getProbabilityDensity().fullPath.slice(1), "cache");
+
       this.historyEntries = this.historyEntries.slice(0, this.maxSize);
+    }
     if (this.historyJSON.length > this.maxSize)
       this.historyJSON = this.historyJSON.slice(0, this.maxSize);
   }

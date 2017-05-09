@@ -21,7 +21,7 @@ import { About } from '../pages/about/about';
 import { History, Name } from '../pages/history/history';
 import { Profile } from '../pages/profile/profile';
 import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
-import { TableView, PopoverPage } from '../pages/table/tableView';
+import { TableView, PopoverPage, ImageView } from '../pages/table/tableView';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { AliquotsPage } from '../pages/aliquots/aliquots';
 import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
@@ -37,6 +37,7 @@ import { DownloadPage } from '../pages/download/download';
     ViewFiles,
     TableView,
     PopoverPage,
+    ImageView,
     FileName,
     FileBrowser,
     AliquotsPage,
@@ -56,6 +57,7 @@ import { DownloadPage } from '../pages/download/download';
     ViewFiles,
     TableView,
     PopoverPage,
+    ImageView,
     FileBrowser,
     AliquotsPage,
     ReportSettingsPage,

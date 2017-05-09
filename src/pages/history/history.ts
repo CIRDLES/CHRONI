@@ -2,7 +2,6 @@ import { Component, Pipe } from '@angular/core';
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
-import { Aliquot, ReportSettings } from '../../utilities/ReportUtility';
 import { TableView } from '../table/tableView';
 import { NavController, Platform, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
@@ -30,9 +29,7 @@ export class History {
       this.historyUtil.addEntry(new HistoryEntry(report, new Date()));
 
       this.opening = false;
-      this.navCtrl.push(TableView, {
-        report: report
-      });
+      this.navCtrl.push(TableView, { report: report });
     }
   }
 

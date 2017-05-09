@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { FileEntry } from '@ionic-native/file';
-import { Response } from '@angular/http';
 
 import { BigNumber } from 'bignumber.js';
 import X2JS from 'x2js';
@@ -525,13 +524,13 @@ export class XMLUtility {
     return fractionArray;
   }
 
-  public checkFileValidity(file: FileEntry, useTempDir: boolean = false): Observable<string> {
+  public checkFileValidity(file: FileEntry, directory: string = "data"): Observable<string> {
     var path = file.fullPath;
     if (path[0] === '/')
       path = path.substring(1);
 
     return new Observable(observer => {
-      this.fileUtil.readFileText(path, useTempDir)
+      this.fileUtil.readFileText(path, directory)
         .subscribe(
         fileData => {
           var jsonObj = this.x2js.xml2js(fileData);

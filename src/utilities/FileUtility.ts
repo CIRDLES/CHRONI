@@ -80,8 +80,19 @@ export class FileUtility {
     });
   }
 
-  public readFileText(filePath: string, useTempDir: boolean = false): Observable<string> {
-    let dir = useTempDir ? this.file.tempDirectory : this.file.dataDirectory;
+  public readFileText(filePath: string, directory: string = "data"): Observable<string> {
+    let dir: string;
+    switch(directory) {
+      case "data":
+        dir = this.file.dataDirectory;
+        break;
+      case "temp":
+        dir = this.file.tempDirectory;
+        break;
+      case "cache":
+        dir = this.file.cacheDirectory;
+        break;
+    }
     return new Observable(observer => {
       this.file.readAsText(dir, filePath)
         .then((fileData: string) => observer.next(fileData))

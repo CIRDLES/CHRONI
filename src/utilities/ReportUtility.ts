@@ -75,7 +75,7 @@ export class Aliquot {
   constructor(private name: string, private fractions: Array<any>, private images: Array<any>, private fileEntry: FileEntry, private fileUtil: FileUtility) {
     for (let imageObj of images) {
       if (imageObj["imageType"] === "concordia") {
-        let fileName = this.name + "_concordia.svg";
+        let fileName = this.getFileName().split('.xml')[0] + "_concordia.svg";
         this.fileUtil.fileExists(fileName, "cache").subscribe((exists: boolean) => {
           if (exists) {
             this.fileUtil.getFile(fileName, "cache").subscribe(
@@ -118,6 +118,14 @@ export class Aliquot {
 
   public getImages() {
     return this.images;
+  }
+
+  public hasConcordia() {
+    return this.concordiaFile !== null;
+  }
+
+  public hasProbabilityDensity() {
+    return this.probabilityDensityFile !== null;
   }
 
   public getProbabilityDensity(): FileEntry {
