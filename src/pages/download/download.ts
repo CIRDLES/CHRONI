@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import { Platform, ToastController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { FileEntry } from '@ionic-native/file';
 
 import { FileUtility } from '../../utilities/FileUtility';
 import { XMLUtility } from '../../utilities/XMLUtility';

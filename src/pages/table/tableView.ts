@@ -1,9 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-import { Platform, Col, NavParams, MenuController, NavController } from 'ionic-angular';
+import { Platform, NavParams, MenuController, NavController, PopoverController, ViewController, ModalController, Modal } from 'ionic-angular';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { FileName } from '../viewFiles/viewFiles';
+import { Report } from '../../utilities/ReportUtility';
+import { FileUtility } from '../../utilities/FileUtility';
 
 @Component({
   selector: 'page-tableView',
@@ -11,8 +14,7 @@ import { FileName } from '../viewFiles/viewFiles';
 })
 export class TableView {
 
-  aliquot: any;
-  reportSettings: any;
+  report: Report;
 
   headerHeight: number = 0;
   bodyScrollHeight: number = 0;
@@ -24,7 +26,7 @@ export class TableView {
   headerArray: Array<Array<string>> = [];
   fractionArray: Array<Array<string>> = [];
 
-  constructor(public platform: Platform, public params: NavParams, public menu: MenuController, public navCtrl: NavController, private screenOrientation: ScreenOrientation) {
+  constructor(private platform: Platform, private params: NavParams, private menu: MenuController, private popoverCtrl: PopoverController, private navCtrl: NavController, private screenOrientation: ScreenOrientation) {
 
     this.bodyScrollHeight = window.screen.height;
 
@@ -34,58 +36,13 @@ export class TableView {
       this.calculateHeights(1);
     });
 
-    // now calculates the data to be displayed in the table
+    this.report = this.params.get("report");
 
-    var tableArray = this.params.get("tableArray");
-    this.aliquot = this.params.get("aliquot");
-    this.reportSettings = this.params.get("reportSettings");
+    this.columnLengths = this.report.getColumnLengths();
+    this.firstRowColSpans = this.report.getFirstRowColSpans();
+    this.headerArray = this.report.getHeaderArray();
+    this.fractionArray = this.report.getFractionArray();
 
-    // claculates the colspan values for the first row of Categories
-    tableArray[1].forEach(categoryNames => {
-      this.firstRowColSpans.push(categoryNames.length);
-    });
-
-    // alters the array so that it can be more easily placed within <th> tags
-    var displayArray = tableArray;
-    for (let i = 0; i < displayArray.length; i++) {
-      var category = displayArray[i];
-      var newCategory = [];
-      category.forEach(function(column) {
-        column.forEach(function(item, itemIndex) {
-          if (item && item != "") {
-            // accounts for spaces, as HTML will remove them
-            if (i > 4 && item.includes(" ")) {
-              var re = new RegExp("\u0020", "g");
-              item = item.replace(re, "\u00A0");
-            }
-            newCategory.push(item);
-          } else
-            // puts just a space in if the field is empty
-            newCategory.push("\u00A0");
-
-
-        });
-      });
-      displayArray[i] = newCategory;
-    }
-
-    // first initializes all column lengths to 0 (uses the last row in header for this)
-    for (let i = 0; i < displayArray[3].length; i++) {
-      this.columnLengths.push(0);
-    }
-    // steps through each row except top one (displayArray contains row arrays which contain columns)
-    for (let i = 1; i < displayArray.length; i++) {
-      // steps through each column in the row
-      for (let j = 0; j < displayArray[i].length; j++) {
-        if (displayArray[i][j].length > this.columnLengths[j]) {
-          // the column contains a longer item than already found, updates lengths array
-          this.columnLengths[j] = displayArray[i][j].length;
-        }
-      }
-    }
-
-    this.headerArray = displayArray.slice(0, 4);
-    this.fractionArray = displayArray.slice(4);
   }
 
   calculateHeights(decrement) {
@@ -96,7 +53,24 @@ export class TableView {
     // uses decrement to differentiate between first openin and screen rotation
     this.headerHeight = document.getElementById("tableHeadLeft").offsetHeight - decrement;
     this.bodyScrollHeight = (contentHeight - toolbarHeight - this.headerHeight);
-  };
+  }
+
+  showMenu(event: Event) {
+    let popover = this.popoverCtrl.create(PopoverPage, { report: this.report });
+    popover.present({
+      ev: event
+    });
+    popover.onDidDismiss((data) => {
+      if (data && data.modal) {
+        data.modal.onDidDismiss(() => {
+          // allows the table sections to scroll again
+          document.getElementById('mainBodyScroll').style.overflow = "scroll";
+          document.getElementById('leftBodyScroll').style.overflow = "scroll";
+          document.getElementById('headerScrollRight').style.overflow = "scroll";
+        });
+      }
+    });
+  }
 
   ionViewWillEnter() {
     this.platform.ready().then(_ => this.screenOrientation.unlock());
@@ -141,6 +115,111 @@ export class TableView {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
     });
     this.menu.swipeEnable(true, "sideMenu");
+  }
+}
+
+@Component({
+  template: `
+    <ion-list>
+      <button ion-item (click)="openConcordia(); close()">Concordia</button>
+      <button ion-item (click)="openProbabilityDensity(); close()">Probability Density</button>
+    </ion-list>
+  `
+})
+export class PopoverPage {
+
+  report: Report;
+  modal: Modal;
+
+  constructor(private viewCtrl: ViewController, private modalCtrl: ModalController, private params: NavParams) {
+    this.report = this.params.get('report');
+  }
+
+  openConcordia() {
+    let aliquot = this.report.getAliquot();
+    if (aliquot.hasConcordia()) {
+      this.modal = this.modalCtrl.create(ImageView, {
+        title: 'Concordia',
+        path: aliquot.getConcordia().fullPath.slice(1)
+      });
+      this.modal.present();
+    }
+  }
+
+  openProbabilityDensity() {
+    let aliquot = this.report.getAliquot();
+    if (aliquot.hasProbabilityDensity()) {
+      this.modal = this.modalCtrl.create(ImageView, {
+        title: 'Probability Density',
+        path: aliquot.getProbabilityDensity().fullPath.slice(1)
+      });
+      this.modal.present();
+    }
+  }
+
+  close() {
+    this.viewCtrl.dismiss({ modal: this.modal });
+  }
+}
+
+@Component({
+  template: `
+    <ion-header id="header">
+      <ion-toolbar>
+        <ion-title>{{ title }}</ion-title>
+        <ion-buttons end>
+          <button ion-button clear (click)="dismiss()">Close</button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content no-bounce id="content">
+      <ion-scroll zoom="true" scrollX="true" scrollY="true" style="width: 100%; height: 100%;">
+        <div (DOMNodeInserted)="setSize()" [innerHTML]="imgData" style="padding: 8px 0px 0px 8px"></div>
+      </ion-scroll>
+    </ion-content>
+  `,
+  selector: 'page-imageView'
+})
+export class ImageView {
+
+  title: string = '';
+  imgData: SafeResourceUrl;
+  originalImgData: string;
+
+  height: number = 0;
+  width: number = 0;
+
+  constructor(private viewCtrl: ViewController, private params: NavParams, private fileUtil: FileUtility, private sanitizer: DomSanitizer) {
+    this.title = this.params.get('title');
+    let path = this.params.get('path');
+    this.fileUtil.readFileText(path, "cache").subscribe((result: string) => {
+      this.originalImgData = result;
+      this.setSize();
+    });
+  }
+
+  ionViewWillEnter() {
+    // disables table section scrolling while modal is open
+    document.getElementById('mainBodyScroll').style.overflow = "hidden";
+    document.getElementById('leftBodyScroll').style.overflow = "hidden";
+    document.getElementById('headerScrollRight').style.overflow = "hidden";
+  }
+
+  setSize() {
+    // obtains the real SVG height and width if it has been inserted yet
+    let el: any = document.getElementById('image');
+    if (el) {
+      let bbox = el.getBBox();
+      this.height = bbox.height;
+      this.width = bbox.width;
+    }
+    // must sanitize the SVG data to insert it inside of the div
+    let idx = this.originalImgData.indexOf("<svg") + 4;
+    this.imgData = this.sanitizer.bypassSecurityTrustHtml('<svg id="image" width="' + (this.width-20) + '" height="' + this.height + '"' + this.originalImgData.slice(idx));
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
 }

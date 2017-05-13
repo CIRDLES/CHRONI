@@ -226,7 +226,6 @@ export class FileBrowser {
         .subscribe(exists => {
           if (!exists) {
             if (this.cutting) {
-              console.log(JSON.stringify(this.copiedFile));
               if (this.copiedFile.isFile)
                 this.fileUtil.moveFile(this.copiedFile.fullPath.substring(1), newPath)
                   .subscribe(
