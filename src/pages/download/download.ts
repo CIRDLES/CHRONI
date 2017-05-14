@@ -14,7 +14,7 @@ import { FileName } from '../viewFiles/viewFiles';
 })
 export class DownloadPage {
 
-  downloadType: string = "url";
+  downloadType: string = "igsn";
   url: string = "";
   igsn: string = "";
   fileName: string = "";
@@ -27,7 +27,6 @@ export class DownloadPage {
   constructor(public platform: Platform, public storage: Storage, public fileUtil: FileUtility, public xmlUtil: XMLUtility, private geochron: GeochronUtility, public toastCtrl: ToastController) {
     this.storage.get('loggedIn').then((value) => {
       if (value) {
-        this.downloadType = 'igsn';
         this.loggedIn = true;
         this.storage.get('geochronUsername').then((user: string) => this.username = user);
         this.storage.get('geochronPassword').then((pass: string) => this.password = pass);
@@ -67,7 +66,7 @@ export class DownloadPage {
         this.password !== '' ? this.password : null).subscribe((valid: boolean) => {
           this.downloading = false;
           if (valid) {
-            this.url = "";
+            this.igsn = "";
             this.fileName = "";
           }
         }, (error) => console.log(JSON.stringify(error)));

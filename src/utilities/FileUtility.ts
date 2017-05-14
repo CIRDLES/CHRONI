@@ -108,18 +108,18 @@ export class FileUtility {
     });
   }
 
-  public createFile(filePath: string, replace: boolean): Observable<any> {
+  public createFile(filePath: string, replace: boolean = false): Observable<FileEntry> {
     return new Observable(observer => {
       this.file.createFile(this.file.dataDirectory, filePath, replace)
-        .then((success) => observer.next(success))
+        .then((success: FileEntry) => observer.next(success))
         .catch((error) => observer.error(error));
     });
   }
 
-  public createDirectory(dirPath: string, replace: boolean): Observable<any> {
+  public createDirectory(dirPath: string, replace: boolean = false): Observable<DirectoryEntry> {
     return new Observable(observer => {
       this.file.createDir(this.file.dataDirectory, dirPath, replace)
-        .then((success) => observer.next(success))
+        .then((success: DirectoryEntry) => observer.next(success))
         .catch((error) => observer.error(error));
     });
   }

@@ -1,10 +1,10 @@
 import { Component, Pipe } from '@angular/core';
-import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
-
-import { XMLUtility } from '../../utilities/XMLUtility';
-import { TableView } from '../table/tableView';
 import { NavController, Platform, ModalController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { TableView } from '../table/tableView';
+
+import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
+import { XMLUtility } from '../../utilities/XMLUtility';
 
 declare var cordova: any;
 
