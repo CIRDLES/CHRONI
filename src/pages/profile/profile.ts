@@ -21,16 +21,14 @@ export class Profile {
       this.storage.get('loggedIn').then((value) => {
         this.loggingIn = false;
         this.loggedIn = value !== null && value;
-        if (this.loggedIn) {
-          this.storage.get('geochronUsername').then((user: string) => {
-            if (user)
-              this.username = user;
-          });
-          this.storage.get('geochronPassword').then((pass: string) => {
-            if (pass)
-              this.password = pass;
-          });
-        }
+        this.storage.get('geochronUsername').then((user: string) => {
+          if (user && user !== "")
+            this.username = user;
+        });
+        this.storage.get('geochronPassword').then((pass: string) => {
+          if (pass && pass !== "")
+            this.password = pass;
+        });
       });
     });
   }

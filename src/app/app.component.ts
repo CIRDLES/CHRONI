@@ -74,17 +74,20 @@ export class Chroni {
         }
       });
 
-      this.storage.set('loggedIn', false);
-      // attempts to log into GeoChron
-      this.storage.get('geochronUsername').then((user: string) => {
-        if (user) {
-          this.storage.get('geochronPassword').then((pass: string) => {
-            if (pass) {
-              this.geochron.validateCredentials(user, pass).subscribe((valid: boolean) => {
-                // if credentials are valid, set loggedIn to true
-                if (valid) {
-                  this.storage.set('loggedIn', true);
-                  this.displayToast('Successfully logged into GeoChron as ' + user);
+      this.storage.get('loggedIn').then((val: boolean) => {
+        if (val === true) {
+          // attempts to log into GeoChron
+          this.storage.get('geochronUsername').then((user: string) => {
+            if (user && user !== "") {
+              this.storage.get('geochronPassword').then((pass: string) => {
+                if (pass && pass !== "") {
+                  this.geochron.validateCredentials(user, pass).subscribe((valid: boolean) => {
+                    // if credentials are valid, set loggedIn to true
+                    if (valid) {
+                      this.storage.set('loggedIn', true);
+                      this.displayToast('Successfully logged into GeoChron as ' + user);
+                    }
+                  });
                 }
               });
             }
