@@ -35,16 +35,8 @@ $ npm install -g cordova ionic
 Ionic should now be installed with version 2 or higher. Use *ionic -v* to confirm. Continue with:
 
 ```bash
-$ gem install sass
 $ npm install
-$ npm install --global gulp-cli
-$ npm install -g bower
-```
-
-Now that ionic and its dependencies have been installed, use the following command to convert the scss written to css:
-
-```bash
-$ gulp sass
+$ ionic resources
 ```
 
 To emulate on an ios platform
@@ -52,7 +44,8 @@ To emulate on an ios platform
 Change directories to the CHRONI directory on the local and run:
 
 ```bash
-$ ionic emulate ios -lr
+$ ionic platform add ios
+$ ionic emulate ios -lc
 ```
 
 To emulate on android platform
