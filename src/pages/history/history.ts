@@ -60,6 +60,11 @@ export class History {
         });
     }
 
+    clearHistory() {
+        this.history = [];
+        this.historyUtil.clearHistory();
+    }
+
 }
 
 @Pipe({

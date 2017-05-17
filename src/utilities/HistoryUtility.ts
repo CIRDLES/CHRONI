@@ -101,6 +101,10 @@ export class HistoryUtility {
         return this.maxSize;
     }
 
+    public clearHistory() {
+        this.historyEntries = [];
+    }
+
 }
 
 export class HistoryEntry {
@@ -146,5 +150,4 @@ export class HistoryEntry {
             date: this._date
         };
     }
-
 }

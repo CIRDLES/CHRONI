@@ -1,9 +1,20 @@
 <ion-header>
     <ion-navbar>
-        <button color="accent" ion-button menuToggle>
-            <ion-icon name="menu"></ion-icon>
-        </button>
-        <ion-title>History</ion-title>
+        <table width="100%">
+            <tr>
+                <td width="10%">
+                    <button color="accent" ion-button menuToggle>
+                        <ion-icon name="menu"></ion-icon>
+                    </button>
+                </td>
+                <td align="left" width="45%">
+                    <ion-title>History</ion-title>
+                </td>
+                <td align="right" width="45%">
+                    <button (click)="clearHistory()" ion-button color="accent">Clear</button>
+                </td>
+            </tr>
+        </table>
     </ion-navbar>
 </ion-header>
 <ion-content>
