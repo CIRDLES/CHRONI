@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.chroni550043" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.cirdles.chroni" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Chroni</name>
-  <description>An awesome Ionic/Cordova app.</description>
-  <author email="cirdles.cofc@gmail.com" href="http://ionicframework.com/">CIRDLES</author>
+  <description>A mobile application that is being developed using Ionic, a cross platform app development framework.</description>
+  <author email="cirdlesorg@gmail.com" href="http://cirdles.org/">CIRDLES</author>
   <content src="index.html"/>
   <access origin="*"/>
   <allow-intent href="*"/>
