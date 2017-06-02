@@ -30,8 +30,8 @@
   <ion-grid>
     <ion-row>
       <ion-col text-center>
-        <button ion-button round *ngIf="!downloading && downloadType === 'url'" [disabled]="url === '' || fileName === ''" (click)="downloadFromURL()">Download</button>
-        <button ion-button round *ngIf="!downloading && downloadType === 'igsn'" [disabled]="igsn === '' || fileName === ''" (click)="downloadIGSN()">Download</button>
+        <button ion-button *ngIf="!downloading && downloadType === 'url'" [disabled]="url === '' || fileName === ''" (click)="downloadFromURL()">Download</button>
+        <button ion-button *ngIf="!downloading && downloadType === 'igsn'" [disabled]="igsn === '' || fileName === ''" (click)="downloadIGSN()">Download</button>
         <ion-spinner *ngIf="downloading" color="primary"></ion-spinner>
       </ion-col>
     </ion-row>
