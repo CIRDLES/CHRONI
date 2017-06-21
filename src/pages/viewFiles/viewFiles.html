@@ -43,7 +43,7 @@
   </ion-row>
   <ion-row>
     <ion-col text-center>
-      <button *ngIf="!opening" ion-button round [disabled]="!currentAliquot || !currentReportSettings" (click)="openTable()">View Report</button>
+      <button *ngIf="!opening" ion-button [disabled]="!currentAliquot || !currentReportSettings" (click)="openTable()">View Report</button>
       <ion-spinner *ngIf="opening" color="primary"></ion-spinner>
     </ion-col>
   </ion-row>

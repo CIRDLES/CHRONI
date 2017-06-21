@@ -21,7 +21,7 @@
     <ion-grid>
       <ion-row>
         <ion-col text-center>
-          <button ion-button round *ngIf="!loggingIn" [disabled]="username === '' || password === ''" (click)="login()">Login</button>
+          <button ion-button *ngIf="!loggingIn" [disabled]="username === '' || password === ''" (click)="login()">Login</button>
           <ion-spinner *ngIf="loggingIn" color="primary"></ion-spinner>
         </ion-col>
       </ion-row>
@@ -40,7 +40,7 @@
     </ion-row>
     <ion-row>
       <ion-col text-center>
-        <button ion-button round class="center" *ngIf="!loggingOut" (click)="logout()">Logout</button>
+        <button ion-button class="center" *ngIf="!loggingOut" (click)="logout()">Logout</button>
         <ion-spinner *ngIf="loggingOut" color="primary"></ion-spinner>
       </ion-col>
     </ion-row>
