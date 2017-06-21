@@ -1,7 +1,7 @@
 {
   "name": "Chroni",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "author": "CIRDLES",
+  "homepage": "cirdles.org",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -75,5 +75,5 @@
       "locator": "ios"
     }
   ],
-  "description": "CHRONI: An Ionic project"
+  "description": "A mobile application that is being developed using Ionic, a cross platform app development framework."
 }
