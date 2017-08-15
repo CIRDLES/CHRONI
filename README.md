@@ -7,6 +7,14 @@ This material is based upon work supported by the National Science Foundation un
 
 For more information about this project, please contact [Jim Bowring](mailto://bowringj@cofc.edu).
 
+<br/>
+
+Downloading the Latest Release for Android and iOS
+-------------
+
+For iOS, you can download Chroni from the App Store: https://appsto.re/us/0Sjikb.i
+
+For Android, you can download Chroni from the Play Store: https://play.google.com/store/apps/details?id=org.cirdles.chroni
 
 <br/>
 
