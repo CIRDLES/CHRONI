@@ -18,7 +18,7 @@ import { DownloadPage } from '../pages/download/download';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { HistoryPage } from '../pages/history/history';
 import { ManageReportsPage } from '../pages/manageReports/manageReports';
-import { TablePage } from '../pages/table/table';
+import { TablePage, PopoverPage, ImageView } from '../pages/table/table';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -38,6 +38,8 @@ import { FileNameFromPathPipe } from '../utilities/pipes/FileNameFromPath';
     HistoryPage,
     ManageReportsPage,
     TablePage,
+    PopoverPage,
+    ImageView,
     FileNamePipe,
     FileNameFromPathPipe
   ],
@@ -55,7 +57,9 @@ import { FileNameFromPathPipe } from '../utilities/pipes/FileNameFromPath';
     FileBrowser,
     HistoryPage,
     ManageReportsPage,
-    TablePage
+    TablePage,
+    PopoverPage,
+    ImageView
   ],
   providers: [
     StatusBar,

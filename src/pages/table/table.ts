@@ -190,7 +190,7 @@ export class ImageView {
 
   title: string = '';
   imgData: SafeResourceUrl;
-  originalImgData: string;
+  originalImgData: string = '';
 
   height: number = 0;
   width: number = 0;
