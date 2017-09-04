@@ -47,28 +47,28 @@ export class XMLUtility {
 
   private createReportSettingsArray(reportSettings: ReportSettings) {
     // the Report Settings section of the table will have 4 rows
-    var reportSettingsArray = [
+    let reportSettingsArray = [
       [],
       [],
       [],
       []
     ];
-    var visibleCategories = [];
+    let visibleCategories = [];
 
-    var categories = reportSettings.getCategories();
+    let categories = reportSettings.getCategories();
 
     // first orders the Categories by position index
-    var orderedCategories = new Array(this.REPORT_CATEGORY_LIST.length);
-    var orderedCategoryNames = new Array(this.REPORT_CATEGORY_LIST.length);
+    let orderedCategories = new Array(this.REPORT_CATEGORY_LIST.length);
+    let orderedCategoryNames = new Array(this.REPORT_CATEGORY_LIST.length);
     this.REPORT_CATEGORY_LIST.forEach(function(categoryName) {
-      var category = categories[categoryName];
+      let category = categories[categoryName];
       orderedCategories[category["positionIndex"]] = category;
       orderedCategoryNames[category["positionIndex"]] = categoryName;
     });
 
     // then steps through the ordered categories
     for (let i = 0; i < orderedCategories.length; i++) {
-      var category = orderedCategories[i];
+      let category = orderedCategories[i];
 
       // only adds Category if it is visible
       if (category["visible"] === "true") {
@@ -78,12 +78,12 @@ export class XMLUtility {
         reportSettingsArray[0].push([category["displayName"]]);
 
         // each Category will have three lists for the display names
-        var displayName1Array = [];
-        var displayName2Array = [];
-        var displayName3Array = [];
+        let displayName1Array = [];
+        let displayName2Array = [];
+        let displayName3Array = [];
 
         // steps through each ReportColumn
-        var reportColumns = category["categoryColumns"]["ReportColumn"];
+        let reportColumns = category["categoryColumns"]["ReportColumn"];
         reportColumns.forEach(function(reportColumn) {
           if (reportColumn["visible"] === "true") {
 
@@ -93,7 +93,7 @@ export class XMLUtility {
             displayName3Array.push(reportColumn["displayName3"]);
 
             // if there is an uncertainty column, adds it
-            var uncertaintyColumn = reportColumn["uncertaintyColumn"];
+            let uncertaintyColumn = reportColumn["uncertaintyColumn"];
             if (uncertaintyColumn && uncertaintyColumn !== "" && uncertaintyColumn["visible"] === "true") {
               displayName1Array.push(uncertaintyColumn["displayName1"]);
 
@@ -130,16 +130,16 @@ export class XMLUtility {
 
   private createFractionArray(aliquot: Aliquot, reportSettings: ReportSettings, reportSettingsArray: Array<any>, visibleCategories: Array<any>) {
 
-    var sizes = [];
-    var hasDecimals = [];
+    let sizes = [];
+    let hasDecimals = [];
 
-    var fractionArray = [];
-    var unitConversions = Numbers.getUnitConversions();
+    let fractionArray = [];
+    let unitConversions = Numbers.getUnitConversions();
 
     // the first row of the fractions is empty except for the Aliquot Name
-    var firstRow = [];
+    let firstRow = [];
     for (let i = 0; i < reportSettingsArray[3].length; i++) {
-      var categoryArray = [];
+      let categoryArray = [];
       // goes through each column in each category in the last row
       for (let j = 0; j < reportSettingsArray[3][i].length; j++) {
         if (reportSettingsArray[3][i][j] === "Fraction")
@@ -153,46 +153,46 @@ export class XMLUtility {
 
     // steps through each fraction in the aliquot
     aliquot.getFractions().forEach(function(fraction) {
-      var currentRowArray = [];
-      var colIndex = 0;
+      let currentRowArray = [];
+      let colIndex = 0;
 
       // steps through each visible Category
       visibleCategories.forEach(function(categoryName, catIndex) {
-        var category = reportSettings.getCategories()[categoryName];
-        var currentCategoryArray = [];
+        let category = reportSettings.getCategories()[categoryName];
+        let currentCategoryArray = [];
 
         // steps through each Report Column per Category
         category["categoryColumns"]["ReportColumn"].forEach(function(column) {
 
           // FILLS IN UNCERTAINTY COLUMN
 
-          var columnVisible = (column["visible"] === "true");
+          let columnVisible = (column["visible"] === "true");
 
-          var uncertaintyColumn = column["uncertaintyColumn"];
-          var uncertaintyValue = new BigNumber();
-          var uncertaintyIsVisible = (uncertaintyColumn["visible"] === "true");
+          let uncertaintyColumn = column["uncertaintyColumn"];
+          let uncertaintyValue;
+          let uncertaintyIsVisible = (uncertaintyColumn["visible"] === "true");
 
           if (uncertaintyColumn && uncertaintyColumn != "") {
-            var uncertaintyValueModel = fraction["ValueModelsByName"][uncertaintyColumn["retrieveVariableName"]];
+            let uncertaintyValueModel = fraction["ValueModelsByName"][uncertaintyColumn["retrieveVariableName"]];
 
             if (uncertaintyValueModel) {
 
-              var oneSigma = parseFloat(uncertaintyValueModel["oneSigma"]);
-              var initialValue = parseFloat(uncertaintyValueModel["value"]);
-              var currentUnit = column["units"];
+              let oneSigma = parseFloat(uncertaintyValueModel["oneSigma"]);
+              let initialValue = parseFloat(uncertaintyValueModel["value"]);
+              let currentUnit = column["units"];
 
-              var uncertaintyType = column["uncertaintyType"];
+              let uncertaintyType = column["uncertaintyType"];
 
-              var uncertaintyCntSigDigits = uncertaintyColumn["countOfSignificantDigits"];
-              var isArbitraryDigitCnt = (
+              let uncertaintyCntSigDigits = uncertaintyColumn["countOfSignificantDigits"];
+              let isArbitraryDigitCnt = (
                 uncertaintyColumn["displayedWithArbitraryDigitCount"] === "true"
               );
 
               // performs mathematical computations
               if (unitConversions.hasOwnProperty(currentUnit)) {
                 // obtains unrounded number
-                var dividingNum = unitConversions[currentUnit];
-                var valueToRound = new BigNumber(
+                let dividingNum = unitConversions[currentUnit];
+                let valueToRound = new BigNumber(
                   (oneSigma / Math.pow(10, dividingNum)) * 2
                 );
 
@@ -218,7 +218,7 @@ export class XMLUtility {
                 }
                 // only adds uncertainty if visible
                 if (columnVisible && uncertaintyIsVisible) {
-                  var val = uncertaintyValue.toString();
+                  let val = uncertaintyValue.toString();
                   currentCategoryArray.push(val);
 
                   // adds or changes necessary length stats for the column
@@ -229,7 +229,7 @@ export class XMLUtility {
                     else
                       hasDecimals[colIndex + 1] = true;
 
-                    var len = val.split(".")[1].length;
+                    let len = val.split(".")[1].length;
                     if (colIndex >= sizes.length)
                       sizes.push(len);
                     else {
@@ -262,15 +262,14 @@ export class XMLUtility {
 
           // FILLS IN FRACTION COLUMN
 
-          var variableName = column["retrieveVariableName"];
+          let variableName = column["retrieveVariableName"];
 
           // must account for the fraction column, it will not have a variable name
           if (!variableName || variableName === "") {
-            var methodName = column["retrieveMethodName"];
+            let methodName = column["retrieveMethodName"];
+            let fractionID = fraction["fractionID"];
 
             if (methodName === "getFractionID") {
-              var fractionID = fraction["fractionID"];
-
               // adds the ID if it is visible
               if (columnVisible) {
                 if (uncertaintyIsVisible) {
@@ -303,28 +302,28 @@ export class XMLUtility {
 
           } else {
             // obtains the correct Value Model based on the variable name
-            var fractionValue = "";
-            var valueModel = fraction["ValueModelsByName"][variableName];
+            let fractionValue;
+            let valueModel = fraction["ValueModelsByName"][variableName];
 
             if (valueModel) {
 
-              var initialValue = parseFloat(valueModel["value"]);
-              var currentUnit = column["units"];
+              let initialValue = parseFloat(valueModel["value"]);
+              let currentUnit = column["units"];
 
-              var isArbitraryDigitCnt = (
+              let isArbitraryDigitCnt = (
                 column["displayedWithArbitraryDigitCount"] === "true"
               );
-              var cntSigDigits = column["countOfSignificantDigits"];
+              let cntSigDigits = column["countOfSignificantDigits"];
 
-              var uncertaintyType = uncertaintyColumn["uncertaintyType"];
-              var uncertaintyIsArbitraryDigitCnt = (
+              let uncertaintyType = uncertaintyColumn["uncertaintyType"];
+              let uncertaintyIsArbitraryDigitCnt = (
                 uncertaintyColumn["displayedWithArbitraryDigitCount"] === "true"
               );
 
               // performs mathematical computations
               if (unitConversions.hasOwnProperty(currentUnit)) {
-                var dividingNum = unitConversions[currentUnit];
-                var valueToRound = new BigNumber(
+                let dividingNum = unitConversions[currentUnit];
+                let valueToRound = new BigNumber(
                   initialValue / Math.pow(10, dividingNum)
                 );
 
@@ -360,7 +359,7 @@ export class XMLUtility {
                       // if both are sig figs, rounds based on uncertainty value
                       if (uncertaintyType === "ABS") {
                         // when uncertainty is absolute, number of decimal digits must match
-                        var numDecimalDigits = uncertaintyValue.decimalPlaces();
+                        let numDecimalDigits = uncertaintyValue.decimalPlaces();
 
                         fractionValue = valueToRound.round(
                           numDecimalDigits, BigNumber.ROUND_HALF_UP
@@ -370,9 +369,9 @@ export class XMLUtility {
                         // when uncertainty is percent, the number of fraction decimal digits is the same as the number of decimal digits when the number resulting from the following equation is rounded to the uncertainty digit count:
                         // fraction * (uncertainty / 100)
 
-                        var uncertaintyCntSigDigits = uncertaintyColumn["countOfSignificantDigits"];
+                        let uncertaintyCntSigDigits = uncertaintyColumn["countOfSignificantDigits"];
 
-                        var modelNumber = new BigNumber(
+                        let modelNumber = new BigNumber(
                           valueToRound.times(
                             uncertaintyValue.times(0.01)
                           )
@@ -391,7 +390,7 @@ export class XMLUtility {
                   }
                 }
 
-                val = fractionValue.toString();
+                let val = fractionValue ? fractionValue.toString() : "";
 
                 if (columnVisible) {
 
@@ -409,7 +408,7 @@ export class XMLUtility {
                       else
                         hasDecimals[colIndex] = true;
 
-                      var len = val.split(".")[1].length;
+                      let len = val.split(".")[1].length;
                       if (colIndex >= sizes.length - 1)
                         sizes.splice(colIndex, 0, len);
                       else {
@@ -440,7 +439,7 @@ export class XMLUtility {
                       else
                         hasDecimals[colIndex] = true;
 
-                      var len = val.split(".")[1].length;
+                      let len = val.split(".")[1].length;
                       if (colIndex >= sizes.length)
                         sizes.push(len);
                       else {
@@ -484,22 +483,22 @@ export class XMLUtility {
     });
 
     // must now add padding to the numbers
-    var currentColumn = 0;
+    let currentColumn = 0;
     for (let i = 1; i < fractionArray.length; i++) {
-      var row = fractionArray[i];
+      let row = fractionArray[i];
 
       // loops through categories, not including first and last (names of fraction)
       for (let j = 1; j < row.length - 1; j++) {
-        var category = row[j];
+        let category = row[j];
 
         for (let k = 0; k < category.length; k++) {
-          var val = category[k];
+          let val = category[k];
           if (val !== "-") {
 
             // does this column contain a decimal?
             if (hasDecimals[currentColumn]) {
-              var maxSize = sizes[currentColumn];
-              var padding = 0;
+              let maxSize = sizes[currentColumn];
+              let padding = 0;
 
               if (val.includes("."))
                 // padding is equal to the difference in decimal lengths
@@ -525,7 +524,7 @@ export class XMLUtility {
   }
 
   public checkFileValidity(file: FileEntry, directory: string = "data"): Observable<string> {
-    var path = file.fullPath;
+    let path = file.fullPath;
     if (path[0] === '/')
       path = path.substring(1);
 
@@ -533,7 +532,7 @@ export class XMLUtility {
       this.fileUtil.readFileText(path, directory)
         .subscribe(
         fileData => {
-          var jsonObj = this.x2js.xml2js(fileData);
+          let jsonObj = this.x2js.xml2js(fileData);
           if (jsonObj) {
             if (jsonObj['Aliquot'])
               observer.next('Aliquot');
@@ -552,31 +551,31 @@ export class XMLUtility {
     return new Observable(observer => {
       this.checkFileValidity(file).subscribe(result => {
         if (result === 'Aliquot') {
-          var path = file.fullPath;
+          let path = file.fullPath;
           if (path[0] === '/')
             path = path.substring(1);
 
           this.fileUtil.readFileText(path)
             .subscribe(
             fileData => {
-              var aliquotJson = this.x2js.xml2js(fileData);
+              let aliquotJson = this.x2js.xml2js(fileData);
               if (aliquotJson) {
                 // first obtains the root node in Aliquot XML
-                var rootNodes = aliquotJson["Aliquot"];
+                let rootNodes = aliquotJson["Aliquot"];
 
                 // then obtains each of the values for the aliquot
-                var aliquotName = rootNodes["aliquotName"];
-                var fractions = rootNodes["analysisFractions"]["AnalysisFraction"];
-                var images = rootNodes["analysisImages"]["AnalysisImage"];
+                let aliquotName = rootNodes["aliquotName"];
+                let fractions = rootNodes["analysisFractions"]["AnalysisFraction"];
+                let images = rootNodes["analysisImages"]["AnalysisImage"];
 
                 // checks to make sure all arrays are actually arrays (will be object if only one node)
                 if (fractions && !Array.isArray(fractions)) {
-                  var fractionArray = [];
+                  let fractionArray = [];
                   fractionArray.push(fractions);
                   fractions = fractionArray;
                 }
                 if (images && !Array.isArray(images)) {
-                  var imagesArray = [];
+                  let imagesArray = [];
                   imagesArray.push(images);
                   images = imagesArray;
                 }
@@ -584,16 +583,16 @@ export class XMLUtility {
                 // adds a Value Models object to each fraction which contains every Value Model indexed by their names
                 fractions.forEach(function(fraction) {
                   fraction["ValueModelsByName"] = {};
-                  var valueModelObj = fraction["ValueModelsByName"];
+                  let valueModelObj = fraction["ValueModelsByName"];
 
-                  for (var key in fraction) {
+                  for (let key in fraction) {
                     if (fraction.hasOwnProperty(key)) {
                       // obtains Value Models if they exist
-                      var valueModelList = fraction[key]["ValueModel"];
+                      let valueModelList = fraction[key]["ValueModel"];
                       if (valueModelList) {
                         // first ensures that it is a list
                         if (valueModelList && !Array.isArray(valueModelList)) {
-                          var valueModelArray = [];
+                          let valueModelArray = [];
                           valueModelArray.push(valueModelList);
                           valueModelList = valueModelArray;
                         }
@@ -628,23 +627,23 @@ export class XMLUtility {
     return new Observable(observer => {
       this.checkFileValidity(file).subscribe(result => {
         if (result === 'Report Settings') {
-          var path = file.fullPath;
+          let path = file.fullPath;
           if (path[0] === '/')
             path = path.substring(1);
 
           this.fileUtil.readFileText(path).subscribe(result => {
-            var aliquotJson = this.x2js.xml2js(result);
+            let aliquotJson = this.x2js.xml2js(result);
             if (aliquotJson) {
               // first obtains the root node in ReportSettings XML
-              var rootNodes = aliquotJson["ReportSettings"];
+              let rootNodes = aliquotJson["ReportSettings"];
 
-              var categories = {};
+              let categories = {};
               this.REPORT_CATEGORY_LIST.forEach(function(category) {
-                var categoryNode = rootNodes[category];
+                let categoryNode = rootNodes[category];
 
                 // checks to make sure the ReportColumn object is an array (if there is a single node it will be an object)
                 if (categoryNode["categoryColumns"]["ReportColumn"] && !Array.isArray(categoryNode["categoryColumns"]["ReportColumn"])) {
-                  var reportColumnArray = [];
+                  let reportColumnArray = [];
                   reportColumnArray.push(categoryNode["categoryColumns"]["ReportColumn"]);
                   categoryNode["categoryColumns"]["ReportColumn"] = reportColumnArray;
                 }
@@ -668,13 +667,13 @@ export class XMLUtility {
 
   public createTableData(aliquot: Aliquot, reportSettings: ReportSettings) {
     // stores the returned list of the Report Settings array and visible categories into a temporary variable
-    var temp = this.createReportSettingsArray(reportSettings);
-    var reportSettingsArray = temp[0];
-    var visibleCategories = temp[1];
+    let temp = this.createReportSettingsArray(reportSettings);
+    let reportSettingsArray = temp[0];
+    let visibleCategories = temp[1];
 
-    var fractionArray = this.createFractionArray(aliquot, reportSettings, reportSettingsArray, visibleCategories);
+    let fractionArray = this.createFractionArray(aliquot, reportSettings, reportSettingsArray, visibleCategories);
 
-    var tableArray = reportSettingsArray.concat(fractionArray);
+    let tableArray = reportSettingsArray.concat(fractionArray);
 
     return tableArray;
   }

@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar color="light">
+    <ion-buttons start>
+      <button color="accent" ion-button icon-only menuToggle="left" (click)="hideStatusBar()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Manage Report</ion-title>
+    <ion-buttons end>
+      <button color="accent" ion-button menuToggle="right" (click)="hideStatusBar()">
+        <ion-icon name="contact"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+  <ion-grid class="full-height">
+    <ion-row id="aliquot-row" align-items-center justify-content-center>
+      <div class="reports-card">
+        <div class="header" text-center>Aliquot</div>
+        <div class="body">
+          <div class="body-left">{{ currentAliquot?.name | fileName }}</div>
+          <div class="body-right">
+            <button class="edit-button" ion-button clear icon-only (click)="openFileViewer('Aliquots')">
+              <ion-icon name="ios-create-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ion-row>
+    <ion-row id="report-settings-row" align-items-center justify-content-center>
+      <div class="reports-card">
+        <div class="header" text-center>Report Settings</div>
+        <div class="body">
+          <div class="body-left">{{ currentReportSettings?.name | fileName }}</div>
+          <div class="body-right">
+            <button class="edit-button" ion-button clear icon-only (click)="openFileViewer('Report Settings')">
+              <ion-icon name="ios-create-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ion-row>
+    <ion-row id="button-row" align-items-center justify-content-center>
+      <ion-col text-center>
+        <button *ngIf="!opening" ion-button [disabled]="!currentAliquot || !currentReportSettings" (click)="openTable()">View Report</button>
+        <ion-spinner *ngIf="opening" color="primary"></ion-spinner>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

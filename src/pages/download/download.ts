@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-
-import { Platform, ToastController} from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
 
-import { FileUtility } from '../../utilities/FileUtility';
-import { XMLUtility } from '../../utilities/XMLUtility';
 import { GeochronUtility } from '../../utilities/GeochronUtility';
-import { FileName } from '../viewFiles/viewFiles';
+import { FileNamePipe } from '../../utilities/pipes/FileName';
 
 @Component({
   selector: 'page-download',
@@ -24,7 +22,7 @@ export class DownloadPage {
   username: string = "";
   password: string = "";
 
-  constructor(public platform: Platform, public storage: Storage, public fileUtil: FileUtility, public xmlUtil: XMLUtility, private geochron: GeochronUtility, public toastCtrl: ToastController) {
+  constructor(private statusBar: StatusBar, private storage: Storage, private geochron: GeochronUtility, private toastCtrl: ToastController) {
     this.storage.get('loggedIn').then((value) => {
       if (value) {
         this.loggedIn = true;
@@ -50,7 +48,10 @@ export class DownloadPage {
         this.url = "";
         this.fileName = "";
       }
-    }, (error) => console.log(JSON.stringify(error)));
+    }, (error) => {
+      this.downloading = false;
+      this.displayToast('ERROR: unable to download file');
+    });
   }
 
   downloadIGSN() {
@@ -69,11 +70,18 @@ export class DownloadPage {
             this.igsn = "";
             this.fileName = "";
           }
-        }, (error) => console.log(JSON.stringify(error)));
+        }, (error) => {
+          this.downloading = false;
+          this.displayToast('ERROR: unable to download file');
+        });
     } else {
       this.displayToast('ERROR: invalid IGSN');
       this.downloading = false;
     }
+  }
+
+  hideStatusBar() {
+    this.statusBar.hide();
   }
 
   displayToast(text: string) {
@@ -84,4 +92,5 @@ export class DownloadPage {
       cssClass: 'text-center'
     }).present();
   }
+
 }

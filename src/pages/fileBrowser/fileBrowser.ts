@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-
-import { ViewController, NavParams, Platform, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
+import { ViewController, NavParams, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
 import { FileUtility } from '../../utilities/FileUtility';
 
-import { Name } from '../history/history';
-
+import { FileNameFromPathPipe } from '../../utilities/pipes/FileNameFromPath';
 
 @Component({
   templateUrl: 'fileBrowser.html'
@@ -26,9 +24,8 @@ export class FileBrowser {
   copying: any = false;
   cutting: boolean = false;
 
-  constructor(public viewCtrl: ViewController, public params: NavParams, public platform: Platform, public actionSheetCtrl: ActionSheetController, public alertCtrl: AlertController, public toastCtrl: ToastController, public xml: XMLUtility, public fileUtil: FileUtility) {
-
-    let directory = params.get('directory');
+  constructor(private viewCtrl: ViewController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private alertCtrl: AlertController, private toastCtrl: ToastController, private xml: XMLUtility, private fileUtil: FileUtility) {
+    let directory = this.params.get('directory');
     if (!directory || directory === '') {
       this.currentDirectory = '/chroni/'
       this.parentDirectory = '';
@@ -142,7 +139,7 @@ export class FileBrowser {
     } else {
       this.alertCtrl.create({
         title: 'WARNING!',
-        message: 'Removing "' + file.name + '" will also delete all files/folders contained within it. Do you wish to continue?',
+        message: 'Removing "' + file.name + '" will also delete all files and folders inside of it. Do you wish to continue?',
         buttons: [
           {
             text: 'Cancel',

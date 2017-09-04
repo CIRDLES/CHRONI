@@ -6,12 +6,13 @@
         {{ parentName + "/" }}
       </button>
     </ion-buttons>
-    <ion-title>{{ currentDirectory | name }}</ion-title>
+    <ion-title>{{ currentDirectory | fileNameFromPath }}</ion-title>
     <ion-buttons end>
       <button ion-button clear (click)="dismiss()">Close</button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let file of files" #itemSliding>
