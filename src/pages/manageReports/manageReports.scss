@@ -33,7 +33,7 @@ page-manage-reports {
       align-items: center;
       border-radius: $card-bezel $card-bezel 0 0;
       background-color: color($colors, primary);
-      font-size: 1.2em;
+      font-size: 1.3em;
       font-weight: 500;
       color: #FFF;
     }
@@ -42,7 +42,7 @@ page-manage-reports {
       flex: 70;
       border-radius: 0 0 $card-bezel $card-bezel;
       background-color: color($colors, light);
-      padding: 0px 10px;
+      padding: 0px 10px 0px 15px;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -52,7 +52,7 @@ page-manage-reports {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        font-size: 1.15em;
+        font-size: 1.25em;
       }
     }
   }
@@ -60,6 +60,10 @@ page-manage-reports {
   .edit-button {
     height: 35px;
     width: 35px;
+  }
+
+  .edit-icon {
+    font-size: 2em;
   }
 
   .card-inner-grid {

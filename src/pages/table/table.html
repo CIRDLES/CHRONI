@@ -1,13 +1,61 @@
-<ion-header>
+<ion-header id="toolbar">
   <ion-navbar>
-    <ion-title>temp</ion-title>
+    <ion-title>{{ report?.getAliquot()?.getName() | fileName }}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="showMenu($event)">
         <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content id="tableContent" no-bounce>
+  <ion-row>
+    <ion-col id="headerScrollLeft" [ngStyle]="{'height': headerHeight + 'px', 'max-width': (columnLengths[0]*10) + 'px'}">
+      <table class="scrollbox">
+        <thead id="tableHeadLeft">
+          <tr *ngFor="let row of headerArray">
+            <th class="tableCell" [ngStyle]="{'width': (columnLengths[0]*10) + 'px'}">
+              {{ row[0] }}
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </ion-col>
+    <ion-col id="headerScrollRight" #headerScroll [ngStyle]="{'height': headerHeight + 'px'}">
+      <table class="scrollbox">
+        <thead id="tableHeadRight">
+          <tr *ngFor="let row of headerArray; let firstRow = first">
+            <th class="tableCell" *ngFor="let column of row.slice(1); let index = index;" [colSpan]="firstRow ? firstRowColSpans[index+1] : null" [ngStyle]="{'min-width': !firstRow ? columnLengths[index+1] + 'em' : null, 'max-width': !firstRow ? columnLengths[index+1] + 'em' : null}">
+              {{ column }}
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col id="leftBodyScroll" #leftBodyScroll [ngStyle]="{'height': bodyScrollHeight + 'px', 'max-width': (columnLengths[0]*10) + 'px'}">
+      <table class="scrollbox">
+        <tbody id="tableBodyLeft">
+          <tr *ngFor="let row of fractionArray">
+            <td class="tableCell" [ngStyle]="{'width': columnLengths[0]*10 + 'px'}">
+              {{ row[0] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ion-col>
+    <ion-col zoom="false" id="mainBodyScroll" #mainBodyScroll [ngStyle]="{'height': bodyScrollHeight + 'px'}">
+      <table class="scrollbox">
+        <tbody id="tableBody">
+          <tr *ngFor="let row of fractionArray">
+            <td class="tableCell" [hidden]="first" *ngFor="let column of row; let index = index; let first = first;" [ngStyle]="{'min-width': columnLengths[index] + 'em', 'max-width': columnLengths[index] + 'em', 'text-align': column === '-' ? 'center' : ''}">
+              {{ column }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ion-col>
+  </ion-row>
 </ion-content>

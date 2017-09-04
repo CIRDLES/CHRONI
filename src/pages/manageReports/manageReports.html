@@ -21,9 +21,9 @@
         <div class="header" text-center>Aliquot</div>
         <div class="body">
           <div class="body-left">{{ currentAliquot?.name | fileName }}</div>
-          <div class="body-right">
+          <div>
             <button class="edit-button" ion-button clear icon-only (click)="openFileViewer('Aliquots')">
-              <ion-icon name="ios-create-outline"></ion-icon>
+              <ion-icon class="edit-icon" name="ios-create-outline"></ion-icon>
             </button>
           </div>
         </div>

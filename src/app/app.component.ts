@@ -181,7 +181,7 @@ export class Chroni {
     this.toastCtrl.create({
       message: text,
       duration: 2000,
-      position: 'bottom',
+      position: 'top',
       cssClass: 'text-center'
     }).present();
   }
