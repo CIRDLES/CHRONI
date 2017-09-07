@@ -3,7 +3,7 @@
     <name>CHRONI</name>
     <description>A mobile application that presents archived data downloaded from the Geochron database in a customizable format for use by geologists in the field. The purpose of CHRONI is to allow people to archive data, while collecting data in the field. With CHRONI, users do not need to remain stationary.</description>
     <author email="cirdlesorg@gmail.com" href="https://cirdles.org">CIRDLES</author>
-    <content original-src="index.html" src="http://192.168.1.26:8100" />
+    <content original-src="index.html" src="http://192.168.66.235:8100" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-intent href="*" />
@@ -93,6 +93,8 @@
     <allow-navigation href="http://192.168.1.26:8100" />
     <allow-navigation href="http://10.5.135.148:8100" />
     <allow-navigation href="http://10.5.206.123:8100" />
+    <allow-navigation href="http://10.5.190.172:8100" />
+    <allow-navigation href="http://192.168.66.235:8100" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-3dtouch" spec="^1.3.5" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.5.9" />

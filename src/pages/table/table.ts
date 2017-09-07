@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NavController, Platform, MenuController, NavParams, PopoverController, ViewController, ModalController, Modal } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -8,6 +8,9 @@ import { Report } from '../../utilities/ReportUtility';
 import { FileUtility } from '../../utilities/FileUtility';
 
 import { FileNamePipe } from '../../utilities/pipes/FileName';
+
+import IScroll from  'iscroll';
+import { CustomScroll } from '../../utilities/CustomScroll/CustomScroll';
 
 @Component({
   selector: 'page-table',
@@ -27,7 +30,11 @@ export class TablePage {
   headerArray: Array<Array<string>> = [];
   fractionArray: Array<Array<string>> = [];
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private platform: Platform, private params: NavParams, private menu: MenuController, private popoverCtrl: PopoverController, private screenOrientation: ScreenOrientation) {
+  mainScroll: CustomScroll;
+  leftScroll: CustomScroll;
+  topScroll: CustomScroll;
+
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private platform: Platform, private params: NavParams, private menu: MenuController, private popoverCtrl: PopoverController, private screenOrientation: ScreenOrientation, private zone: NgZone) {
 
     this.bodyScrollHeight = window.screen.height;
 
@@ -35,6 +42,9 @@ export class TablePage {
       this.headerHeight = null;
       this.bodyScrollHeight = window.screen.height;
       this.calculateHeights(1);
+      this.mainScroll.updateScrollHeight(this.bodyScrollHeight);
+      this.leftScroll.updateScrollHeight(this.bodyScrollHeight);
+      this.topScroll.updateScrollWidth(document.getElementById('mainBodyScroll').clientWidth);
     });
 
     this.report = this.params.get("report");
@@ -84,31 +94,25 @@ export class TablePage {
   }
 
   initCustomScrolling() {
-    let mainBodyEl: HTMLElement = document.getElementById('mainBodyScroll');
-    let leftBodyEl: HTMLElement = document.getElementById('leftBodyScroll');
-    let headerEl: HTMLElement = document.getElementById('headerScrollRight');
-
-    mainBodyEl.addEventListener('scroll', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (mainBodyEl.scrollLeft !== headerEl.scrollLeft)
-        headerEl.scrollLeft = mainBodyEl.scrollLeft;
-      if (mainBodyEl.scrollTop !== leftBodyEl.scrollTop)
-        leftBodyEl.scrollTop = mainBodyEl.scrollTop;
-    });
-
-    leftBodyEl.addEventListener('scroll', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (leftBodyEl.scrollTop !== mainBodyEl.scrollTop)
-        mainBodyEl.scrollTop = leftBodyEl.scrollTop;
-    });
-
-    headerEl.addEventListener('scroll', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (headerEl.scrollLeft !== mainBodyEl.scrollLeft)
-        mainBodyEl.scrollLeft = headerEl.scrollLeft;
+    // must run outside of angular so events are fired properly
+    this.zone.runOutsideAngular(() => {
+      this.mainScroll = new CustomScroll('#mainBodyScroll', {
+        bounce: false,
+        scrollHeight: this.bodyScrollHeight
+      });
+      this.leftScroll = new CustomScroll('#leftBodyScroll', {
+        bounce: false,
+        scrollX: false,
+        scrollHeight: this.bodyScrollHeight
+      });
+      this.topScroll = new CustomScroll('#headerScrollRight', {
+        bounce: false,
+        scrollY: false
+      });
+      this.mainScroll.addVerticalSync(this.leftScroll);
+      this.mainScroll.addHorizontalSync(this.topScroll);
+      this.leftScroll.addVerticalSync(this.mainScroll);
+      this.topScroll.addHorizontalSync(this.mainScroll);
     });
   }
 

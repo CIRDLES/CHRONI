@@ -22,7 +22,7 @@
         </thead>
       </table>
     </ion-col>
-    <ion-col id="headerScrollRight" #headerScroll [ngStyle]="{'height': headerHeight + 'px'}">
+    <ion-col id="headerScrollRight" [ngStyle]="{'height': headerHeight + 'px'}">
       <table class="scrollbox">
         <thead id="tableHeadRight">
           <tr *ngFor="let row of headerArray; let firstRow = first">
@@ -35,8 +35,8 @@
     </ion-col>
   </ion-row>
   <ion-row>
-    <ion-col id="leftBodyScroll" #leftBodyScroll [ngStyle]="{'height': bodyScrollHeight + 'px', 'max-width': (columnLengths[0]*10) + 'px'}">
-      <table class="scrollbox">
+    <ion-col id="leftBodyScroll" [ngStyle]="{'height': bodyScrollHeight + 'px', 'max-width': (columnLengths[0]*10) + 'px'}">
+      <table class="scrollbox" id="leftBodyScrollTable">
         <tbody id="tableBodyLeft">
           <tr *ngFor="let row of fractionArray">
             <td class="tableCell" [ngStyle]="{'width': columnLengths[0]*10 + 'px'}">
@@ -46,7 +46,7 @@
         </tbody>
       </table>
     </ion-col>
-    <ion-col zoom="false" id="mainBodyScroll" #mainBodyScroll [ngStyle]="{'height': bodyScrollHeight + 'px'}">
+    <ion-col zoom="false" id="mainBodyScroll" [ngStyle]="{'height': bodyScrollHeight + 'px'}">
       <table class="scrollbox">
         <tbody id="tableBody">
           <tr *ngFor="let row of fractionArray">
