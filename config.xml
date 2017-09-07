@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.cirdles.chroni" version="2.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>CHRONI</name>
     <description>A mobile application that presents archived data downloaded from the Geochron database in a customizable format for use by geologists in the field. The purpose of CHRONI is to allow people to archive data, while collecting data in the field. With CHRONI, users do not need to remain stationary.</description>
     <author email="cirdlesorg@gmail.com" href="https://cirdles.org">CIRDLES</author>
