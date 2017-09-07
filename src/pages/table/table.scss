@@ -13,43 +13,22 @@ page-table {
   }
 
   #headerScrollLeft {
-    // .scroll-content {
-    //   overflow: hidden;
-    // }
     padding: 0px;
-    // overflow: scroll;
-    // flex: 1;
     z-index: 3;
   }
 
   #headerScrollRight {
-    // .scroll-content {
-    //   overflow-x: auto;
-    // }
     padding: 0px;
-    // overflow: scroll;
-    // flex: 1;
     z-index: 2;
   }
 
   #leftBodyScroll {
-    // .scroll-content {
-    //   overflow-y: auto;
-    // }
     padding: 0px;
-    // overflow-y: scroll;
-    // overflow-x: none;
-    // flex: 1;
     z-index: 2;
   }
 
   #mainBodyScroll {
-    // .scroll-content {
-    //   overflow: auto;
-    // }
     padding: 0px;
-    // overflow: scroll;
-    // flex: 1;
     z-index: 1;
   }
 

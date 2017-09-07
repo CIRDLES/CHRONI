@@ -9,7 +9,6 @@ import { FileUtility } from '../../utilities/FileUtility';
 
 import { FileNamePipe } from '../../utilities/pipes/FileName';
 
-import IScroll from  'iscroll';
 import { CustomScroll } from '../../utilities/CustomScroll/CustomScroll';
 
 @Component({

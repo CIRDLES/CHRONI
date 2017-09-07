@@ -31,7 +31,7 @@ export class Chroni {
   username: string = "";
   password: string = "";
   loggedIn: boolean = false;
-  loggingIn: boolean = true;
+  loggingIn: boolean = false;
   loggingOut: boolean = false;
 
   constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private storage: Storage, private screenOrientation: ScreenOrientation, private toastCtrl: ToastController, private geochron: GeochronUtility, private fileUtil: FileUtility, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch) {
@@ -70,32 +70,42 @@ export class Chroni {
       });
 
       this.storage.get('loggedIn').then((val: boolean) => {
+        let error = () => {
+          this.loggingIn = false;
+          this.displayToast('There was an error while logging into GeoChron');
+        }
         if (val === true) {
+          this.loggingIn = true;
           // attempts to log into GeoChron
           this.storage.get('geochronUsername').then((user: string) => {
             if (user && user !== "") {
+              error = () => {
+                this.loggingIn = false;
+                this.displayToast('There was an error while logging into GeoChron as ' + user);
+              }
               this.username = user;
               this.storage.get('geochronPassword').then((pass: string) => {
                 if (pass && pass !== "") {
                   this.password = pass;
                   this.geochron.validateCredentials(user, pass).subscribe((valid: boolean) => {
                     // if credentials are valid, set loggedIn to true
-                    this.loggingIn = false;
-                    this.loggedIn = valid !== null && valid;
                     if (valid) {
+                      this.loggingIn = false;
+                      this.loggedIn = valid !== null && valid;
                       this.storage.set('loggedIn', true);
-                      this.displayToast('Successfully logged into GeoChron as ' + user);
-                    }
-                  }, (error) => this.loggingIn = false);
+                      this.displayToast('Successfully logged into GeoChron as ' + user, 2000);
+                    } else
+                      error();
+                  }, (err) => error());
                 } else
-                  this.loggingIn = false;
-              }, (error) => this.loggingIn = false);
+                  error();
+              }, (err) => error());
             } else
-              this.loggingIn = false;
-          }, (error) => this.loggingIn = false);
+              error();
+          }, (err) => error());
         } else
-          this.loggingIn = false;
-      }, (error) => this.loggingIn = false);
+          error();
+      }, (err) => console.log(err));
     });
   }
 
@@ -103,22 +113,24 @@ export class Chroni {
     this.loggingIn = true;
     let user = this.username;
     let pass = this.password;
+    let error = () => {
+      this.loggingIn = false;
+      this.displayToast('There was an error while logging into GeoChron as ' + user);
+    }
     this.geochron.validateCredentials(user, pass)
       .subscribe((valid: boolean) => {
-        if (valid)
-          this.geochron.saveCurrentUser(user, pass).subscribe(
-            _ => this.loggingIn = false,
-            _ => this.loggingIn = false,
+        if (valid) {
+          this.geochron.saveCurrentUser(user, pass).subscribe(_ => { }, _ => { },
             () => {
               this.loggingIn = false;
               this.loggedIn = true;
-              this.displayToast('Successfully logged into Geochron as ' + user);
+              this.displayToast('Successfully logged into Geochron as ' + user, 2000);
             });
-        else {
+        } else {
           this.loggingIn = false;
-          this.displayToast('Could not log in, invalid Geochron credentials');
+          this.displayToast('Error logging in, invalid Geochron credentials');
         }
-      });
+      }, (err) => error());
   }
 
   logout() {
@@ -177,10 +189,10 @@ export class Chroni {
     this.browser = this.iab.create(this.helpURL, '_blank', options);
   }
 
-  displayToast(text: string) {
+  displayToast(text: string, duration=3000) {
     this.toastCtrl.create({
       message: text,
-      duration: 2000,
+      duration: duration,
       position: 'top',
       cssClass: 'text-center'
     }).present();
