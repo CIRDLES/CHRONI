@@ -8,8 +8,6 @@ export class CustomScroll {
 
   x: number;
   y: number;
-  directionX: number;
-  directionY: number;
 
   moved: boolean;
   distX: number;
@@ -67,8 +65,6 @@ export class CustomScroll {
 
     this.x = 0;
     this.y = 0;
-    this.directionX = 0;
-  	this.directionY = 0;
 
     this.initEvents();
     this.refresh();
@@ -100,8 +96,6 @@ export class CustomScroll {
     this.moved = false;
     this.distX = 0;
     this.distY = 0;
-    this.directionX = 0;
-    this.directionY = 0;
 
     this.startX = this.x;
     this.startY = this.y;
@@ -164,9 +158,6 @@ export class CustomScroll {
         newY = newY > 0 ? 0 : this.maxScrollY;
     }
 
-    this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
-		this.directionY = deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0;
-
     this.moved = true;
 
     this.translate(doX ? newX : this.x, doY ? newY : this.y);
@@ -190,7 +181,7 @@ export class CustomScroll {
     let newY = Math.round(this.y);
     let distanceX = Math.abs(newX - this.startX);
     let distanceY = Math.abs(newY - this.startY);
-    let time = 0;
+    let time = (syncOptions && syncOptions.time) || 0;
 
     this.isInTransition = false;
 
@@ -200,12 +191,6 @@ export class CustomScroll {
       return;
 
     this.endTime = (syncOptions && syncOptions.endTime) || Date.now();
-    if (!syncOptions) {
-      for (let scroll of this.syncHorizontal)
-        scroll.end(ev, { doX: true, doY: false, endTime: this.endTime });
-      for (let scroll of this.syncVertical)
-        scroll.end(ev, { doX: false, doY: true, endTime: this.endTime });
-    }
     let duration = this.endTime - this.startTime;
 
     if (this.options.momentum && duration < 300) {
@@ -213,8 +198,16 @@ export class CustomScroll {
       let momentumY = this.hasVerticalScroll ? this.calculateMomentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : { destination: newY, duration: 0 };
       newX = momentumX.destination;
 			newY = momentumY.destination;
-			time = Math.max(momentumX.duration, momentumY.duration);
+      if (time === 0)
+			   time = Math.max(momentumX.duration, momentumY.duration);
 			this.isInTransition = true;
+    }
+
+    if (!syncOptions) {
+      for (let scroll of this.syncHorizontal)
+        scroll.end(ev, { doX: true, doY: false, endTime: this.endTime, time: time });
+      for (let scroll of this.syncVertical)
+        scroll.end(ev, { doX: false, doY: true, endTime: this.endTime, time: time });
     }
 
     if (newX !== this.x || newY !== this.y)
@@ -352,8 +345,6 @@ export class CustomScroll {
 		}
 
     this.endTime = 0;
-		this.directionX = 0;
-		this.directionY = 0;
 
     this.reset(0);
   }

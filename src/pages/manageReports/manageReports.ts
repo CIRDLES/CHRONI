@@ -84,12 +84,13 @@ export class ManageReportsPage {
               reportSettings,
               this.xml.createTableData(aliquot, reportSettings)
             );
-            let entry = new HistoryEntry(report, new Date());
-            this.historyUtil.addEntry(entry);
-            this.storage.set('currentAliquot', this.currentAliquot);
-            this.storage.set('currentReportSettings', this.currentReportSettings);
-            this.opening = false;
-            this.navCtrl.push(TablePage, { report: report });
+            this.navCtrl.push(TablePage, { report: report }).then(() => {
+              let entry = new HistoryEntry(report, new Date());
+              this.historyUtil.addEntry(entry);
+              this.storage.set('currentAliquot', this.currentAliquot);
+              this.storage.set('currentReportSettings', this.currentReportSettings);
+              this.opening = false;
+            });
           } else {
             this.opening = false;
             this.displayToast("Could not open table, invalid Report Settings XML file");
