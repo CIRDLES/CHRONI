@@ -1,9 +1,16 @@
 <ion-header>
-  <ion-navbar>
-    <button color="accent" ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
+  <ion-navbar color="light">
+    <ion-buttons start>
+      <button color="accent" ion-button icon-only menuToggle="left" (click)="hideStatusBar()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Download</ion-title>
+    <ion-buttons end>
+      <button color="accent" ion-button menuToggle="right" (click)="hideStatusBar()">
+        <ion-icon name="contact"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
   <div padding>
     <ion-segment [(ngModel)]="downloadType">
@@ -12,6 +19,7 @@
     </ion-segment>
   </div>
 </ion-header>
+
 <ion-content no-bounce>
   <ion-list id="list">
     <ion-item *ngIf="downloadType === 'url'">

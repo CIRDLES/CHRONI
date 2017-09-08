@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { File, FileEntry, DirectoryEntry, Entry } from '@ionic-native/file';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { Storage } from '@ionic/storage';
 
 const defaultAliquotURL: string = 'https://raw.githubusercontent.com/CIRDLES/cirdles.github.com/master/assets/Default-Aliquot-XML/Default Aliquot.xml';
@@ -12,9 +12,9 @@ const defaultReportSettings2URL: string = 'https://raw.githubusercontent.com/CIR
 @Injectable()
 export class FileUtility {
 
-  private fileTransfer: TransferObject;
+  private fileTransfer: FileTransferObject;
 
-  constructor(private platform: Platform, private storage: Storage, private transfer: Transfer, private file: File) {
+  constructor(private platform: Platform, private storage: Storage, private transfer: FileTransfer, private file: File) {
     this.platform.ready().then(_ => {
       this.fileTransfer = this.transfer.create();
     });

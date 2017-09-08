@@ -1,22 +1,19 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, ModalController, ToastController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
-
+import { Nav, Platform, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { Storage } from '@ionic/storage';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { ThemeableBrowser, ThemeableBrowserObject, ThemeableBrowserOptions } from '@ionic-native/themeable-browser';
 import { ThreeDeeTouch, ThreeDeeTouchQuickAction } from '@ionic-native/three-dee-touch';
-import { ScreenOrientation } from '@ionic-native/screen-orientation';
+
+import { ManageReportsPage } from '../pages/manageReports/manageReports';
+import { DownloadPage } from '../pages/download/download';
+import { HistoryPage } from '../pages/history/history';
+import { AboutPage } from '../pages/about/about';
 
 import { FileUtility } from '../utilities/FileUtility';
 import { GeochronUtility } from '../utilities/GeochronUtility';
-
-import { About } from '../pages/about/about';
-import { History } from '../pages/history/history';
-import { Profile } from '../pages/profile/profile';
-import { ViewFiles } from '../pages/viewFiles/viewFiles';
-import { DownloadPage } from '../pages/download/download';
-
 
 @Component({
   templateUrl: 'app.html'
@@ -24,33 +21,31 @@ import { DownloadPage } from '../pages/download/download';
 export class Chroni {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = ViewFiles;
-  pages: Array<{ title: string, component: any }>;
+  rootPage: any = ManageReportsPage;
+  pages: Array<{ title: string, component: Component }> = [];
 
-  private helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
-  private browser: ThemeableBrowserObject;
+  helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
+  browser: ThemeableBrowserObject;
 
-  constructor(private platform: Platform, private modalCtrl: ModalController, private geochron: GeochronUtility, private fileUtil: FileUtility, private statusBar: StatusBar, private storage: Storage, private splashScreen: SplashScreen, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController, private screenOrientation: ScreenOrientation) {
-    this.initializeApp();
+  // Geochron menu variables
+  username: string = "";
+  password: string = "";
+  loggedIn: boolean = false;
+  loggingIn: boolean = false;
+  loggingOut: boolean = false;
 
-    // used for an example of ngFor and navigation
+  constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private storage: Storage, private screenOrientation: ScreenOrientation, private toastCtrl: ToastController, private geochron: GeochronUtility, private fileUtil: FileUtility, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch) {
     this.pages = [
-      { title: 'Manage Report Table', component: ViewFiles },
+      { title: 'Manage Report Table', component: ManageReportsPage },
       { title: 'Download', component: DownloadPage },
-      // { title: 'Aliquots', component: AliquotsPage },
-      // { title: 'Report Settings', component: ReportSettingsPage},
-      { title: 'History', component: History },
-      { title: 'GeoChron Credentials', component: Profile },
-      { title: 'About', component: About }
+      { title: 'History', component: HistoryPage },
+      { title: 'About', component: AboutPage }
     ];
-  }
 
-  initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.statusBar.show();
 
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
 
@@ -75,31 +70,86 @@ export class Chroni {
       });
 
       this.storage.get('loggedIn').then((val: boolean) => {
+        let error = () => {
+          this.loggingIn = false;
+          this.displayToast('There was an error while logging into GeoChron');
+        }
         if (val === true) {
+          this.loggingIn = true;
           // attempts to log into GeoChron
           this.storage.get('geochronUsername').then((user: string) => {
             if (user && user !== "") {
+              error = () => {
+                this.loggingIn = false;
+                this.displayToast('There was an error while logging into GeoChron as ' + user);
+              }
+              this.username = user;
               this.storage.get('geochronPassword').then((pass: string) => {
                 if (pass && pass !== "") {
+                  this.password = pass;
                   this.geochron.validateCredentials(user, pass).subscribe((valid: boolean) => {
                     // if credentials are valid, set loggedIn to true
                     if (valid) {
+                      this.loggingIn = false;
+                      this.loggedIn = valid !== null && valid;
                       this.storage.set('loggedIn', true);
-                      this.displayToast('Successfully logged into GeoChron as ' + user);
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
+                      this.displayToast('Successfully logged into GeoChron as ' + user, 2000);
+                    } else
+                      error();
+                  }, (err) => error());
+                } else
+                  error();
+              }, (err) => error());
+            } else
+              error();
+          }, (err) => error());
+        } else
+          error();
+      }, (err) => console.log(err));
     });
   }
 
+  login() {
+    this.loggingIn = true;
+    let user = this.username;
+    let pass = this.password;
+    let error = () => {
+      this.loggingIn = false;
+      this.displayToast('There was an error while logging into GeoChron as ' + user);
+    }
+    this.geochron.validateCredentials(user, pass)
+      .subscribe((valid: boolean) => {
+        if (valid) {
+          this.geochron.saveCurrentUser(user, pass).subscribe(_ => { }, _ => { },
+            () => {
+              this.loggingIn = false;
+              this.loggedIn = true;
+              this.displayToast('Successfully logged into Geochron as ' + user, 2000);
+            });
+        } else {
+          this.loggingIn = false;
+          this.displayToast('Error logging in, invalid Geochron credentials');
+        }
+      }, (err) => error());
+  }
+
+  logout() {
+    this.loggingOut = true;
+    this.storage.set('loggedIn', false).then(() => {
+      this.loggedIn = false;
+      this.loggingOut = false;
+    });
+  }
+
+  hideStatusBar() {
+    this.statusBar.hide();
+  }
+
+  showStatusBar() {
+    this.statusBar.show();
+  }
+
   openPage(page) {
-    // Resets the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
 
@@ -116,35 +166,36 @@ export class Chroni {
         showPageTitle: true
       },
       backButton: {
-        wwwImage: 'assets/icon/close-icon.png',
-        wwwImagePressed: 'assets/icon/close-icon-pressed.png',
-        wwwImageDensity: 13,
-        align: 'left',
+        image: 'back',
+        imagePressed: 'back_pressed',
+        align: 'right',
         event: 'backPressed'
       },
       forwardButton: {
         image: 'forward',
         imagePressed: 'forward_pressed',
-        align: 'left',
+        align: 'right',
         event: 'forwardPressed'
       },
       closeButton: {
-        image: 'close',
-        imagePressed: 'close_pressed',
+        wwwImage: 'assets/icon/browser/close-icon.png',
+        wwwImagePressed: 'assets/icon/browser/close-icon-pressed.png',
+        wwwImageDensity: 13,
         align: 'left',
         event: 'closePressed'
       },
-      backButtonCanClose: true
+      backButtonCanClose: false
     };
     this.browser = this.iab.create(this.helpURL, '_blank', options);
   }
 
-  displayToast(text: string) {
+  displayToast(text: string, duration=3000) {
     this.toastCtrl.create({
       message: text,
-      duration: 3000,
-      position: 'bottom',
+      duration: duration,
+      position: 'top',
       cssClass: 'text-center'
     }).present();
   }
+
 }

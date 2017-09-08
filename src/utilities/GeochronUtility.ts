@@ -93,8 +93,10 @@ export class GeochronUtility {
 
   public validateCredentials(username: string, password: string): Observable<boolean> {
     let extractValid = (res: Response | any) => {
-      if (res instanceof Response) {
-        let resultJSON = this.x2js.xml2js(res.text().match(/<valid>.*<\/valid>/)[0]);
+      let text = (res && res instanceof Response) && res.text();
+      let match = (text && text.length > 0) && text.match(/<valid>.*<\/valid>/);
+      if (match) {
+        let resultJSON = this.x2js.xml2js(match[0]);
         return resultJSON && resultJSON['valid'] && resultJSON['valid'] === 'yes';
       } else
         return false;
@@ -105,7 +107,7 @@ export class GeochronUtility {
       let data = 'username=' + encodeURI(username) + '&password=' + encodeURI(password) + '&submit=submit';
       this.http.post(CREDENTIALS_URL, data, options).subscribe(
         (res: Response) => observer.next(extractValid(res)),
-        (res: Response | any) => observer.next(extractValid(res)));
+        (res: Response | any) => observer.error(extractValid(res)));
     });
   }
 

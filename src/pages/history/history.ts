@@ -1,22 +1,23 @@
-import { Component, Pipe } from '@angular/core';
-import { NavController, Platform, ModalController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
-import { TableView } from '../table/tableView';
+import { Component } from '@angular/core';
+import { NavController } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+
+import { TablePage } from '../table/table';
 
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
-import { XMLUtility } from '../../utilities/XMLUtility';
 
-declare var cordova: any;
+import { FileNameFromPathPipe } from '../../utilities/pipes/FileNameFromPath';
 
 @Component({
+  selector: 'page-history',
   templateUrl: 'history.html'
 })
-export class History {
+export class HistoryPage {
 
   history: Array<HistoryEntry> = [];
   opening: boolean = false;
 
-  constructor(private platform: Platform, private historyUtil: HistoryUtility, private navCtrl: NavController, private xml: XMLUtility, private modalCtrl: ModalController, private storage: Storage) { }
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private historyUtil: HistoryUtility) { }
 
   ionViewWillEnter() {
     this.history = this.historyUtil.getHistoryEntries();
@@ -29,23 +30,12 @@ export class History {
       this.historyUtil.addEntry(new HistoryEntry(report, new Date()));
 
       this.opening = false;
-      this.navCtrl.push(TableView, { report: report });
+      this.navCtrl.push(TablePage, { report: report });
     }
   }
 
-}
-
-@Pipe({
-  name: 'name'
-})
-export class Name {
-  transform(value, args) {
-    if (value && value !== '') {
-      var split = value.split('/');
-      if (split[split.length - 1] === '')
-        return split[split.length - 2];
-      else
-        return split[split.length - 1];
-    }
+  hideStatusBar() {
+    this.statusBar.hide();
   }
+
 }

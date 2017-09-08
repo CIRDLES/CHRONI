@@ -1,32 +1,34 @@
-.vscode/
-.DS_Store
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
 
-*.sw*
+*~
+*.sw[mnpcod]
 *.log
 *.tmp
 *.tmp.*
 log.txt
-
-# ionic
-node_modules/
-www/build/
-platforms/
-plugins/
-.io-config.json
-
-# Node
-*.log
+*.sublime-project
+*.sublime-workspace
+.vscode/
 npm-debug.log*
 
-# editor files
-/.idea/
-/.brackets.json
+.idea/
+.sass-cache/
+.tmp/
+.versions/
+coverage/
+dist/
+node_modules/
+tmp/
+temp/
+hooks/
+platforms/
+plugins/
+plugins/android.json
+plugins/ios.json
+www/
+$RECYCLE.BIN/
 
-# iOS Platform
-*.mode1v3
-*.perspectivev3
-*.pbxuser
-
-# no generated images
-/resources/android/
-/resources/ios/
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate

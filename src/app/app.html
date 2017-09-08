@@ -1,20 +1,45 @@
-<ion-menu id="sideMenu" [content]="content">
+<ion-menu side="left" [content]="contentLeft" (ionDrag)="hideStatusBar()" (ionOpen)="hideStatusBar()" (ionClose)="showStatusBar()">
   <ion-header>
-    <ion-toolbar>
+    <ion-navbar color="light">
       <ion-title>Menu</ion-title>
-    </ion-toolbar>
+    </ion-navbar>
   </ion-header>
-
-  <ion-content no-bounce>
+  <ion-content>
     <ion-list>
-      <button menuClose ion-item detail-none *ngFor="let p of pages" (click)="openPage(p)">
-        {{ p.title }}
-      </button>
-      <button menuClose ion-item detail-none (click)="openHelp()">Help</button>
+      <button *ngFor="let page of pages" ion-item detail-none menuClose (click)="openPage(page)">{{ page.title }}</button>
+      <button ion-item detail-none menuClose (click)="openHelp()">Help</button>
     </ion-list>
   </ion-content>
-
 </ion-menu>
 
-<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
-<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+<ion-nav #contentLeft #contentRight [root]="rootPage"></ion-nav>
+
+<ion-menu side="right" type="overlay" [content]="contentRight" (ionDrag)="hideStatusBar()" (ionOpen)="hideStatusBar()" (ionClose)="showStatusBar()">
+  <ion-header>
+    <ion-navbar color="light">
+      <ion-title>Geochron</ion-title>
+    </ion-navbar>
+  </ion-header>
+  <ion-content id="geochron-menu" no-bounce>
+    <div id="geochron-upper">
+      <ion-list *ngIf="!loggedIn">
+        <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input type="text" autocapitalize="none" autocorrect="off" [(ngModel)]="username"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input type="password" [(ngModel)]="password"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div *ngIf="loggedIn" text-center>
+        <h5 id="logged-in-top">Logged in as:</h5>
+        <p id="logged-in-username">{{ username }}</p>
+      </div>
+      <div text-center>
+        <button ion-button round id="login-button" *ngIf="!loggingIn && !loggingOut" (click)="loggedIn ? logout() : login()">{{ loggedIn ? 'Logout' : 'Login' }}</button>
+        <ion-spinner *ngIf="loggingIn || loggingOut" color="primary"></ion-spinner>
+      </div>
+    </div>
+  </ion-content>
+</ion-menu>

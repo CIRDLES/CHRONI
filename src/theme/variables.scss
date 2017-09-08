@@ -1,6 +1,16 @@
 // Ionic Variables and Theming. For more info, please see:
-// http://ionicframework.com/docs/v2/theming/
+// http://ionicframework.com/docs/theming/
+
+// Font path is used to include ionicons,
+// roboto, and noto sans fonts
 $font-path: "../assets/fonts";
+
+
+// The app direction is used to include
+// rtl styles in your app. For more info, please see:
+// http://ionicframework.com/docs/theming/rtl-support/
+$app-direction: ltr;
+
 
 @import "ionic.globals";
 
@@ -10,7 +20,7 @@ $font-path: "../assets/fonts";
 // To customize the look and feel of this app, you can override
 // the Sass variables found in Ionic's source scss files.
 // To view all the possible Ionic variables, see:
-// http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
+// http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
 
 
@@ -33,12 +43,8 @@ $colors: (
   dark:       #222222
 );
 
-/*ion-side-menu.menu-left.menu {
-  background-color: color($colors, light);
-}*/
-
 $background-color: color($colors, secondary);
-//$background-ios-color: color($colors, secondary);
+$toolbar-background: color($colors, light);
 
 // darkens the list border color
 $list-border-color:          #B3B1B8 !default;
@@ -77,9 +83,9 @@ $list-border-color:          #B3B1B8 !default;
 // Ionicons
 // --------------------------------------------------
 // The premium icon font for Ionic. For more info, please see:
-// http://ionicframework.com/docs/v2/ionicons/
+// http://ionicframework.com/docs/ionicons/
 
-@import "ionicons";
+@import "ionic.ionicons";
 
 
 // Fonts

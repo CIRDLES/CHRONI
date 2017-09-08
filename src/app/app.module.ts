@@ -1,14 +1,24 @@
-import { NgModule, ErrorHandler } from '@angular/core';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { BrowserModule } from '@angular/platform-browser';
+import { ErrorHandler, NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { IonicStorageModule } from '@ionic/storage';
 
-import { File } from '@ionic-native/file';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ThemeableBrowser } from '@ionic-native/themeable-browser';
+import { StatusBar } from '@ionic-native/status-bar';
+import { File } from '@ionic-native/file';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { ThreeDeeTouch } from '@ionic-native/three-dee-touch';
+import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+
+import { Chroni } from './app.component';
+import { AboutPage } from '../pages/about/about';
+import { DownloadPage } from '../pages/download/download';
+import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
+import { HistoryPage } from '../pages/history/history';
+import { ManageReportsPage } from '../pages/manageReports/manageReports';
+import { TablePage, PopoverPage, ImageView } from '../pages/table/table';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -16,56 +26,50 @@ import { FileUtility } from '../utilities/FileUtility';
 import { GeochronUtility } from '../utilities/GeochronUtility';
 import { ReportUtility } from '../utilities/ReportUtility';
 
-import { Chroni } from './app.component';
-import { About } from '../pages/about/about';
-import { History, Name } from '../pages/history/history';
-import { Profile } from '../pages/profile/profile';
-import { ViewFiles, FileName } from '../pages/viewFiles/viewFiles';
-import { TableView, PopoverPage, ImageView } from '../pages/table/tableView';
-import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
-import { AliquotsPage } from '../pages/aliquots/aliquots';
-import { ReportSettingsPage } from '../pages/reportSettings/reportSettings';
-import { DownloadPage } from '../pages/download/download';
+import { FileNamePipe } from '../utilities/pipes/FileName';
+import { FileNameFromPathPipe } from '../utilities/pipes/FileNameFromPath';
 
 @NgModule({
   declarations: [
     Chroni,
-    About,
-    History,
-    Name,
-    Profile,
-    ViewFiles,
-    TableView,
+    AboutPage,
+    DownloadPage,
+    FileBrowser,
+    HistoryPage,
+    ManageReportsPage,
+    TablePage,
     PopoverPage,
     ImageView,
-    FileName,
-    FileBrowser,
-    AliquotsPage,
-    ReportSettingsPage,
-    DownloadPage
+    FileNamePipe,
+    FileNameFromPathPipe
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(Chroni),
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     Chroni,
-    About,
-    History,
-    Profile,
-    ViewFiles,
-    TableView,
-    PopoverPage,
-    ImageView,
+    AboutPage,
+    DownloadPage,
     FileBrowser,
-    AliquotsPage,
-    ReportSettingsPage,
-    DownloadPage
+    HistoryPage,
+    ManageReportsPage,
+    TablePage,
+    PopoverPage,
+    ImageView
   ],
   providers: [
-    StatusBar, SplashScreen, ThemeableBrowser, ThreeDeeTouch, ScreenOrientation,
-    File, Transfer, TransferObject,
+    StatusBar,
+    SplashScreen,
+    File,
+    FileTransfer,
+    FileTransferObject,
+    ThreeDeeTouch,
+    ThemeableBrowser,
+    ScreenOrientation,
     XMLUtility, HistoryUtility, FileUtility, GeochronUtility, ReportUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
