@@ -28,9 +28,7 @@ export class HistoryUtility {
           (entries: Array<HistoryEntry>) => this.historyEntries = entries
         );
       }
-    }, (error) => {
-      this.storage.set('history', history);
-    });
+    }, (error) => console.log(JSON.stringify(error)));
 
   }
 

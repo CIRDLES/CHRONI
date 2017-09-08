@@ -17,7 +17,9 @@ export class HistoryPage {
   history: Array<HistoryEntry> = [];
   opening: boolean = false;
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private historyUtil: HistoryUtility) { }
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private historyUtil: HistoryUtility) {
+    this.history = this.historyUtil.getHistoryEntries();
+  }
 
   ionViewWillEnter() {
     this.history = this.historyUtil.getHistoryEntries();
@@ -27,10 +29,11 @@ export class HistoryPage {
     if (!this.opening) {
       this.opening = true;
       let report = this.historyUtil.getEntry(i).getReport();
-      this.historyUtil.addEntry(new HistoryEntry(report, new Date()));
 
-      this.opening = false;
-      this.navCtrl.push(TablePage, { report: report });
+      this.navCtrl.push(TablePage, { report: report }).then(() => {
+        this.opening = false;
+        this.historyUtil.addEntry(new HistoryEntry(report, new Date()));
+      });
     }
   }
 

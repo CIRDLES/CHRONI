@@ -25,6 +25,7 @@ export class ManageReportsPage {
   currentAliquot: FileEntry;
   currentReportSettings: FileEntry;
   opening: boolean = false;
+  entryFromHistory: HistoryEntry = null;
 
   constructor(public navCtrl: NavController, private statusBar: StatusBar, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController) {
     this.platform.ready().then(() => {
@@ -65,48 +66,57 @@ export class ManageReportsPage {
     fileViewer.onDidDismiss(file => {
       if (file) {
         if (directory === 'Aliquots')
-          this.currentAliquot = file;
+          this.setCurrentAliquot(file);
         else if (directory === 'Report Settings')
-          this.currentReportSettings = file;
+          this.setCurrentReportSettings(file);
       }
     });
   }
 
   openTable() {
     this.opening = true;
-    this.xml.createAliquot(this.currentAliquot).subscribe(al => {
-      if (al) {
-        let aliquot: Aliquot = <Aliquot> al;
-        this.xml.createReportSettings(this.currentReportSettings).subscribe(rs => {
-          if (rs) {
-            let reportSettings: ReportSettings = <ReportSettings> rs;
-            let report = new Report(aliquot,
-              reportSettings,
-              this.xml.createTableData(aliquot, reportSettings)
-            );
-            this.navCtrl.push(TablePage, { report: report }).then(() => {
-              let entry = new HistoryEntry(report, new Date());
-              this.historyUtil.addEntry(entry);
-              this.storage.set('currentAliquot', this.currentAliquot);
-              this.storage.set('currentReportSettings', this.currentReportSettings);
+    if (this.entryFromHistory) {
+      // obtains the report from history if it exists
+      let report = this.entryFromHistory.getReport();
+      this.navCtrl.push(TablePage, { report: report }).then(() => this.afterTableOpened(report));
+    } else {
+      this.xml.createAliquot(this.currentAliquot).subscribe(al => {
+        if (al) {
+          let aliquot: Aliquot = <Aliquot> al;
+          this.xml.createReportSettings(this.currentReportSettings).subscribe(rs => {
+            if (rs) {
+              let reportSettings: ReportSettings = <ReportSettings> rs;
+              let report = new Report(aliquot,
+                reportSettings,
+                this.xml.createTableData(aliquot, reportSettings)
+              );
+              this.navCtrl.push(TablePage, { report: report }).then(() => this.afterTableOpened(report));
+            } else {
               this.opening = false;
-            });
-          } else {
+              this.displayToast("Could not open table, invalid Report Settings XML file");
+            }
+          }, (error) => {
             this.opening = false;
-            this.displayToast("Could not open table, invalid Report Settings XML file");
-          }
-        }, (error) => {
+            this.displayToast("Could not open table, " + error);
+          });
+        } else {
           this.opening = false;
-          this.displayToast("Could not open table, " + error);
-        });
-      } else {
+          this.displayToast("Could not open table, invalid Aliquot XML file");
+        }
+      }, (error) => {
         this.opening = false;
-        this.displayToast("Could not open table, invalid Aliquot XML file");
-      }
-    }, (error) => {
-      this.opening = false;
-      this.displayToast("Could not open table, " + error);
-    });
+        this.displayToast("Could not open table, " + error);
+      });
+    }
+  }
+
+  afterTableOpened(report: Report) {
+    let entry = new HistoryEntry(report, new Date());
+    this.historyUtil.addEntry(entry);
+    this.storage.set('currentAliquot', this.currentAliquot);
+    this.storage.set('currentReportSettings', this.currentReportSettings);
+    this.opening = false;
+    this.updateHistoryEntry();
   }
 
   getCurrentFiles(): Observable<any> {
@@ -116,7 +126,7 @@ export class ManageReportsPage {
           if (!file)
             this.setCurrentAliquotAsDefault().subscribe(() => observer2.next(1));
           else {
-            this.currentAliquot = file;
+            this.setCurrentAliquot(file);
             this.fileUtil.fileExists(this.currentAliquot.fullPath.slice(1)).subscribe((exists) => {
               if (!exists)
                 this.setCurrentAliquotAsDefault().subscribe(() => observer2.next(1));
@@ -129,7 +139,7 @@ export class ManageReportsPage {
           if (!file)
             this.setCurrentReportSettingsAsDefault().subscribe(() => observer2.next(1));
           else {
-            this.currentReportSettings = file;
+            this.setCurrentReportSettings(file);
             this.fileUtil.fileExists(this.currentReportSettings.fullPath.slice(1)).subscribe((exists) => {
               if (!exists)
                 this.setCurrentReportSettingsAsDefault().subscribe(() => observer2.next(1));
@@ -149,12 +159,41 @@ export class ManageReportsPage {
     });
   }
 
+  setCurrentAliquot(file: FileEntry) {
+    this.currentAliquot = file;
+    this.updateHistoryEntry();
+  }
+
+  setCurrentReportSettings(file: FileEntry) {
+    this.currentReportSettings = file;
+    this.updateHistoryEntry();
+  }
+
+  updateHistoryEntry() {
+    let i = 0;
+    let found = false;
+    let entries: Array<HistoryEntry> = this.historyUtil.getHistoryEntries();
+    if (this.currentAliquot && this.currentReportSettings) {
+      while (!found && i < entries.length) {
+        let entry: HistoryEntry = entries[i];
+        if (entry.getAliquotPath() === this.currentAliquot.fullPath.slice(1) &&
+            entry.getReportSettingsPath() === this.currentReportSettings.fullPath.slice(1)) {
+          this.entryFromHistory = entry;
+          found = true
+        }
+        i++;
+      }
+    }
+    if (!found)
+      this.entryFromHistory = null;
+  }
+
   setCurrentAliquotAsDefault() {
     return new Observable<any>(observer => {
       this.fileUtil.getFile('chroni/Aliquots/Default Aliquot.xml').subscribe(
         (file: FileEntry) => {
           this.storage.set('currentAliquot', file);
-          this.currentAliquot = file;
+          this.setCurrentAliquot(file);
           observer.next();
         }, error => {
           console.log(JSON.stringify(error));
@@ -168,7 +207,7 @@ export class ManageReportsPage {
       this.fileUtil.getFile('chroni/Report Settings/Default Report Settings.xml').subscribe(
         (file: FileEntry) => {
           this.storage.set('currentReportSettings', file);
-          this.currentReportSettings = file;
+          this.setCurrentReportSettings(file);
           observer.next();
         }, error => {
           console.log(JSON.stringify(error));

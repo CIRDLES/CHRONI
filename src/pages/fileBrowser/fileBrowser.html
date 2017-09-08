@@ -16,9 +16,12 @@
 <ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let file of files" #itemSliding>
-      <button ion-item (click)="chooseFile(file)">
-        <ion-icon item-left *ngIf="!file.isFile" name="folder"></ion-icon>
-        <ion-icon item-left *ngIf="file.isFile" name="document"></ion-icon>
+      <button *ngIf="file.isFile" ion-item detail-none (click)="chooseFile(file)">
+        <ion-icon item-left name="document"></ion-icon>
+        {{ file.name }}
+      </button>
+      <button *ngIf="!file.isFile" ion-item (click)="chooseFile(file)">
+        <ion-icon item-left name="folder"></ion-icon>
         {{ file.name }}
       </button>
       <ion-item-options side="right">
