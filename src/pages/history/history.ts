@@ -6,7 +6,7 @@ import { TablePage } from '../table/table';
 
 import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 
-import { FileNameFromPathPipe } from '../../utilities/pipes/FileNameFromPath';
+import { FileNamePipe } from '../../utilities/pipes/FileName';
 
 @Component({
   selector: 'page-history',

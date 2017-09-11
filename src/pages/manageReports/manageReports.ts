@@ -52,7 +52,7 @@ export class ManageReportsPage {
   }
 
   openFileViewer(directory) {
-    var params = { directory: '' };
+    let params = { directory: '' };
 
     if (directory === 'Aliquots')
       params.directory = '/chroni/Aliquots/';

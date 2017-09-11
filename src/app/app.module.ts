@@ -27,7 +27,6 @@ import { GeochronUtility } from '../utilities/GeochronUtility';
 import { ReportUtility } from '../utilities/ReportUtility';
 
 import { FileNamePipe } from '../utilities/pipes/FileName';
-import { FileNameFromPathPipe } from '../utilities/pipes/FileNameFromPath';
 
 @NgModule({
   declarations: [
@@ -40,8 +39,7 @@ import { FileNameFromPathPipe } from '../utilities/pipes/FileNameFromPath';
     TablePage,
     PopoverPage,
     ImageView,
-    FileNamePipe,
-    FileNameFromPathPipe
+    FileNamePipe
   ],
   imports: [
     BrowserModule,

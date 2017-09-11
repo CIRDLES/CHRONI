@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import { Entry, FileEntry } from '@ionic-native/file';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
 import { FileUtility } from '../../utilities/FileUtility';
+import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
 
-import { FileNameFromPathPipe } from '../../utilities/pipes/FileNameFromPath';
+import { FileNamePipe } from '../../utilities/pipes/FileName';
 
 @Component({
   templateUrl: 'fileBrowser.html'
@@ -24,7 +27,7 @@ export class FileBrowser {
   copying: any = false;
   cutting: boolean = false;
 
-  constructor(private viewCtrl: ViewController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private alertCtrl: AlertController, private toastCtrl: ToastController, private xml: XMLUtility, private fileUtil: FileUtility) {
+  constructor(private viewCtrl: ViewController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private alertCtrl: AlertController, private toastCtrl: ToastController, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility) {
     let directory = this.params.get('directory');
     if (!directory || directory === '') {
       this.currentDirectory = '/chroni/'
@@ -53,8 +56,8 @@ export class FileBrowser {
     // must remove leading '/' from currentDirectory file path
     this.fileUtil.getFilesAtDirectory(this.currentDirectory.substring(1))
       .subscribe(
-      files => this.files = files,
-      error => console.log(JSON.stringify(error))
+        files => this.files = files,
+        error => console.log(JSON.stringify(error))
       );
   }
 
@@ -133,8 +136,10 @@ export class FileBrowser {
     if (file.isFile) {
       this.fileUtil.removeFile(filePath)
         .subscribe(
-        success => this.updateFiles(),
-        error => console.log(JSON.stringify(error))
+          success => {
+            this.deleteFromHistory(file);
+            this.updateFiles();
+          }, error => console.log(JSON.stringify(error))
         );
     } else {
       this.alertCtrl.create({
@@ -150,8 +155,8 @@ export class FileBrowser {
             handler: () => {
               this.fileUtil.removeDirectory(filePath)
                 .subscribe(
-                success => this.updateFiles(),
-                error => console.log(JSON.stringify(error))
+                  success => this.updateFiles(),
+                  error => console.log(JSON.stringify(error))
                 );
             }
           }
@@ -160,7 +165,7 @@ export class FileBrowser {
     }
   }
 
-  renameFile(file, newName) {
+  renameFile(file: Entry, newName) {
     if (newName && newName !== '') {
       let newPath = '';
       let oldPath = file.fullPath.substring(1);
@@ -171,15 +176,19 @@ export class FileBrowser {
 
         this.fileUtil.moveFile(oldPath, newPath)
           .subscribe(
-          success => this.updateFiles(),
-          error => console.log(JSON.stringify(error))
+            (newFile: Entry) => {
+              this.updateFiles();
+              this.updateHistory(file, newFile);
+            }, error => console.log(JSON.stringify(error))
           );
       } else {
         newPath = oldPath.substring(0, oldPath.length - file.name.length) + newName;
         this.fileUtil.moveDirectory(oldPath, newPath)
           .subscribe(
-          success => this.updateFiles(),
-          error => console.log(JSON.stringify(error))
+            (newDir: Entry) => {
+              this.updateFiles();
+              this.updateHistory(file, newDir);
+            }, error => console.log(JSON.stringify(error))
           );
       }
     } else {
@@ -212,34 +221,108 @@ export class FileBrowser {
               if (this.copiedFile.isFile)
                 this.fileUtil.moveFile(this.copiedFile.fullPath.substring(1), newPath)
                   .subscribe(
-                  success => this.updateFiles(),
-                  error => console.log(JSON.stringify(error))
-                  );
+                    (newFile: Entry) => {
+                      this.updateFiles();
+                      this.updateHistory(this.copiedFile, newFile);
+                      this.copiedFile = null;
+                      this.cutting = false;
+                    }, error => {
+                      this.copiedFile = null;
+                      this.cutting = false;
+                    });
               else
                 this.fileUtil.moveDirectory(this.copiedFile.fullPath.substring(1), newPath)
                   .subscribe(
-                  success => this.updateFiles(),
-                  error => console.log(JSON.stringify(error))
-                  );
-
-              this.copiedFile = null;
-              this.cutting = false;
+                    (newDir: Entry) => {
+                      this.updateFiles();
+                      this.updateHistory(this.copiedFile, newDir);
+                      this.copiedFile = null;
+                      this.cutting = false;
+                    }, error => {
+                      this.copiedFile = null;
+                      this.cutting = false;
+                    });
             } else {
               if (this.copiedFile.isFile)
                 this.fileUtil.copyFile(this.copiedFile.fullPath.substring(1), newPath)
                   .subscribe(
-                  success => this.updateFiles(),
-                  error => console.log(JSON.stringify(error))
+                    success => this.updateFiles(),
+                    error => console.log(JSON.stringify(error))
                   );
               else
                 this.fileUtil.copyDirectory(this.copiedFile.fullPath.substring(1), newPath)
                   .subscribe(
-                  success => this.updateFiles(),
-                  error => console.log(JSON.stringify(error))
+                    success => this.updateFiles(),
+                    error => console.log(JSON.stringify(error))
                   );
             }
           }
         }, error => console.log(JSON.stringify(error)));
+    }
+  }
+
+  updateCurrents() {
+
+  }
+
+  deleteFromHistory(fileEntry: Entry) {
+    let entries: Array<HistoryEntry> = this.historyUtil.getHistoryEntries();
+    if (fileEntry.isDirectory) {
+      // if deleting directory, delete all files in history entries whose paths
+      // are within the deleted folder
+      let i = 0;
+      while (i < entries.length) {
+        let historyEntry: HistoryEntry = entries[i];
+        let historyPath: string = fileEntry.fullPath.slice(1);
+        let aliquotMatch: boolean = historyEntry.aliquotInDirectory(historyPath);
+        let reportSettingsMatch: boolean = historyEntry.reportSettingsInDirectory(historyPath);
+        (aliquotMatch || reportSettingsMatch) ? this.historyUtil.removeEntry(i) : i++;
+      }
+    } else {
+      // if deleting file, delete all files in history entries whose paths match
+      // the deleted file
+      let i = 0;
+      while (i < entries.length) {
+        let historyEntry: HistoryEntry = entries[i];
+        let historyPath: string = fileEntry.fullPath.slice(1);
+        let aliquotMatch: boolean = historyEntry.getAliquotPath() === fileEntry.fullPath.slice(1);
+        let reportSettingsMatch: boolean = historyEntry.getReportSettingsPath() === fileEntry.fullPath.slice(1);
+        (aliquotMatch || reportSettingsMatch) ? this.historyUtil.removeEntry(i) : i++;
+      }
+    }
+  }
+
+  updateHistory(fileEntry: Entry, newFileEntry: Entry) {
+    let entries: Array<HistoryEntry> = this.historyUtil.getHistoryEntries();
+    if (fileEntry.isDirectory) {
+      // if updating directory, change all files' paths in history entries that
+      // exist within the changed folder
+      let i = 0;
+      while (i < entries.length) {
+        let historyEntry: HistoryEntry = entries[i];
+        let historyPath: string = fileEntry.fullPath.slice(1);
+        let aliquotMatch: boolean = historyEntry.aliquotInDirectory(historyPath);
+        let reportSettingsMatch: boolean = historyEntry.reportSettingsInDirectory(historyPath);
+        if (aliquotMatch || reportSettingsMatch) {
+          aliquotMatch ? historyEntry.updateAliquotPathPortion(fileEntry.fullPath, newFileEntry.fullPath) : historyEntry.updateReportSettingsPathPortion(fileEntry.fullPath, newFileEntry.fullPath);
+          this.historyUtil.updateEntry(i, historyEntry);
+        }
+        i++;
+      }
+    } else {
+      // if updating a file, change the aliquot or report settings for history
+      // entries that contain that file
+      let i = 0;
+      while (i < entries.length) {
+        let historyEntry: HistoryEntry = entries[i];
+        let aliquotMatch: boolean = historyEntry.getAliquotPath() === fileEntry.fullPath.slice(1);
+        let reportSettingsMatch: boolean = historyEntry.getReportSettingsPath() === fileEntry.fullPath.slice(1);
+        if (aliquotMatch || reportSettingsMatch) {
+          aliquotMatch ? historyEntry.setAliquotFileEntry(<FileEntry> newFileEntry) : historyEntry.setReportSettingsFileEntry(<FileEntry> newFileEntry);
+          this.historyUtil.updateEntry(i, historyEntry);
+        }
+        i++;
+      }
     }
   }
 
@@ -293,7 +376,7 @@ export class FileBrowser {
       return '/';
   }
 
-  showMoreOptions(file, itemSliding) {
+  showMoreOptions(file: Entry, itemSliding) {
     let actionsheet = this.actionSheetCtrl.create({
       title: 'Modify File',
       buttons: [
