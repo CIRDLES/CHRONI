@@ -28,6 +28,8 @@ import { ReportUtility } from '../utilities/ReportUtility';
 
 import { FileNamePipe } from '../utilities/pipes/FileName';
 
+import { AppVersion } from '@ionic-native/app-version';
+
 @NgModule({
   declarations: [
     Chroni,
@@ -68,6 +70,7 @@ import { FileNamePipe } from '../utilities/pipes/FileName';
     ThreeDeeTouch,
     ThemeableBrowser,
     ScreenOrientation,
+    AppVersion,
     XMLUtility, HistoryUtility, FileUtility, GeochronUtility, ReportUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]

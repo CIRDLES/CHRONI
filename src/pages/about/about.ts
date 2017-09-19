@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { ThemeableBrowser, ThemeableBrowserOptions } from '@ionic-native/themeable-browser';
+import { AppVersion } from '@ionic-native/app-version';
 
 @Component({
   selector: 'page-about',
@@ -9,7 +10,9 @@ import { ThemeableBrowser, ThemeableBrowserOptions } from '@ionic-native/themeab
 })
 export class AboutPage {
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private iab: ThemeableBrowser) { }
+  appVer: any;
+
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private iab: ThemeableBrowser, private appVersion: AppVersion, private platform: Platform) { }
 
   openBrowser(url: string) {
     let options: ThemeableBrowserOptions = {
@@ -49,6 +52,12 @@ export class AboutPage {
 
   hideStatusBar() {
     this.statusBar.hide();
+  }
+
+  ionViewDidLoad() {
+    if (this.platform.is('cordova')) {
+      this.appVer = this.appVersion.getVersionNumber();
+    }
   }
 
 }
