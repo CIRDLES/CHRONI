@@ -10,7 +10,7 @@ import { AppVersion } from '@ionic-native/app-version';
 })
 export class AboutPage {
 
-  appVer: any;
+  appVer: string;
 
   constructor(public navCtrl: NavController, private statusBar: StatusBar, private iab: ThemeableBrowser, private appVersion: AppVersion, private platform: Platform) { }
 
@@ -56,7 +56,7 @@ export class AboutPage {
 
   ionViewDidLoad() {
     if (this.platform.is('cordova')) {
-      this.appVer = this.appVersion.getVersionNumber();
+      this.appVersion.getVersionNumber().then((ver: string) => this.appVer = ver);
     }
   }
 

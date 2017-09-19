@@ -28,12 +28,7 @@ export class HistoryUtility {
           // first creates the entry objects from the stored JSON object
           this.createEntriesFromJSON(jsonResult).subscribe(
             (entries: Array<HistoryEntry>) => {
-              // then ensures all files are still valid (deletes if necessary
-              // and saves the new JSON object)
-              this.ensureEntryFiles(entries, jsonResult).subscribe((validEntries: Array<HistoryEntry>) => {
-                this.historyEntries = validEntries;
-                this.saveHistory();
-              });
+              this.checkValidity(entries, jsonResult).subscribe();
           });
         }
       }, (error) => console.log(JSON.stringify(error)));
@@ -143,20 +138,27 @@ export class HistoryUtility {
           index && positionsToDelete.push(index);
           if (finished === entries.length) {
             let newEntries: Array<HistoryEntry> = [];
-            let newJson: any = [];
             entries.forEach((entry: HistoryEntry, i: number) => {
-              if (positionsToDelete.indexOf(i) < 0) {
-                newEntries.push(entries[i]);
-                newJson.push(jsonItems[i]);
-              }
+              if (entry && positionsToDelete.indexOf(i) < 0)
+                newEntries.push(entry);
             });
-            // this.historyJSON = newJson;
-            this.historyEntries = newEntries;
-            // this.saveHistory();
-            observer.next(entries);
+            observer.next(newEntries);
           }
         }, (error) => console.log(JSON.stringify(error))
       );
+    });
+  }
+
+  public checkValidity(entries: Array<HistoryEntry> = null, json: any = null): Observable<any> {
+    return new Observable(observer => {
+      entries = entries || this.historyEntries;
+      json = json || this.getHistoryJSONList();
+      // ensures all files are still valid (deletes if necessary and saves the new JSON object)
+      this.ensureEntryFiles(entries, json).subscribe((validEntries: Array<HistoryEntry>) => {
+        this.historyEntries = validEntries;
+        this.saveHistory();
+        observer.next(this.historyEntries.length !== validEntries.length);
+      }, (error) => observer.error(error));
     });
   }
 
