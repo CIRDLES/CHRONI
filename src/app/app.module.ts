@@ -27,7 +27,6 @@ import { GeochronUtility } from '../utilities/GeochronUtility';
 import { ReportUtility } from '../utilities/ReportUtility';
 
 import { FileNamePipe } from '../utilities/pipes/FileName';
-import { FileNameFromPathPipe } from '../utilities/pipes/FileNameFromPath';
 
 import { AppVersion } from '@ionic-native/app-version';
 
@@ -42,8 +41,7 @@ import { AppVersion } from '@ionic-native/app-version';
     TablePage,
     PopoverPage,
     ImageView,
-    FileNamePipe,
-    FileNameFromPathPipe
+    FileNamePipe
   ],
   imports: [
     BrowserModule,

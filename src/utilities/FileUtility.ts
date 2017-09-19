@@ -108,6 +108,30 @@ export class FileUtility {
     });
   }
 
+  // private recursivelyGetFilesWithin(dirPath: string): Observable<Array<FileEntry>> {
+  //   return new Observable(observer => {
+  //     let result: Array<FileEntry> = [];
+  //     this.getFilesAtDirectory(dirPath).subscribe((entries: Array<Entry>) => {
+  //       let containsDirectories: boolean = false;
+  //       let i = 0;
+  //       while (!containsDirectories && i < entries.length) {
+  //         containsDirectories = entries[i].isDirectory;
+  //         i++;
+  //       }
+  //       // base case: no children are directories
+  //       if (!containsDirectories)
+  //         result = <Array<FileEntry>> entries;
+  //       else {
+  //         for (let entry of entries) {
+  //           let filesToAdd: Array<FileEntry> = [];
+  //           if (entry.isDirectory)
+  //             filesToAdd = ;
+  //         }
+  //       }
+  //     }, (error) => observer.error(error));
+  //   });
+  // }
+
   public createFile(filePath: string, replace: boolean = false): Observable<FileEntry> {
     return new Observable(observer => {
       this.file.createFile(this.file.dataDirectory, filePath, replace)

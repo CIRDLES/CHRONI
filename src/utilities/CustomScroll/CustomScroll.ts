@@ -1,3 +1,14 @@
+/*
+This software uses code taken from the IScroll project which can be found at https://github.com/cubiq/iscroll
+
+Copyright (c) 2014 Matteo Spinelli, cubiq.org
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 export class CustomScroll {
 
   wrapper: any;
@@ -331,8 +342,16 @@ export class CustomScroll {
     this.scrollerWidth = this.scroller.offsetWidth;
 		this.scrollerHeight	= this.scroller.offsetHeight;
 
+    let optionHeight = this.options.scrollHeight;
+    let optionWidth = this.options.scrollWidth;
+
 		this.maxScrollX	= (this.options.scrollWidth || this.wrapperWidth) - this.scrollerWidth;
 		this.maxScrollY	= (this.options.scrollHeight || this.wrapperHeight) - this.scrollerHeight;
+    if (this.maxScrollY > 0)
+      this.maxScrollY = 0;
+    if (this.maxScrollX > 0)
+      this.maxScrollX = 0;
+
 
     if (!this.hasHorizontalScroll) {
 			this.maxScrollX = 0;

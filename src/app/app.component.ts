@@ -103,8 +103,7 @@ export class Chroni {
             } else
               error();
           }, (err) => error());
-        } else
-          error();
+        }
       }, (err) => console.log(err));
     });
   }

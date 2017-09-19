@@ -16,9 +16,9 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let item of history, let i = index" (click)="openTable(i)">
-      <h2>{{ item.getReport().getAliquotFileName() | fileNameFromPath }}</h2>
-      <h3>{{ item.getReport().getReportSettingsFileName() | fileNameFromPath }}</h3>
+    <button ion-item *ngFor="let item of history; let i = index" (click)="openTable(i)">
+      <h2>{{ item.getReport().getAliquotFileName() | fileName }}</h2>
+      <h3>{{ item.getReport().getReportSettingsFileName() | fileName }}</h3>
       <p>{{ item.getDate() | date:'medium' }}</p>
     </button>
   </ion-list>

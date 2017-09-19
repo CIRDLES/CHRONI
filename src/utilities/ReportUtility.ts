@@ -60,8 +60,8 @@ export class ReportUtility {
           this.reportSettingsFromJSON(reportJSON['reportSettings']).subscribe(
             (reportSettings: ReportSettings) => {
               observer.next(new Report(aliquot, reportSettings, reportJSON['tableArray']));
-            }, (error) => console.log(JSON.stringify(error)));
-        }, (error) => console.log(JSON.stringify(error)));
+            }, (error) => observer.error(error));
+        }, (error) => observer.error(error));
     });
   }
 
@@ -108,6 +108,10 @@ export class Aliquot {
     return this.fileEntry.name;
   }
 
+  public setFileEntry(newFile: FileEntry) {
+    this.fileEntry = newFile;
+  }
+
   public getName(): string {
     return this.name;
   }
@@ -148,6 +152,12 @@ export class Aliquot {
     return this.fileEntry.fullPath.slice(1);
   }
 
+  public setFilePath(newPath: string) {
+    if (newPath[0] !== '/')
+      newPath = '/' + newPath;
+    this.fileEntry.fullPath = newPath;
+  }
+
 }
 
 export class ReportSettings {
@@ -160,6 +170,14 @@ export class ReportSettings {
 
   public getFilePath(): string {
     return this.fileEntry.fullPath.slice(1);
+  }
+
+  public setFilePath(newPath: string) {
+    this.fileEntry.fullPath = newPath;
+  }
+
+  public setFileEntry(newFile: FileEntry) {
+    this.fileEntry = newFile;
   }
 
   public getFileName(): string {
@@ -228,8 +246,28 @@ export class Report {
     return this.aliquot;
   }
 
+  public setAliquotPath(newPath: string) {
+    if (newPath && newPath.length > 0)
+      this.aliquot.setFilePath(newPath);
+  }
+
+  public setAliquotFileEntry(newFile: FileEntry) {
+    if (newFile)
+      this.aliquot.setFileEntry(newFile);
+  }
+
   public getReportSettings() {
     return this.reportSettings;
+  }
+
+  public setReportSettingsPath(newPath: string) {
+    if (newPath && newPath.length > 0)
+      this.reportSettings.setFilePath(newPath);
+  }
+
+  public setReportSettingsFileEntry(newFile: FileEntry) {
+    if (newFile)
+      this.reportSettings.setFileEntry(newFile);
   }
 
   public getAliquotFileName() {
