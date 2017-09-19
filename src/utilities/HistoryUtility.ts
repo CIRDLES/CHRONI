@@ -32,6 +32,7 @@ export class HistoryUtility {
               // and saves the new JSON object)
               this.ensureEntryFiles(entries, jsonResult).subscribe((validEntries: Array<HistoryEntry>) => {
                 this.historyEntries = validEntries;
+                this.saveHistory();
               });
           });
         }

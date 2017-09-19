@@ -342,8 +342,16 @@ export class CustomScroll {
     this.scrollerWidth = this.scroller.offsetWidth;
 		this.scrollerHeight	= this.scroller.offsetHeight;
 
+    let optionHeight = this.options.scrollHeight;
+    let optionWidth = this.options.scrollWidth;
+
 		this.maxScrollX	= (this.options.scrollWidth || this.wrapperWidth) - this.scrollerWidth;
 		this.maxScrollY	= (this.options.scrollHeight || this.wrapperHeight) - this.scrollerHeight;
+    if (this.maxScrollY > 0)
+      this.maxScrollY = 0;
+    if (this.maxScrollX > 0)
+      this.maxScrollX = 0;
+
 
     if (!this.hasHorizontalScroll) {
 			this.maxScrollX = 0;
