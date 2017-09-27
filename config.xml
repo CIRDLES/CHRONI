@@ -3,7 +3,7 @@
     <name>CHRONI</name>
     <description>A mobile application that presents archived data downloaded from the Geochron database in a customizable format for use by geologists in the field. The purpose of CHRONI is to allow people to archive data, while collecting data in the field. With CHRONI, users do not need to remain stationary.</description>
     <author email="cirdlesorg@gmail.com" href="https://cirdles.org">CIRDLES</author>
-    <content original-src="index.html" src="http://192.168.1.8:8100" />
+    <content original-src="index.html" src="http://10.5.172.120:8100" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-intent href="*" />
@@ -77,7 +77,13 @@
         <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
+        <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
+        <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
+    <feature name="CDVWKWebViewEngine">
+        <param name="ios-package" value="CDVWKWebViewEngine" />
+    </feature>
+    <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
@@ -98,6 +104,8 @@
     <allow-navigation href="http://192.168.0.7:8100" />
     <allow-navigation href="http://10.5.132.134:8100" />
     <allow-navigation href="http://192.168.1.8:8100" />
+    <allow-navigation href="http://10.5.172.120:8100" />
+    <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-3dtouch" spec="^1.3.5" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.5.9" />
@@ -106,6 +114,7 @@
     <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^1.1.8" />
     <plugin name="cordova-plugin-screen-orientation" spec="^2.0.1" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.2.2" />
