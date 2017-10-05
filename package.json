@@ -31,6 +31,7 @@
         "@ionic-native/three-dee-touch": "^4.2.1",
         "@ionic/storage": "^2.0.1",
         "bignumber.js": "^4.0.4",
+        "cordova-android": "^6.2.3",
         "cordova-ios": "^4.4.0",
         "cordova-plugin-3dtouch": "^1.3.5",
         "cordova-plugin-advanced-http": "^1.5.9",
@@ -40,15 +41,18 @@
         "cordova-plugin-device": "^1.1.4",
         "cordova-plugin-file": "^4.3.3",
         "cordova-plugin-file-transfer": "^1.6.3",
+        "cordova-plugin-ionic-webview": "^1.1.8",
         "cordova-plugin-screen-orientation": "^2.0.1",
         "cordova-plugin-splashscreen": "^4.0.3",
         "cordova-plugin-statusbar": "^2.2.2",
         "cordova-plugin-themeablebrowser": "^0.2.17",
         "cordova-plugin-whitelist": "^1.3.1",
         "cordova-sqlite-storage": "^2.0.4",
+        "es6-promise-plugin": "git+https://github.com/vstirbu/PromisesPlugin.git",
         "ionic-angular": "3.6.0",
         "ionic-plugin-keyboard": "^2.2.1",
         "ionicons": "3.0.0",
+        "npm": "^5.4.2",
         "rxjs": "5.4.0",
         "sw-toolbox": "3.6.0",
         "x2js": "^3.1.1",
@@ -74,9 +78,11 @@
             "cordova-plugin-themeablebrowser": {},
             "cordova-sqlite-storage": {},
             "cordova-plugin-advanced-http": {},
-            "cordova-plugin-app-version": {}
+            "cordova-plugin-app-version": {},
+            "cordova-plugin-ionic-webview": {}
         },
         "platforms": [
+            "android",
             "ios"
         ]
     }

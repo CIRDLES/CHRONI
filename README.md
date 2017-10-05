@@ -1,26 +1,77 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+CHRONI
+=====================
 
-## How to use this template
+**CHRONI** is a mobile application that presents archived data downloaded from the Geochron database in a customizable format for use by geologists in the field. The project is led and maintained by [CIRDLES](https://cirdles.org), an undergraduate research lab at the College of Charleston in Charleston, South Carolina.
 
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
+This material is based upon work supported by the National Science Foundation under Grant Numbers [0930223](http://www.nsf.gov/awardsearch/showAward?AWD_ID=0930223) and [1443037](http://www.nsf.gov/awardsearch/showAward?AWD_ID=1443037).  Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.
 
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
+For more information about this project, please contact [Jim Bowring](mailto://bowringj@cofc.edu).
 
-### With the Ionic CLI:
+<br/>
 
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
+Downloading the Latest Release for Android and iOS
+-------------
+
+For iOS, you can download Chroni from the App Store: https://appsto.re/us/0Sjikb.i
+
+For Android, you can download Chroni from the Play Store: https://play.google.com/store/apps/details?id=org.cirdles.chroni
+
+<br/>
+
+Getting Started for Contributors and Users:
+-------------
+
+Please have installed git tools, Xcode (mac), and a text editor. Make sure there is an updated Node.js version installed: http://nodejs.org/en/
+Fork a copy of this project as your origin. Clone your repository onto your local and use the following commands to establish the upstream:
 
 ```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
+$ git remote add upstream https://github.com/CIRDLES/CHRONI.git
 ```
 
-Then, to run it, cd into `myBlank` and run:
+Installing Ionic: (Some commands might need sudo)
 
 ```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+$ npm install -g cordova ionic
+```
+If this result in errors use this instead:
+
+```bash
+$ npm uninstall -g cordova
+$ npm uninstall -g ionic
+$ npm install -g cordova ionic
+```
+Ionic should now be installed with version 2 or higher. Use *ionic -v* to confirm. Continue with:
+
+```bash
+$ npm install
+$ ionic resources
 ```
 
-Substitute ios for android if not on a Mac.
+To emulate on an ios platform
+-------------
+Change directories to the CHRONI directory on the local and run:
 
+```bash
+$ ionic platform add ios
+$ ionic emulate ios -lc
+```
+
+To emulate on android platform
+-------------
+Have Android Studio installed and create an AVD within Android Studio. Then add the android platform and check if its been installed:
+
+```bash
+$ ionic platform add android
+$ ionic platform
+```
+
+Change directories to the CHRONI directory on the local and run:
+
+```bash
+$ ionic build android
+$ ionic run android
+```
+
+<br/>
+
+More info on this can be found on the Ionic [Getting Started](http://ionicframework.com/getting-started) page and the [Ionic CLI](https://github.com/driftyco/ionic-cli) repo.
