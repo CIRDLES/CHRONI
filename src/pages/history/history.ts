@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Storage } from '@ionic/storage';
 
 import { TablePage } from '../table/table';
 
@@ -16,8 +17,13 @@ export class HistoryPage {
 
   history: Array<HistoryEntry> = [];
   opening: boolean = false;
+  hasOverlay: boolean = false;
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private historyUtil: HistoryUtility) {
+  constructor(public navCtrl: NavController, private storage: Storage, private statusBar: StatusBar, private historyUtil: HistoryUtility) {
+    this.storage.get('hasOverlay').then(
+      (overlayed: boolean) => this.hasOverlay = overlayed,
+      (error) => this.hasOverlay = false
+    );
     this.history = this.historyUtil.getHistoryEntries();
   }
 
@@ -37,8 +43,8 @@ export class HistoryPage {
     }
   }
 
-  hideStatusBar() {
-    this.statusBar.hide();
+  hideStatusBar(force: boolean = false) {
+    (force || this.hasOverlay) && this.statusBar.hide();
   }
 
 }

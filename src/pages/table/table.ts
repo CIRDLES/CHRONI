@@ -116,7 +116,7 @@ export class TablePage {
   }
 
   ionViewWillLeave() {
-    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
+    this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     this.menu.swipeEnable(true, "left");
     this.menu.swipeEnable(true, "right");
   }

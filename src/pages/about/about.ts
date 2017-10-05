@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Storage } from '@ionic/storage';
 import { ThemeableBrowser, ThemeableBrowserOptions } from '@ionic-native/themeable-browser';
 import { AppVersion } from '@ionic-native/app-version';
 
@@ -11,8 +12,14 @@ import { AppVersion } from '@ionic-native/app-version';
 export class AboutPage {
 
   appVer: string;
+  hasOverlay: boolean = false;
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private iab: ThemeableBrowser, private appVersion: AppVersion, private platform: Platform) { }
+  constructor(public navCtrl: NavController, private storage: Storage, private statusBar: StatusBar, private iab: ThemeableBrowser, private appVersion: AppVersion, private platform: Platform) {
+    this.storage.get('hasOverlay').then(
+      (overlayed: boolean) => this.hasOverlay = overlayed,
+      (error) => this.hasOverlay = false
+    );
+  }
 
   openBrowser(url: string) {
     let options: ThemeableBrowserOptions = {
@@ -21,6 +28,9 @@ export class AboutPage {
       toolbar: {
         height: 40,
         color: '#D26D56'
+      },
+      statusbar: {
+        color: '#ffffffff'
       },
       title: {
         color: '#3F3F3F',
@@ -50,8 +60,8 @@ export class AboutPage {
     this.iab.create(url, '_blank', options);
   }
 
-  hideStatusBar() {
-    this.statusBar.hide();
+  hideStatusBar(force: boolean = false) {
+    (force || this.hasOverlay) && this.statusBar.hide();
   }
 
   ionViewDidLoad() {

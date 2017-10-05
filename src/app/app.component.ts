@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, ToastController } from 'ionic-angular';
+import { Device } from '@ionic-native/device';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Storage } from '@ionic/storage';
@@ -33,8 +34,9 @@ export class Chroni {
   loggedIn: boolean = false;
   loggingIn: boolean = false;
   loggingOut: boolean = false;
+  hasOverlay: boolean = false;
 
-  constructor(private platform: Platform, private statusBar: StatusBar, private splashScreen: SplashScreen, private storage: Storage, private screenOrientation: ScreenOrientation, private toastCtrl: ToastController, private geochron: GeochronUtility, private fileUtil: FileUtility, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch) {
+  constructor(private platform: Platform, private device: Device, private statusBar: StatusBar, private splashScreen: SplashScreen, private storage: Storage, private screenOrientation: ScreenOrientation, private toastCtrl: ToastController, private geochron: GeochronUtility, private fileUtil: FileUtility, private iab: ThemeableBrowser, private threeDeeTouch: ThreeDeeTouch) {
     this.pages = [
       { title: 'Manage Report Table', component: ManageReportsPage },
       { title: 'Download', component: DownloadPage },
@@ -47,7 +49,12 @@ export class Chroni {
       this.splashScreen.hide();
       this.statusBar.show();
 
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT_PRIMARY);
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+
+      this.storage.get('hasOverlay').then(
+        (overlay) =>  overlay ? this.hasOverlay = overlay : this.setOverlaySetting(),
+        (error) => this.setOverlaySetting()
+      );
 
       // creates and/or downloads default files and directories
       this.fileUtil.createDefaultDirectories();
@@ -140,8 +147,8 @@ export class Chroni {
     });
   }
 
-  hideStatusBar() {
-    this.statusBar.hide();
+  hideStatusBar(force: boolean = false) {
+    (force || this.hasOverlay) && this.statusBar.hide();
   }
 
   showStatusBar() {
@@ -150,6 +157,11 @@ export class Chroni {
 
   openPage(page) {
     this.nav.setRoot(page.component);
+  }
+
+  setOverlaySetting() {
+    let noOverlay = this.platform.is('android') || this.device.model === 'iPhone X';
+    this.storage.set('hasOverlay', !noOverlay);
   }
 
   openHelp() {

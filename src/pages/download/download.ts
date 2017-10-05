@@ -21,6 +21,7 @@ export class DownloadPage {
   loggedIn: boolean = false;
   username: string = "";
   password: string = "";
+  hasOverlay: boolean = false;
 
   constructor(private statusBar: StatusBar, private storage: Storage, private geochron: GeochronUtility, private toastCtrl: ToastController) {
     this.storage.get('loggedIn').then((value) => {
@@ -30,6 +31,10 @@ export class DownloadPage {
         this.storage.get('geochronPassword').then((pass: string) => this.password = pass);
       }
     });
+    this.storage.get('hasOverlay').then(
+      (overlayed: boolean) => this.hasOverlay = overlayed,
+      (error) => this.hasOverlay = false
+    );
   }
 
   downloadFromURL() {
@@ -80,8 +85,8 @@ export class DownloadPage {
     }
   }
 
-  hideStatusBar() {
-    this.statusBar.hide();
+  hideStatusBar(force: boolean = false) {
+    (force || this.hasOverlay) && this.statusBar.hide();
   }
 
   displayToast(text: string) {

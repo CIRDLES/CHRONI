@@ -26,6 +26,7 @@ export class ManageReportsPage {
   currentReportSettings: FileEntry;
   opening: boolean = false;
   entryFromHistory: HistoryEntry = null;
+  hasOverlay: boolean = false;
 
   constructor(public navCtrl: NavController, private statusBar: StatusBar, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController) {
     this.platform.ready().then(() => {
@@ -45,6 +46,10 @@ export class ManageReportsPage {
         });;
       });
     });
+    this.storage.get('hasOverlay').then(
+      (overlayed: boolean) => this.hasOverlay = overlayed,
+      (error) => this.hasOverlay = false
+    );
   }
 
   ionViewWillEnter() {
@@ -225,8 +230,8 @@ export class ManageReportsPage {
     }).present();
   }
 
-  hideStatusBar() {
-    this.statusBar.hide();
+  hideStatusBar(force: boolean = false) {
+    (force || this.hasOverlay) && this.statusBar.hide();
   }
 
 }
