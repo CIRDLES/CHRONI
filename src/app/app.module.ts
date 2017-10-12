@@ -11,6 +11,7 @@ import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { ThreeDeeTouch } from '@ionic-native/three-dee-touch';
 import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { Device } from '@ionic-native/device';
 
 import { Chroni } from './app.component';
 import { AboutPage } from '../pages/about/about';
@@ -70,6 +71,7 @@ import { AppVersion } from '@ionic-native/app-version';
     ThreeDeeTouch,
     ThemeableBrowser,
     ScreenOrientation,
+    Device,
     AppVersion,
     XMLUtility, HistoryUtility, FileUtility, GeochronUtility, ReportUtility,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
