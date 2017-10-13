@@ -9,11 +9,11 @@ android:
   components:
     - tools
     - platform-tools
-    - tools
     - build-tools-25.0.0
     - android-25
 
 before_install:
+  - export ANDROID_HOME=~/Library/Android/sdk
   - npm install -g ionic cordova
 
 install:
