@@ -13,4 +13,3 @@ install:
 
 script:
   - ionic cordova build ios
-  - ionic cordova build android
