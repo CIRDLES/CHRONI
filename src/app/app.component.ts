@@ -131,6 +131,9 @@ export class Chroni {
               this.loggingIn = false;
               this.loggedIn = true;
               this.displayToast('Successfully logged into Geochron as ' + user, 2000);
+              this.geochron.getMyGeochronIGSNs(user, pass).subscribe((res) => {
+                console.log(JSON.stringify(res));
+              });
             });
         } else {
           this.loggingIn = false;

@@ -14,6 +14,7 @@ import X2JS from 'x2js';
 
 const CREDENTIALS_URL: string = "https://app.geosamples.org/webservices/credentials_service.php";
 const BASE_ALIQUOT_URL: string = "http://www.geochronportal.org/getxml.php?igsn=";
+const MY_ALIQUOTS_URL: string = 'http://www.geochron.org/my_existing_igsns.php';
 
 @Injectable()
 export class GeochronUtility {
@@ -108,6 +109,17 @@ export class GeochronUtility {
       this.http.post(CREDENTIALS_URL, data, options).subscribe(
         (res: Response) => observer.next(extractValid(res)),
         (res: Response | any) => observer.error(extractValid(res)));
+    });
+  }
+
+  public getMyGeochronIGSNs(username: string, password: string) {
+    return new Observable(observer => {
+      let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+      let options = new RequestOptions({ headers: headers });
+      let data = 'username=' + encodeURI(username) + '&password=' + encodeURI(password) + '&submit=submit';
+      this.http.post(MY_ALIQUOTS_URL, data, options).subscribe(
+        (res: Response) => observer.next(res.json()['IGSNS']),
+        (res: Response | any) => observer.error());
     });
   }
 
