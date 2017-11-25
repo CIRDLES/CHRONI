@@ -2,11 +2,9 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
-
 import { TablePage } from '../table/table';
-
-import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
-
+import { HistoryEntry } from '../../models';
+import { HistoryUtility } from '../../utilities/HistoryUtility';
 import { FileNamePipe } from '../../utilities/pipes/FileName';
 
 @Component({

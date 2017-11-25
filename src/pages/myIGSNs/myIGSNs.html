@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar color="light">
+    <ion-buttons start>
+      <button color="accent" ion-button icon-only menuToggle="left" (click)="hideStatusBar()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>My IGSNs</ion-title>
+    <ion-buttons end>
+      <button color="accent" ion-button menuToggle="right" (click)="hideStatusBar()">
+        <ion-icon name="contact"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" pullingText="Pull to refresh"></ion-refresher-content>
+  </ion-refresher>
+  <div class="full-height">
+    <div class="full-height inner" *ngIf="loading">
+      <ion-spinner color="primary"></ion-spinner>
+    </div>
+    <ng-container *ngIf="!loading">
+      <div class="full-height inner" *ngIf="igsns.length === 0">
+        <h5>No IGSNs found</h5>
+      </div>
+      <ion-list *ngIf="igsns.length > 0">
+        <button ion-item detail-none *ngFor="let igsn of igsns; let i = index">
+          <h2>{{ igsn }}</h2>
+        </button>
+      </ion-list>
+    </ng-container>
+  </div>
+</ion-content>

@@ -10,9 +10,10 @@ import { FileBrowser } from '../fileBrowser/fileBrowser';
 import { TablePage } from '../table/table';
 
 import { XMLUtility } from '../../utilities/XMLUtility';
-import { Report, Aliquot, ReportSettings } from '../../utilities/ReportUtility';
 import { FileUtility } from '../../utilities/FileUtility';
-import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
+import { HistoryUtility } from '../../utilities/HistoryUtility';
+
+import { Aliquot, ReportSettings, Report, HistoryEntry } from '../../models';
 
 import { FileNamePipe } from '../../utilities/pipes/FileName';
 

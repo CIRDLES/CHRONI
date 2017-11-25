@@ -2,12 +2,10 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { FileEntry } from '@ionic-native/file';
-
 import { BigNumber } from 'bignumber.js';
 import X2JS from 'x2js';
-
 import { FileUtility } from './FileUtility';
-import { Aliquot, ReportSettings } from './ReportUtility';
+import { Aliquot, ReportSettings, Numbers } from '../models';
 
 @Injectable()
 export class XMLUtility {
@@ -676,42 +674,5 @@ export class XMLUtility {
     let tableArray = reportSettingsArray.concat(fractionArray);
 
     return tableArray;
-  }
-}
-
-export class Numbers {
-
-  static _unitConversions = {
-    "": 0,
-
-    // mass is stored in grams
-    "g": 0,
-    "mg": -3,
-    "\u03bcg": -6,
-    "ng": -9,
-    "pg": -12,
-    "fg": -15,
-
-    // concentrations
-    "\u0025": -2,
-    "\u2030": -3,
-    "ppm": -6,
-    "ppb": -9,
-    "g/g": 0,
-
-    // dates are stored in years
-    "a": 0,
-    "ka": 3,
-    "Ma": 6,
-    "Ga": 9,
-
-    // misc in % per amu
-    "%/amu": -2
-  };
-
-  constructor() { }
-
-  static getUnitConversions() {
-    return this._unitConversions;
   }
 }

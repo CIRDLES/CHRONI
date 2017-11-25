@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { ViewController, NavParams, ActionSheetController, AlertController, ToastController, ItemSliding } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Entry, FileEntry } from '@ionic-native/file';
-
+import { HistoryEntry } from '../../models';
 import { XMLUtility } from '../../utilities/XMLUtility';
 import { FileUtility } from '../../utilities/FileUtility';
-import { HistoryUtility, HistoryEntry } from '../../utilities/HistoryUtility';
-
+import { HistoryUtility } from '../../utilities/HistoryUtility';
 import { FileNamePipe } from '../../utilities/pipes/FileName';
 
 @Component({
@@ -71,7 +70,6 @@ export class FileBrowser {
           else
             this.displayToast('"' + file.name + '" is not a valid Aliquot file...');
         });
-
       } else if (this.lookingFor === 'Report Settings') {
         // checks to make sure the file is an Report Settings XML file
         this.xml.checkFileValidity(file).subscribe(result => {
@@ -80,7 +78,6 @@ export class FileBrowser {
           else
             this.displayToast('"' + file.name + '" is not a valid Report Settings file...');
         });
-
       } else
         // if not specifically looking for Aliquot or Report Settings, assumes valid
         this.sendFileBack(file);
