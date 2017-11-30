@@ -145,6 +145,9 @@ export class Chroni {
       this.loggedIn = false;
       this.loggingOut = false;
       this.pages.splice(1, 1);
+      if (this.nav.getActive().name === "MyIGSNsPage") {
+        this.openPage(this.pages[0]);
+      }
     });
   }
 
