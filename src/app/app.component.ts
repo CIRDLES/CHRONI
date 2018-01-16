@@ -12,6 +12,7 @@ import { ManageReportsPage } from '../pages/manageReports/manageReports';
 import { DownloadPage } from '../pages/download/download';
 import { HistoryPage } from '../pages/history/history';
 import { AboutPage } from '../pages/about/about';
+import { MyIGSNsPage } from '../pages/myIGSNs/myIGSNs';
 
 import { FileUtility } from '../utilities/FileUtility';
 import { GeochronUtility } from '../utilities/GeochronUtility';
@@ -23,7 +24,7 @@ export class Chroni {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = ManageReportsPage;
-  pages: Array<{ title: string, component: Component }> = [];
+  pages: Array<{ title: string, component: any }> = [];
 
   helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
   browser: ThemeableBrowserObject;
@@ -100,15 +101,13 @@ export class Chroni {
                       this.loggingIn = false;
                       this.loggedIn = valid !== null && valid;
                       this.storage.set('loggedIn', true);
+                      this.pages.splice(1, 0, { title: 'My IGSNs', component: MyIGSNsPage });
                       this.displayToast('Successfully logged into GeoChron as ' + user, 2000);
-                    } else
-                      error();
+                    } else error();
                   }, (err) => error());
-                } else
-                  error();
+                } else error();
               }, (err) => error());
-            } else
-              error();
+            } else error();
           }, (err) => error());
         }
       }, (err) => console.log(err));
@@ -130,6 +129,7 @@ export class Chroni {
             () => {
               this.loggingIn = false;
               this.loggedIn = true;
+              this.pages.splice(1, 0, { title: 'My IGSNs', component: MyIGSNsPage });
               this.displayToast('Successfully logged into Geochron as ' + user, 2000);
             });
         } else {
@@ -144,6 +144,10 @@ export class Chroni {
     this.storage.set('loggedIn', false).then(() => {
       this.loggedIn = false;
       this.loggingOut = false;
+      this.pages.splice(1, 1);
+      if (this.nav.getActive().name === "MyIGSNsPage") {
+        this.openPage(this.pages[0]);
+      }
     });
   }
 

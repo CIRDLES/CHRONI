@@ -1,14 +1,11 @@
 import { Component, NgZone } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { NavController, Platform, MenuController, NavParams, PopoverController, ViewController, ModalController, Modal } from 'ionic-angular';
+import { NavController, MenuController, NavParams, PopoverController, ViewController, ModalController, Modal } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
-
-import { Report } from '../../utilities/ReportUtility';
+import { Report } from '../../models';
 import { FileUtility } from '../../utilities/FileUtility';
-
 import { FileNamePipe } from '../../utilities/pipes/FileName';
-
 import { CustomScroll } from '../../utilities/CustomScroll/CustomScroll';
 
 @Component({
@@ -33,7 +30,7 @@ export class TablePage {
   leftScroll: CustomScroll;
   topScroll: CustomScroll;
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private platform: Platform, private params: NavParams, private menu: MenuController, private popoverCtrl: PopoverController, private screenOrientation: ScreenOrientation, private zone: NgZone) {
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private params: NavParams, private menu: MenuController, private popoverCtrl: PopoverController, private screenOrientation: ScreenOrientation, private zone: NgZone) {
 
     this.bodyScrollHeight = window.screen.height;
 

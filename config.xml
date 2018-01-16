@@ -3,7 +3,7 @@
     <name>CHRONI</name>
     <description>A mobile application that presents archived data downloaded from the Geochron database in a customizable format for use by geologists in the field. The purpose of CHRONI is to allow people to archive data, while collecting data in the field. With CHRONI, users do not need to remain stationary.</description>
     <author email="cirdlesorg@gmail.com" href="https://cirdles.org">CIRDLES</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://10.5.206.123:8100" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-intent href="*" />
@@ -106,13 +106,15 @@
     <allow-navigation href="http://192.168.1.8:8100" />
     <allow-navigation href="http://10.5.172.120:8100" />
     <allow-navigation href="http://10.5.190.196:8100" />
+    <allow-navigation href="http://192.168.1.13:8100" />
+    <allow-navigation href="http://192.168.0.6:8100" />
     <engine name="android" spec="^6.2.3" />
-    <engine name="ios" spec="4.5.1" />
-    <plugin name="cordova-plugin-console" spec="^1.1.0" />
-    <plugin name="cordova-plugin-device" spec="^1.1.6" />
+    <engine name="ios" spec="^4.4.0" />
+    <plugin name="cordova-plugin-console" spec="^1.0.5" />
+    <plugin name="cordova-plugin-device" spec="^1.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
-    <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.2.2" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
@@ -120,8 +122,7 @@
     <plugin name="cordova-plugin-screen-orientation" spec="^2.0.1" />
     <plugin name="cordova-plugin-themeablebrowser" spec="^0.2.17" />
     <plugin name="cordova-sqlite-storage" spec="^2.0.4" />
-    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="cordova-plugin-advanced-http" spec="^1.6.1" />
+    <plugin name="cordova-plugin-advanced-http" spec="^1.5.9" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^1.1.15" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^1.1.8" />
 </widget>

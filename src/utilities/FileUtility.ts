@@ -168,7 +168,7 @@ export class FileUtility {
   public moveDirectory(oldDirPath: string, newDirPath: string): Observable<DirectoryEntry> {
     return new Observable(observer => {
       this.file.moveDir(this.file.dataDirectory, oldDirPath, this.file.dataDirectory, newDirPath)
-        .then((newDir) => observer.next(newDir))
+        .then((newDir: DirectoryEntry) => observer.next(newDir))
         .catch((error) => observer.error(error));
     });
   }
@@ -184,7 +184,7 @@ export class FileUtility {
   public copyDirectory(oldDirPath: string, newDirPath: string): Observable<DirectoryEntry> {
     return new Observable(observer => {
       this.file.copyDir(this.file.dataDirectory, oldDirPath, this.file.dataDirectory, newDirPath)
-        .then((newDir) => observer.next(newDir))
+        .then((newDir: DirectoryEntry) => observer.next(newDir))
         .catch((error) => observer.error(error));
     });
   }

@@ -19,6 +19,7 @@ import { DownloadPage } from '../pages/download/download';
 import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { HistoryPage } from '../pages/history/history';
 import { ManageReportsPage } from '../pages/manageReports/manageReports';
+import { MyIGSNsPage } from '../pages/myIGSNs/myIGSNs';
 import { TablePage, PopoverPage, ImageView } from '../pages/table/table';
 
 import { XMLUtility } from '../utilities/XMLUtility';
@@ -39,6 +40,7 @@ import { AppVersion } from '@ionic-native/app-version';
     FileBrowser,
     HistoryPage,
     ManageReportsPage,
+    MyIGSNsPage,
     TablePage,
     PopoverPage,
     ImageView,
@@ -58,6 +60,7 @@ import { AppVersion } from '@ionic-native/app-version';
     FileBrowser,
     HistoryPage,
     ManageReportsPage,
+    MyIGSNsPage,
     TablePage,
     PopoverPage,
     ImageView
