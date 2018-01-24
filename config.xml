@@ -127,4 +127,5 @@
     <plugin name="cordova-plugin-console" spec="^1.1.0" />
     <engine name="ios" spec="~4.5.4" />
     <allow-navigation href="http://192.168.1.11:8100" />
+    <allow-navigation href="http://10.5.198.25:8100" />
 </widget>

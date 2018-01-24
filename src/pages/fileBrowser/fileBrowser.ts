@@ -64,19 +64,17 @@ export class FileBrowser {
     if (file.isFile) {
       if (this.lookingFor === 'Aliquot') {
         // checks to make sure the file is an Aliquot XML file
-        this.xml.checkFileValidity(file).subscribe(result => {
-          if (result === 'Aliquot')
-            this.sendFileBack(file);
-          else
-            this.displayToast('"' + file.name + '" is not a valid Aliquot file...');
+        this.xml.isValidAliquot(file).subscribe(valid => {
+          valid
+            ? this.sendFileBack(file)
+            : this.displayToast('"' + file.name + '" is not a valid Aliquot file...');
         });
       } else if (this.lookingFor === 'Report Settings') {
         // checks to make sure the file is an Report Settings XML file
-        this.xml.checkFileValidity(file).subscribe(result => {
-          if (result === 'Report Settings')
-            this.sendFileBack(file);
-          else
-            this.displayToast('"' + file.name + '" is not a valid Report Settings file...');
+        this.xml.isValidReportSettings(file).subscribe(valid => {
+          valid
+            ? this.sendFileBack(file)
+            : this.displayToast('"' + file.name + '" is not a valid Report Settings file...');
         });
       } else
         // if not specifically looking for Aliquot or Report Settings, assumes valid

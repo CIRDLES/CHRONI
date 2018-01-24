@@ -67,9 +67,9 @@ export class DownloadPage {
 
     let igsn: string = this.igsn = this.igsn.toUpperCase();
     if (igsn.length === 9) {
-      this.geochron.downloadIGSN(igsn, name,
-        this.username !== '' ? this.username : null,
-        this.password !== '' ? this.password : null).subscribe((valid: boolean) => {
+      this.geochron.downloadIGSN(igsn,
+        this.username !== '' && this.username,
+        this.password !== '' && this.password).subscribe((valid: boolean) => {
           this.downloading = false;
           if (valid) {
             this.igsn = "";

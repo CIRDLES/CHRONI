@@ -14,7 +14,7 @@ import X2JS from 'x2js';
 
 const CREDENTIALS_URL: string = "https://app.geosamples.org/webservices/credentials_service.php";
 const BASE_ALIQUOT_URL: string = "http://www.geochronportal.org/getxml.php?igsn=";
-const MY_ALIQUOTS_URL: string = 'http://www.geochron.org/my_existing_igsns.php';
+const MY_IGSNS_URL: string = 'http://www.geochron.org/my_existing_igsns.php';
 
 @Injectable()
 export class GeochronUtility {
@@ -25,19 +25,60 @@ export class GeochronUtility {
     this.platform.ready().then(() => this.x2js = new X2JS());
   }
 
-  public downloadIGSN(igsn: string, filePath: string, username?: string, password?: string): Observable<boolean> {
+  public downloadIGSN(igsn: string, username?: string, password?: string): Observable<boolean> {
     return new Observable(observer => {
       let url = BASE_ALIQUOT_URL + igsn;
       if (username && username !== '' && password && password !== '')
         url += '&username=' + username + '&password=' + password;
-      this.fileUtil.downloadFile(url, filePath, "temp").subscribe(
+      const tempPath = igsn + "_temp_" + (new Date()).getMilliseconds().toString();
+      this.fileUtil.downloadFile(url, tempPath, "temp").subscribe(
         (file: FileEntry) => {
           this.validateAndTransferTempFile(file).subscribe(
-            (valid: boolean) => observer.next(valid),
+            (success: boolean) => observer.next(success),
             (error) => observer.error(error)
           );
         }, (error) => observer.error(error)
       );
+    });
+  }
+
+  private validateAndTransferTempFile(file: FileEntry): Observable<boolean> {
+    return new Observable(observer => {
+      this.xmlUtil.convertXMLtoJSON(file, "temp").subscribe(json => {
+        let type = null;
+        let fileName = null;
+        if (json && json['Aliquot']) {
+          type = 'Aliquot';
+          fileName = json['Aliquot']['aliquotName'];
+        }
+        if (json && json['ReportSettings']) {
+          type = 'Report Settings';
+          fileName = json['ReportSettings']['name'];
+        }
+        if (!type || !fileName) {
+          this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
+          this.fileUtil.removeFile(file.name, "temp");
+          observer.next(false);
+        } else {
+          type += type === 'Aliquot' ? 's' : '';
+          const newPath = 'chroni/' + type + '/' + fileName + '.xml';
+          this.fileUtil.moveFile(file.name, newPath, true).subscribe(
+            (newFile: FileEntry) => {
+              this.displayToast(fileName + " has been successfully downloaded to the " + type + " directory");
+              observer.next(true);
+            }, (error) => {
+              console.log(JSON.stringify(error));
+              this.displayToast("ERROR: " + fileName + " could not be downloaded to the " + type + " directory");
+              this.fileUtil.removeFile(file.name, "temp");
+              observer.next(false);
+            }
+          );
+        }
+      }, (error) => {
+        this.displayToast("ERROR: could not validate the file");
+          this.fileUtil.removeFile(file.name, "temp");
+          observer.next(false);
+      });
     });
   }
 
@@ -50,45 +91,6 @@ export class GeochronUtility {
           (error) => observer.error(error)
         );
       }, (error) => observer.error(error));
-    });
-  }
-
-  private validateAndTransferTempFile(file: FileEntry): Observable<boolean> {
-    return new Observable(observer => {
-      let name = file.name;
-      this.xmlUtil.checkFileValidity(file, "temp").subscribe((result: string) => {
-        if (result === "Aliquot") {
-          let path = "chroni/Aliquots/" + name;
-          this.fileUtil.moveFile(name, path, true).subscribe(
-            (newFile: FileEntry) => {
-              this.displayToast(newFile.name + " has been successfully downloaded to the Aliquots directory");
-              observer.next(true);
-            }, (error) => {
-              this.displayToast("ERROR: " + name + " could not be downloaded to the Aliquots directory");
-              this.fileUtil.removeFile(name, "temp");
-              observer.next(false);
-            });
-        } else if (result === "Report Settings") {
-          let path = "chroni/Report Settings/" + name;
-          this.fileUtil.moveFile(name, path, true).subscribe(
-            (newFile: FileEntry) => {
-              this.displayToast(name + " has been successfully downloaded to the Report Settings directory");
-              observer.next(true);
-            }, (error) => {
-              this.displayToast("ERROR: " + name + " could not be downloaded to the Report Settings directory");
-              this.fileUtil.removeFile(name, "temp");
-              observer.next(false);
-            });
-        } else {
-          this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
-          this.fileUtil.removeFile(name, "temp");
-          observer.next(false);
-        }
-      }, (error) => {
-        this.displayToast("ERROR: the file specified is not a valid Aliquot or Report Settings XML file");
-        this.fileUtil.removeFile(name, "temp");
-        observer.next(false);
-      });
     });
   }
 
@@ -117,8 +119,15 @@ export class GeochronUtility {
       let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
       let options = new RequestOptions({ headers: headers });
       let data = 'username=' + encodeURI(username) + '&password=' + encodeURI(password) + '&submit=submit';
-      this.http.post(MY_ALIQUOTS_URL, data, options).subscribe(
-        (res: Response) => observer.next(res.json()['IGSNS']),
+      this.http.post(MY_IGSNS_URL, data, options).subscribe(
+        (res: Response) => {
+          let igsns = res.json()['IGSNS']
+          igsns = igsns && igsns.map(igsn => {
+            const split = igsn.split('.');
+            return split[split.length - 1];
+          });
+          observer.next(igsns);
+        },
         (res: Response | any) => observer.error());
     });
   }
