@@ -21,7 +21,7 @@ For Android, you can download Chroni from the Play Store: https://play.google.co
 Getting Started for Contributors and Users:
 -------------
 
-Please have installed git tools, Xcode (mac), and a text editor. Make sure there is an updated Node.js version installed: http://nodejs.org/en/
+Please have installed git tools, Xcode (mac), and a text editor. Make sure there is an updated Node.js LTS version installed: http://nodejs.org/en/
 Fork a copy of this project as your origin. Clone your repository onto your local and use the following commands to establish the upstream:
 
 ```bash
@@ -44,7 +44,7 @@ Ionic should now be installed with version 2 or higher. Use *ionic -v* to confir
 
 ```bash
 $ npm install
-$ ionic resources
+$ ionic cordova resources
 ```
 
 To emulate on an ios platform
@@ -52,8 +52,8 @@ To emulate on an ios platform
 Change directories to the CHRONI directory on the local and run:
 
 ```bash
-$ ionic platform add ios
-$ ionic emulate ios -lc
+$ ionic cordova platform add ios
+$ ionic cordova emulate ios -lc
 ```
 
 To emulate on android platform
@@ -61,15 +61,15 @@ To emulate on android platform
 Have Android Studio installed and create an AVD within Android Studio. Then add the android platform and check if its been installed:
 
 ```bash
-$ ionic platform add android
-$ ionic platform
+$ ionic cordova platform add android
+$ ionic cordova platform
 ```
 
 Change directories to the CHRONI directory on the local and run:
 
 ```bash
-$ ionic build android
-$ ionic run android
+$ ionic cordova build android
+$ ionic cordova run android
 ```
 
 <br/>
