@@ -521,146 +521,131 @@ export class XMLUtility {
     return fractionArray;
   }
 
-  public checkFileValidity(file: FileEntry, directory: string = "data"): Observable<string> {
+  public convertXMLtoJSON(file: FileEntry, directory: string = "data"): Observable<any> {
     let path = file.fullPath;
     if (path[0] === '/')
       path = path.substring(1);
-
     return new Observable(observer => {
       this.fileUtil.readFileText(path, directory)
         .subscribe(
-        fileData => {
-          let jsonObj = this.x2js.xml2js(fileData);
-          if (jsonObj) {
-            if (jsonObj['Aliquot'])
-              observer.next('Aliquot');
-            else if (jsonObj['ReportSettings'])
-              observer.next('Report Settings');
-            else
-              observer.error('Invalid file...');
-          } else
-            observer.error('Invalid file...');
-        }, error => observer.error(error));
+          fileData => observer.next(this.x2js.xml2js(fileData)),
+          error => observer.error(error)
+        );
     });
   }
 
   public createAliquot(file: FileEntry): Observable<Aliquot> {
-
     return new Observable(observer => {
-      this.checkFileValidity(file).subscribe(result => {
-        if (result === 'Aliquot') {
+      this.convertXMLtoJSON(file).subscribe(json => {
+        if (json && json['Aliquot']) {
           let path = file.fullPath;
           if (path[0] === '/')
             path = path.substring(1);
-
-          this.fileUtil.readFileText(path)
-            .subscribe(
-            fileData => {
-              let aliquotJson = this.x2js.xml2js(fileData);
-              if (aliquotJson) {
-                // first obtains the root node in Aliquot XML
-                let rootNodes = aliquotJson["Aliquot"];
-
-                // then obtains each of the values for the aliquot
-                let aliquotName = rootNodes["aliquotName"];
-                let fractions = rootNodes["analysisFractions"]["AnalysisFraction"];
-                let images = rootNodes["analysisImages"]["AnalysisImage"];
-
-                // checks to make sure all arrays are actually arrays (will be object if only one node)
-                if (fractions && !Array.isArray(fractions)) {
-                  let fractionArray = [];
-                  fractionArray.push(fractions);
-                  fractions = fractionArray;
-                }
-                if (images && !Array.isArray(images)) {
-                  let imagesArray = [];
-                  imagesArray.push(images);
-                  images = imagesArray;
-                }
-
-                // adds a Value Models object to each fraction which contains every Value Model indexed by their names
-                fractions.forEach(function(fraction) {
-                  fraction["ValueModelsByName"] = {};
-                  let valueModelObj = fraction["ValueModelsByName"];
-
-                  for (let key in fraction) {
-                    if (fraction.hasOwnProperty(key)) {
-                      // obtains Value Models if they exist
-                      let valueModelList = fraction[key]["ValueModel"];
-                      if (valueModelList) {
-                        // first ensures that it is a list
-                        if (valueModelList && !Array.isArray(valueModelList)) {
-                          let valueModelArray = [];
-                          valueModelArray.push(valueModelList);
-                          valueModelList = valueModelArray;
-                        }
-
-                        // puts each Value Model into the fraction's new ValueModelsByName object
-                        valueModelList.forEach(function(model) {
-                          valueModelObj[model.name] = model;
-                        });
-                      }
+          if (json) {
+            // first obtains the root node in Aliquot XML
+            let rootNodes = json["Aliquot"];
+            // then obtains each of the values for the aliquot
+            let aliquotName = rootNodes["aliquotName"];
+            let fractions = rootNodes["analysisFractions"]["AnalysisFraction"];
+            let images = rootNodes["analysisImages"]["AnalysisImage"];
+            // checks to make sure all arrays are actually arrays (will be object if only one node)
+            if (fractions && !Array.isArray(fractions)) {
+              let fractionArray = [];
+              fractionArray.push(fractions);
+              fractions = fractionArray;
+            }
+            if (images && !Array.isArray(images)) {
+              let imagesArray = [];
+              imagesArray.push(images);
+              images = imagesArray;
+            }
+            // adds a Value Models object to each fraction which contains every Value Model indexed by their names
+            fractions.forEach(function(fraction) {
+              fraction["ValueModelsByName"] = {};
+              let valueModelObj = fraction["ValueModelsByName"];
+              for (let key in fraction) {
+                if (fraction.hasOwnProperty(key)) {
+                  // obtains Value Models if they exist
+                  let valueModelList = fraction[key]["ValueModel"];
+                  if (valueModelList) {
+                    // first ensures that it is a list
+                    if (valueModelList && !Array.isArray(valueModelList)) {
+                      let valueModelArray = [];
+                      valueModelArray.push(valueModelList);
+                      valueModelList = valueModelArray;
                     }
+                    // puts each Value Model into the fraction's new ValueModelsByName object
+                    valueModelList.forEach(function(model) {
+                      valueModelObj[model.name] = model;
+                    });
                   }
-
-                });
-
-                this.fileUtil.getFile(path).subscribe((file: FileEntry) => {
-                  let aliquot: Aliquot = new Aliquot(aliquotName, fractions, images, file, this.fileUtil);
-                  observer.next(aliquot);
-                });
+                }
               }
-            }, error => observer.error(error)
-            );
+            });
+            this.fileUtil.getFile(path).subscribe((file: FileEntry) => {
+              let aliquot: Aliquot = new Aliquot(aliquotName, fractions, images, file, this.fileUtil);
+              observer.next(aliquot);
+            });
+          }
         } else
-          observer.error("invalid Aliquot XML file");
-
-      }, error => observer.error("invalid Aliquot XML file"));
+          observer.error("Invalid Aliquot XML file");
+      }, error => observer.error("Invalid Aliquot XML file"));
     });
-
   }
 
   public createReportSettings(file: FileEntry): Observable<ReportSettings> {
-
     return new Observable(observer => {
-      this.checkFileValidity(file).subscribe(result => {
-        if (result === 'Report Settings') {
+      this.convertXMLtoJSON(file).subscribe(json => {
+        if (json && json['ReportSettings']) {
           let path = file.fullPath;
           if (path[0] === '/')
             path = path.substring(1);
+          if (json) {
+            // first obtains the root node in ReportSettings XML
+            let rootNodes = json["ReportSettings"];
 
-          this.fileUtil.readFileText(path).subscribe(result => {
-            let aliquotJson = this.x2js.xml2js(result);
-            if (aliquotJson) {
-              // first obtains the root node in ReportSettings XML
-              let rootNodes = aliquotJson["ReportSettings"];
+            let categories = {};
+            this.REPORT_CATEGORY_LIST.forEach(function(category) {
+              let categoryNode = rootNodes[category];
 
-              let categories = {};
-              this.REPORT_CATEGORY_LIST.forEach(function(category) {
-                let categoryNode = rootNodes[category];
+              // checks to make sure the ReportColumn object is an array (if there is a single node it will be an object)
+              if (categoryNode["categoryColumns"]["ReportColumn"] && !Array.isArray(categoryNode["categoryColumns"]["ReportColumn"])) {
+                let reportColumnArray = [];
+                reportColumnArray.push(categoryNode["categoryColumns"]["ReportColumn"]);
+                categoryNode["categoryColumns"]["ReportColumn"] = reportColumnArray;
+              }
 
-                // checks to make sure the ReportColumn object is an array (if there is a single node it will be an object)
-                if (categoryNode["categoryColumns"]["ReportColumn"] && !Array.isArray(categoryNode["categoryColumns"]["ReportColumn"])) {
-                  let reportColumnArray = [];
-                  reportColumnArray.push(categoryNode["categoryColumns"]["ReportColumn"]);
-                  categoryNode["categoryColumns"]["ReportColumn"] = reportColumnArray;
-                }
+              categories[category] = categoryNode;
+            });
 
-                categories[category] = categoryNode;
-              });
-
-              this.fileUtil.getFile(path).subscribe((file: FileEntry) => {
-                let reportSettings: ReportSettings = new ReportSettings(categories, file);
-                observer.next(reportSettings);
-              });
-            }
-          }, error => observer.error(error));
+            this.fileUtil.getFile(path).subscribe((file: FileEntry) => {
+              let reportSettings: ReportSettings = new ReportSettings(categories, file);
+              observer.next(reportSettings);
+            });
+          }
         } else
           observer.error("invalid Report Settings XML file");
 
       }, error => observer.error("invalid Report Settings XML file"));
     });
+  }
 
+  public isValidAliquot(file: FileEntry, directory: string = "data") {
+    return new Observable(observer => {
+      this.convertXMLtoJSON(file, directory).subscribe(
+        json => observer.next('Aliquot' in json),
+        error => observer.error(error)
+      );
+    })
+  }
+
+  public isValidReportSettings(file: FileEntry, directory: string = "data") {
+    return new Observable(observer => {
+      this.convertXMLtoJSON(file, directory).subscribe(
+        json => observer.next('ReportSettings' in json),
+        error => observer.error(error)
+      );
+    })
   }
 
   public createTableData(aliquot: Aliquot, reportSettings: ReportSettings) {
