@@ -16,6 +16,7 @@ import { MyIGSNsPage } from '../pages/myIGSNs/myIGSNs';
 
 import { FileUtility } from '../utilities/FileUtility';
 import { GeochronUtility } from '../utilities/GeochronUtility';
+import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,7 +24,7 @@ import { GeochronUtility } from '../utilities/GeochronUtility';
 export class Chroni {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = ManageReportsPage;
+  rootPage: any = TabsPage;
   pages: Array<{ title: string, component: any }> = [];
 
   helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';

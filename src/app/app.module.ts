@@ -21,6 +21,7 @@ import { HistoryPage } from '../pages/history/history';
 import { ManageReportsPage } from '../pages/manageReports/manageReports';
 import { MyIGSNsPage } from '../pages/myIGSNs/myIGSNs';
 import { TablePage, PopoverPage, ImageView } from '../pages/table/table';
+import { TabsPage } from '../pages/tabs/tabs';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -44,7 +45,8 @@ import { AppVersion } from '@ionic-native/app-version';
     TablePage,
     PopoverPage,
     ImageView,
-    FileNamePipe
+    FileNamePipe,
+    TabsPage
   ],
   imports: [
     BrowserModule,
@@ -62,6 +64,7 @@ import { AppVersion } from '@ionic-native/app-version';
     ManageReportsPage,
     MyIGSNsPage,
     TablePage,
+    TabsPage,
     PopoverPage,
     ImageView
   ],
