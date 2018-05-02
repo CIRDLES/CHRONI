@@ -7,10 +7,11 @@
     </ion-buttons>
     <ion-title>History</ion-title>
     <ion-buttons end>
-      <button color="accent" ion-button menuToggle="right" (click)="hideStatusBar()">
-        <ion-icon name="contact"></ion-icon>
+      <button color="accent" ion-button icon-only (click)="showPopoverMenu($event)">
+        <ion-icon name="more"></ion-icon>
       </button>
     </ion-buttons>
+    
   </ion-navbar>
 </ion-header>
 

@@ -20,8 +20,9 @@ import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { HistoryPage } from '../pages/history/history';
 import { ManageReportsPage } from '../pages/manageReports/manageReports';
 import { MyIGSNsPage } from '../pages/myIGSNs/myIGSNs';
-import { TablePage, PopoverPage, ImageView } from '../pages/table/table';
+import { TablePage, ImageView } from '../pages/table/table';
 import { TabsPage } from '../pages/tabs/tabs';
+import { PopoverPage } from '../pages/popover/popover';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
