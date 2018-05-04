@@ -1,15 +1,27 @@
-import { ViewController, NavController, ModalController } from "ionic-angular";
+import { ViewController, NavController, ModalController, ToastController } from "ionic-angular";
 import { Component } from "@angular/core";
 import { ThemeableBrowserOptions, ThemeableBrowser, ThemeableBrowserObject } from "@ionic-native/themeable-browser";
 import { AboutPage } from "../about/about";
 import { StatusBar } from "@ionic-native/status-bar";
 import { LoginPage } from "../login/login";
+import { Storage } from '@ionic/storage';
 
 @Component({
     templateUrl: 'popover.html'
   })
   export class PopoverPage {
-    constructor(public viewCtrl: ViewController, private navCtrl: NavController, private iab: ThemeableBrowser, private statusBar: StatusBar, private modalCtrl: ModalController) {}
+    isLoggedIn: boolean = false;
+
+    constructor(public viewCtrl: ViewController, private navCtrl: NavController, private iab: ThemeableBrowser, private statusBar: StatusBar, private modalCtrl: ModalController, private storage: Storage, private toastCtrl: ToastController) {
+      this.storage.get('loggedIn').then((val: boolean) => {
+        let error = () => {
+          this.isLoggedIn = false;
+        }
+        if (val === true) {
+          this.isLoggedIn = true;
+        }
+      }, (err) => console.log(err));
+    }
   
     helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
     browser: ThemeableBrowserObject;
@@ -60,9 +72,21 @@ import { LoginPage } from "../login/login";
       this.browser = this.iab.create(this.helpURL, '_blank', options);
     }
 
-    openLoginPage() {
-      let modal = this.modalCtrl.create(LoginPage);
-      modal.present();
-      this.close();
+    loginLogout() {
+      if(this.isLoggedIn) {
+        this.storage.set('loggedIn', false).then(() => {
+          this.close();
+          this.isLoggedIn = false;
+        });
+        let toast = this.toastCtrl.create({
+          message: "Sucessfully logged out.",
+          duration: 3000,
+          position: "bottom"
+        }); toast.present();
+      } else {
+        let modal = this.modalCtrl.create(LoginPage);
+        modal.present();
+        this.close();
+      }
     }
   }

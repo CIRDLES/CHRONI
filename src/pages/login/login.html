@@ -26,10 +26,6 @@
         <ion-input type="password" [(ngModel)]="password"></ion-input>
       </ion-item>
     </ion-list>
-    <div *ngIf="loggedIn" text-center>
-      <h5 id="logged-in-top">Logged in as:</h5>
-      <p id="logged-in-username">{{ username }}</p>
-    </div>
     <div text-center>
       <button ion-button round id="login-button" *ngIf="!loggingIn && !loggingOut" (click)="loggedIn ? logout() : login()">{{ loggedIn ? 'Logout' : 'Login' }}</button>
       <ion-spinner *ngIf="loggingIn || loggingOut" color="primary"></ion-spinner>
