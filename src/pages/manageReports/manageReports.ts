@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, Platform, ModalController, ToastController } from 'ionic-angular';
+import { NavController, Platform, ModalController, ToastController, PopoverController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Observable } from 'rxjs/Observable';
 import { ThreeDeeTouch, ThreeDeeTouchQuickAction } from '@ionic-native/three-dee-touch';
@@ -16,6 +16,7 @@ import { HistoryUtility } from '../../utilities/HistoryUtility';
 import { Aliquot, ReportSettings, Report, HistoryEntry } from '../../models';
 
 import { FileNamePipe } from '../../utilities/pipes/FileName';
+import { PopoverPage } from '../popover/popover';
 
 @Component({
   selector: 'page-manage-reports',
@@ -29,7 +30,7 @@ export class ManageReportsPage {
   entryFromHistory: HistoryEntry = null;
   hasOverlay: boolean = false;
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController, private popoverCtrl: PopoverController) {
     this.platform.ready().then(() => {
       // first makes sure the default directories are created
       this.fileUtil.createDefaultDirectories().subscribe(_ => { }, _ => { }, () => {
@@ -233,6 +234,13 @@ export class ManageReportsPage {
 
   hideStatusBar(force: boolean = false) {
     (force || this.hasOverlay) && this.statusBar.hide();
+  }
+
+  showPopoverMenu(event) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: event
+    });
   }
 
 }

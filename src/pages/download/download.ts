@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { ToastController } from 'ionic-angular';
+import { ToastController, PopoverController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
 
 import { GeochronUtility } from '../../utilities/GeochronUtility';
 import { FileNamePipe } from '../../utilities/pipes/FileName';
+import { PopoverPage } from '../popover/popover';
 
 @Component({
   selector: 'page-download',
@@ -25,7 +26,8 @@ export class DownloadPage {
     private statusBar: StatusBar,
     private storage: Storage,
     private geochron: GeochronUtility,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private popoverCtrl: PopoverController,
   ) {
     this.storage.get('loggedIn').then(value => {
       if (value) {
@@ -106,5 +108,12 @@ export class DownloadPage {
         cssClass: 'text-center'
       })
       .present();
+  }
+
+  showPopoverMenu(event) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: event
+    });
   }
 }

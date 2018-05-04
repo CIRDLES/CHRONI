@@ -20,7 +20,9 @@ import { FileBrowser } from '../pages/fileBrowser/fileBrowser';
 import { HistoryPage } from '../pages/history/history';
 import { ManageReportsPage } from '../pages/manageReports/manageReports';
 import { MyIGSNsPage } from '../pages/myIGSNs/myIGSNs';
-import { TablePage, PopoverPage, ImageView } from '../pages/table/table';
+import { TablePage, ImageView } from '../pages/table/table';
+import { TabsPage } from '../pages/tabs/tabs';
+import { PopoverPage } from '../pages/popover/popover';
 
 import { XMLUtility } from '../utilities/XMLUtility';
 import { HistoryUtility } from '../utilities/HistoryUtility';
@@ -31,6 +33,7 @@ import { ReportUtility } from '../utilities/ReportUtility';
 import { FileNamePipe } from '../utilities/pipes/FileName';
 
 import { AppVersion } from '@ionic-native/app-version';
+import { LoginPage } from '../pages/login/login';
 
 @NgModule({
   declarations: [
@@ -44,7 +47,9 @@ import { AppVersion } from '@ionic-native/app-version';
     TablePage,
     PopoverPage,
     ImageView,
-    FileNamePipe
+    FileNamePipe,
+    TabsPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -62,8 +67,10 @@ import { AppVersion } from '@ionic-native/app-version';
     ManageReportsPage,
     MyIGSNsPage,
     TablePage,
+    TabsPage,
     PopoverPage,
-    ImageView
+    ImageView,
+    LoginPage
   ],
   providers: [
     StatusBar,

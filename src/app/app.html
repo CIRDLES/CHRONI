@@ -1,4 +1,6 @@
-<ion-menu side="left" [content]="contentLeft" (ionDrag)="hideStatusBar()" (ionOpen)="hideStatusBar()" (ionClose)="showStatusBar()">
+<ion-nav [root]="rootPage"></ion-nav>
+
+<!-- <ion-menu side="left" [content]="contentLeft" (ionDrag)="hideStatusBar()" (ionOpen)="hideStatusBar()" (ionClose)="showStatusBar()">
   <ion-header>
     <ion-navbar color="light">
       <ion-title>Menu</ion-title>
@@ -12,9 +14,10 @@
   </ion-content>
 </ion-menu>
 
-<ion-nav #contentLeft #contentRight [root]="rootPage"></ion-nav>
+<ion-nav #contentLeft #contentRight [root]="rootPage"></ion-nav> -->
 
-<ion-menu side="right" type="overlay" [content]="contentRight" (ionDrag)="hideStatusBar()" (ionOpen)="hideStatusBar()" (ionClose)="showStatusBar()">
+
+<!-- <ion-menu side="right" type="overlay" [content]="contentRight" (ionDrag)="hideStatusBar()" (ionOpen)="hideStatusBar()" (ionClose)="showStatusBar()">
   <ion-header>
     <ion-navbar color="light">
       <ion-title>Geochron</ion-title>
@@ -42,4 +45,4 @@
       </div>
     </div>
   </ion-content>
-</ion-menu>
+</ion-menu> -->

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, PopoverController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Storage } from '@ionic/storage';
 import { TablePage } from '../table/table';
+import { PopoverPage } from '../popover/popover';
 import { HistoryEntry } from '../../models';
 import { HistoryUtility } from '../../utilities/HistoryUtility';
 import { FileNamePipe } from '../../utilities/pipes/FileName';
@@ -17,7 +18,7 @@ export class HistoryPage {
   opening: boolean = false;
   hasOverlay: boolean = false;
 
-  constructor(public navCtrl: NavController, private storage: Storage, private statusBar: StatusBar, private historyUtil: HistoryUtility) {
+  constructor(public navCtrl: NavController, private storage: Storage, private statusBar: StatusBar, private historyUtil: HistoryUtility, private popoverCtrl: PopoverController) {
     this.storage.get('hasOverlay').then(
       (overlayed: boolean) => this.hasOverlay = overlayed,
       (error) => this.hasOverlay = false
@@ -43,6 +44,13 @@ export class HistoryPage {
 
   hideStatusBar(force: boolean = false) {
     (force || this.hasOverlay) && this.statusBar.hide();
+  }
+
+  showPopoverMenu(event) {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: event
+    });
   }
 
 }
