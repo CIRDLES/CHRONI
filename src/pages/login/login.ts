@@ -20,6 +20,7 @@ export class LoginPage {
 
   username: string = "";
   password: string = "";
+  loginEnabled: boolean = false;
   loggedIn: boolean = false;
   loggingIn: boolean = false;
   loggingOut: boolean = false;
@@ -111,6 +112,14 @@ export class LoginPage {
 
   close() {
     this.viewCtrl.dismiss();
+  }
+
+  checkRequiredFields() {
+    if(this.username.length == 0 || this.password.length == 0) {
+      this.loginEnabled = false;
+    } else {
+      this.loginEnabled = true;
+    }
   }
 
 }
