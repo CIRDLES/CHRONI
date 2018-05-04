@@ -18,6 +18,13 @@ import { Storage } from '@ionic/storage';
 })
 export class LoginPage {
 
+  username: string = "";
+  password: string = "";
+  loginEnabled: boolean = false;
+  loggedIn: boolean = false;
+  loggingIn: boolean = false;
+  loggingOut: boolean = false;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private toastCtrl: ToastController, private geochron: GeochronUtility, private storage: Storage, private viewCtrl: ViewController) {
 
     this.storage.get('loggedIn').then((val: boolean) => {
@@ -55,11 +62,6 @@ export class LoginPage {
     }, (err) => console.log(err));
   }
 
-  username: string = "";
-  password: string = "";
-  loggedIn: boolean = false;
-  loggingIn: boolean = false;
-  loggingOut: boolean = false;
 
   login() {
     this.loggingIn = true;
@@ -99,17 +101,25 @@ export class LoginPage {
     });
   }
 
-  displayToast(text: string, duration=3000) {
+  displayToast(text: string, duration=4000) {
     this.toastCtrl.create({
       message: text,
       duration: duration,
-      position: 'top',
+      position: 'bottom',
       cssClass: 'text-center'
     }).present();
   }
 
   close() {
     this.viewCtrl.dismiss();
+  }
+
+  checkRequiredFields() {
+    if(this.username.length == 0 || this.password.length == 0) {
+      this.loginEnabled = false;
+    } else {
+      this.loginEnabled = true;
+    }
   }
 
 }

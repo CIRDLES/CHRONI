@@ -17,6 +17,7 @@ import { Aliquot, ReportSettings, Report, HistoryEntry } from '../../models';
 
 import { FileNamePipe } from '../../utilities/pipes/FileName';
 import { PopoverPage } from '../popover/popover';
+import { ThemeableBrowserObject, ThemeableBrowser, ThemeableBrowserOptions } from '@ionic-native/themeable-browser';
 
 @Component({
   selector: 'page-manage-reports',
@@ -29,8 +30,10 @@ export class ManageReportsPage {
   opening: boolean = false;
   entryFromHistory: HistoryEntry = null;
   hasOverlay: boolean = false;
+  helpURL: string = 'http://cirdles.org/projects/chroni';
+  browser: ThemeableBrowserObject;
 
-  constructor(public navCtrl: NavController, private statusBar: StatusBar, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController, private popoverCtrl: PopoverController) {
+  constructor(public navCtrl: NavController, private statusBar: StatusBar, private modalCtrl: ModalController, private platform: Platform, private storage: Storage, private xml: XMLUtility, private fileUtil: FileUtility, private historyUtil: HistoryUtility, private threeDeeTouch: ThreeDeeTouch, public toastCtrl: ToastController, private popoverCtrl: PopoverController, private iab: ThemeableBrowser) {
     this.platform.ready().then(() => {
       // first makes sure the default directories are created
       this.fileUtil.createDefaultDirectories().subscribe(_ => { }, _ => { }, () => {
@@ -241,6 +244,47 @@ export class ManageReportsPage {
     popover.present({
       ev: event
     });
+  }
+
+  establishBrowserOptions(): ThemeableBrowserOptions {
+    let options: ThemeableBrowserOptions = {
+      location: 'no',
+      toolbarposition: 'top',
+      toolbar: {
+        height: 40,
+        color: '#D26D56'
+      },
+      title: {
+        color: '#3F3F3F',
+        showPageTitle: true
+      },
+      backButton: {
+        image: 'back',
+        imagePressed: 'back_pressed',
+        align: 'right',
+        event: 'backPressed'
+      },
+      forwardButton: {
+        image: 'forward',
+        imagePressed: 'forward_pressed',
+        align: 'right',
+        event: 'forwardPressed'
+      },
+      closeButton: {
+        wwwImage: 'assets/icon/browser/close-icon.png',
+        wwwImagePressed: 'assets/icon/browser/close-icon-pressed.png',
+        wwwImageDensity: 13,
+        align: 'left',
+        event: 'closePressed'
+      },
+      backButtonCanClose: false
+    };
+
+    return options;
+  }
+
+  openHelpAtProcedures() {
+    this.browser = this.iab.create(`${this.helpURL}/#Procedures`, '_blank', this.establishBrowserOptions());
   }
 
 }
