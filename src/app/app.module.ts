@@ -33,6 +33,7 @@ import { ReportUtility } from '../utilities/ReportUtility';
 import { FileNamePipe } from '../utilities/pipes/FileName';
 
 import { AppVersion } from '@ionic-native/app-version';
+import { LoginPage } from '../pages/login/login';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { AppVersion } from '@ionic-native/app-version';
     PopoverPage,
     ImageView,
     FileNamePipe,
-    TabsPage
+    TabsPage,
+    LoginPage
   ],
   imports: [
     BrowserModule,
@@ -67,7 +69,8 @@ import { AppVersion } from '@ionic-native/app-version';
     TablePage,
     TabsPage,
     PopoverPage,
-    ImageView
+    ImageView,
+    LoginPage
   ],
   providers: [
     StatusBar,

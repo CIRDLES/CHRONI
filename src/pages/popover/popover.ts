@@ -1,16 +1,19 @@
-import { ViewController, NavController } from "ionic-angular";
+import { ViewController, NavController, ModalController } from "ionic-angular";
 import { Component } from "@angular/core";
 import { ThemeableBrowserOptions, ThemeableBrowser, ThemeableBrowserObject } from "@ionic-native/themeable-browser";
 import { AboutPage } from "../about/about";
+import { StatusBar } from "@ionic-native/status-bar";
+import { LoginPage } from "../login/login";
 
 @Component({
     templateUrl: 'popover.html'
   })
   export class PopoverPage {
-    constructor(public viewCtrl: ViewController, private navCtrl: NavController, private iab: ThemeableBrowser, ) {}
+    constructor(public viewCtrl: ViewController, private navCtrl: NavController, private iab: ThemeableBrowser, private statusBar: StatusBar, private modalCtrl: ModalController) {}
   
     helpURL: string = 'http://cirdles.org/projects/chroni/#Procedures';
     browser: ThemeableBrowserObject;
+    hasOverlay: boolean = false;
 
     close() {
       this.viewCtrl.dismiss();
@@ -18,7 +21,7 @@ import { AboutPage } from "../about/about";
 
     openAbout() {
       this.navCtrl.push(AboutPage);
-      this.viewCtrl.dismiss();
+      this.close();
     }
 
     openHelp() {
@@ -55,5 +58,11 @@ import { AboutPage } from "../about/about";
         backButtonCanClose: false
       };
       this.browser = this.iab.create(this.helpURL, '_blank', options);
+    }
+
+    openLoginPage() {
+      let modal = this.modalCtrl.create(LoginPage);
+      modal.present();
+      this.close();
     }
   }
